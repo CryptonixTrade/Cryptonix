@@ -203,7 +203,7 @@ export default function TradePanel({
       </div>
 
       {/* MOBILE STICKY */}
-      <div className="lg:hidden sticky bottom-0 z-40 px-2 pb-2">
+      <div className="lg:hidden sticky top-0 z-40 px-2">
         {PanelContent}
       </div>
     </>
