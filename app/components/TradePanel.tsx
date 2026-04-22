@@ -36,7 +36,12 @@ export default function TradePanel({
       result = ((trade.entry - price) / trade.entry) * 100;
     }
 
-    setPnl(result);
+    // 🔥 лёгкое сглаживание (чтобы не дёргалось)
+    setPnl(prev => {
+      if (prev === null) return result;
+      return prev * 0.7 + result * 0.3;
+    });
+
   }, [price, trade]);
 
   const pnlColor =
@@ -49,16 +54,16 @@ export default function TradePanel({
       ? "#ff3b3b"
       : "#999";
 
-  // ===== TOGGLE (НЕ ЛОМАЕМ)
+  // ===== TOGGLE
   function handleClick(type: "LONG" | "SHORT") {
     if (selected === type) {
-      onTrade(type);
+      onTrade(type); // закрытие
     } else {
-      onTrade(type);
+      onTrade(type); // открытие
     }
   }
 
-  // ===== AI LOGIC
+  // ===== AI
   const aiDecision = aiSignal?.decision || "NO TRADE";
   const aiConfidence = aiSignal?.confidence || 0;
 
@@ -96,7 +101,7 @@ export default function TradePanel({
         {formatPrice(price || 0)}
       </div>
 
-      {/* 🔥 AI STATUS */}
+      {/* AI STATUS */}
       <div style={{
         padding:10,
         borderRadius:8,
@@ -128,7 +133,7 @@ export default function TradePanel({
         </div>
       </div>
 
-      {/* 🔥 MAIN ACTION */}
+      {/* MAIN ACTION */}
       <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
 
         <button
@@ -145,7 +150,21 @@ export default function TradePanel({
             borderRadius: 8,
             fontWeight:700,
             cursor: isBlocked ? "not-allowed" : "pointer",
-            border:"none"
+            border:"none",
+            transition:"all 0.15s ease",
+            boxShadow: !isBlocked
+              ? "0 0 10px rgba(255,255,255,0.05)"
+              : "none"
+          }}
+          onMouseEnter={(e)=>{
+            if(!isBlocked){
+              e.currentTarget.style.opacity = "0.85";
+            }
+          }}
+          onMouseLeave={(e)=>{
+            if(!isBlocked){
+              e.currentTarget.style.opacity = "1";
+            }
           }}
         >
           {isBlocked ? "NO TRADE" : `ENTER ${aiDecision}`}
@@ -163,7 +182,7 @@ export default function TradePanel({
 
       </div>
 
-      {/* 🔥 MANUAL CONTROL */}
+      {/* MANUAL */}
       <div style={{ display: "flex", gap: 6, marginTop:6 }}>
 
         <button
@@ -179,7 +198,8 @@ export default function TradePanel({
             borderRadius: 6,
             border: "1px solid #003322",
             cursor: "pointer",
-            fontSize:12
+            fontSize:12,
+            transition:"0.15s"
           }}
         >
           LONG
@@ -198,7 +218,8 @@ export default function TradePanel({
             borderRadius: 6,
             border: "1px solid #330000",
             cursor: "pointer",
-            fontSize:12
+            fontSize:12,
+            transition:"0.15s"
           }}
         >
           SHORT
@@ -207,7 +228,7 @@ export default function TradePanel({
       </div>
 
       {/* TRADE INFO */}
-      {trade && (
+      {trade ? (
         <div style={{
           marginTop: 8,
           padding: 12,
@@ -248,9 +269,7 @@ export default function TradePanel({
           </div>
 
         </div>
-      )}
-
-      {!trade && (
+      ) : (
         <div style={{
           fontSize:11,
           textAlign:"center",

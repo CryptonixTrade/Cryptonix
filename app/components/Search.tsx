@@ -17,12 +17,10 @@ export default function Search({
 
   // ===== LOAD FAVORITES
   useEffect(() => {
-    const saved = localStorage.getItem("favorites");
-    if (saved) {
-      try {
-        setFavorites(JSON.parse(saved));
-      } catch {}
-    }
+    try {
+      const saved = localStorage.getItem("favorites");
+      if (saved) setFavorites(JSON.parse(saved));
+    } catch {}
   }, []);
 
   // ===== SAVE FAVORITES
@@ -42,26 +40,39 @@ export default function Search({
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // ===== SEARCH OPTIMIZED
+  // ===== SEARCH + FAVORITES PRIORITY
   const results = useMemo(() => {
-    return coins
+    if (!coins?.length) return [];
+
+    const filtered = coins
       .filter((c:any)=>c.symbol.endsWith("USDT"))
       .filter((c:any)=>
         c.symbol.toLowerCase().includes(search.toLowerCase())
-      )
-      .slice(0, 50);
-  }, [coins, search]);
+      );
+
+    // 🔥 фавориты вверх
+    const sorted = filtered.sort((a:any, b:any)=>{
+      const aFav = favorites.includes(a.symbol) ? 1 : 0;
+      const bFav = favorites.includes(b.symbol) ? 1 : 0;
+      return bFav - aFav;
+    });
+
+    return sorted.slice(0, 50);
+
+  }, [coins, search, favorites]);
 
   function toggleFavorite(sym:string){
-    if(favorites.includes(sym)){
-      setFavorites(favorites.filter((f:string)=>f!==sym));
-    }else{
-      setFavorites([...favorites, sym]);
-    }
+    setFavorites((prev:string[])=>{
+      if(prev.includes(sym)){
+        return prev.filter(f=>f!==sym);
+      } else {
+        return [...prev, sym];
+      }
+    });
   }
 
   return (
-    <div ref={ref} style={{ width: 260, position: "relative", marginBottom: 15 }}>
+    <div ref={ref} style={{ width: 260, position: "relative", marginBottom: 12 }}>
 
       {/* SELECTED */}
       <div style={{
@@ -83,7 +94,7 @@ export default function Search({
         }}
         style={{
           width:"100%",
-          padding:"10px 10px",
+          padding:"9px 10px",
           background:"#0f0f0f",
           color:"#fff",
           border:"1px solid #222",
@@ -106,19 +117,18 @@ export default function Search({
           borderRadius:8,
           marginTop:6,
           maxHeight: open ? 320 : 0,
-          overflow:"hidden",
           overflowY:"auto",
           zIndex:100,
           opacity: open ? 1 : 0,
           transform: open ? "translateY(0px)" : "translateY(-5px)",
-          transition:"all 0.2s ease"
+          transition:"all 0.15s ease"
         }}
       >
 
         {results.map((c:any)=>{
 
-          const change = Number(c.priceChangePercent);
-          const price = Number(c.lastPrice).toFixed(2);
+          const change = Number(c.priceChangePercent || 0);
+          const price = Number(c.lastPrice || 0).toFixed(2);
           const isFav = favorites.includes(c.symbol);
           const isActive = symbol === c.symbol;
 
@@ -137,7 +147,7 @@ export default function Search({
                 fontSize:12,
                 cursor:"pointer",
                 background: isActive ? "#1a1a1a" : "transparent",
-                transition:"0.15s"
+                transition:"0.12s"
               }}
               onMouseEnter={(e)=>{
                 if(!isActive) e.currentTarget.style.background = "#151515";
@@ -194,7 +204,7 @@ export default function Search({
 
       {/* FAVORITES */}
       {favorites.length > 0 && (
-        <div style={{marginTop:12, fontSize:11}}>
+        <div style={{marginTop:10, fontSize:11}}>
 
           <div style={{marginBottom:4, color:"#888"}}>
             ⭐ Favorites
@@ -220,14 +230,7 @@ export default function Search({
                     background: isActive ? "#ffd700" : "#111",
                     color: isActive ? "#000" : "#ccc",
                     fontSize:11,
-                    transition:"0.2s",
-                    transform:"scale(1)"
-                  }}
-                  onMouseEnter={(e)=>{
-                    e.currentTarget.style.transform = "scale(1.05)";
-                  }}
-                  onMouseLeave={(e)=>{
-                    e.currentTarget.style.transform = "scale(1)";
+                    transition:"0.15s"
                   }}
                 >
                   {f.replace("USDT","")}

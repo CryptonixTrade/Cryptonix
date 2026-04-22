@@ -21,13 +21,26 @@ export default function Tape({ symbol, onUpdate }: any) {
     wsRef.current = ws;
 
     ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
+      try {
+        const data = JSON.parse(e.data);
 
-      bufferRef.current.push({
-        price: Number(data.p),
-        qty: Number(data.q),
-        isBuy: !data.m
-      });
+        if (!data?.p || !data?.q) return;
+
+        bufferRef.current.push({
+          price: Number(data.p),
+          qty: Number(data.q),
+          isBuy: !data.m,
+          id: Date.now() + Math.random() // 🔥 уникальный ключ
+        });
+
+        // 🔥 защита от переполнения
+        if (bufferRef.current.length > 100) {
+          bufferRef.current = bufferRef.current.slice(-50);
+        }
+
+      } catch (err) {
+        console.error("Tape parse error", err);
+      }
     };
 
     return () => ws.close();
@@ -45,6 +58,8 @@ export default function Tape({ symbol, onUpdate }: any) {
         onUpdate?.(next);
 
         bufferRef.current = [];
+
+        // 🔥 ограничение памяти
         return next.slice(0, 40);
       });
 
@@ -66,13 +81,13 @@ export default function Tape({ symbol, onUpdate }: any) {
         Trades
       </div>
 
-      {trades.map((t, i) => {
+      {trades.map((t) => {
 
         const color = t.isBuy ? "#00ff66" : "#ff3b3b";
 
         return (
           <div
-            key={i}
+            key={t.id}
             style={{
               display:"flex",
               justifyContent:"space-between",

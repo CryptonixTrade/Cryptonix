@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-export default function OrderBook({ symbol, onUpdate }: any) {
+type Props = {
+  symbol: string;
+  onUpdate?: (data: {
+    imbalance: number; // -1 .. +1
+    bidVolume: number;
+    askVolume: number;
+  }) => void;
+};
 
-  const [bids, setBids] = useState<any[]>([]);
-  const [asks, setAsks] = useState<any[]>([]);
+export default function OrderBook({ symbol, onUpdate }: Props) {
 
   useEffect(() => {
     if (!symbol) return;
@@ -15,28 +21,34 @@ export default function OrderBook({ symbol, onUpdate }: any) {
     );
 
     ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
+      try {
+        const data = JSON.parse(e.data);
 
-      const b = data.b.map((x:any)=>({
-        price:+x[0],
-        qty:+x[1]
-      }));
+        if (!data?.b || !data?.a) return;
 
-      const a = data.a.map((x:any)=>({
-        price:+x[0],
-        qty:+x[1]
-      }));
+        const bids = data.b.map((x:any)=>+x[1]);
+        const asks = data.a.map((x:any)=>+x[1]);
 
-      setBids(b);
-      setAsks(a);
+        const bidVolume = bids.reduce((a:number,b:number)=>a+b,0);
+        const askVolume = asks.reduce((a:number,b:number)=>a+b,0);
 
-      // 🔥 ВАЖНО: данные продолжают идти в систему
-      onUpdate?.({ bids: b, asks: a });
+        const total = bidVolume + askVolume;
+
+        const imbalance =
+          total > 0 ? (bidVolume - askVolume) / total : 0;
+
+        onUpdate?.({
+          imbalance,
+          bidVolume,
+          askVolume
+        });
+
+      } catch {}
     };
 
     return () => ws.close();
+
   }, [symbol]);
 
-  // ❌ UI УБРАН ПОЛНОСТЬЮ
-  return null;
+  return null; // 🔥 UI убрали — только данные
 }

@@ -2,129 +2,140 @@
 
 import { useMemo } from "react";
 
-export default function PressureSignal({ bids, asks, trades }: any) {
+export default function TechnicalSignal({ candles }: any) {
 
   const signal = useMemo(() => {
+    if (!candles || candles.length < 30) return null;
 
-    if (!bids.length || !asks.length || !trades.length) return null;
+    const closes = candles.map((c:any)=>Number(c.close || 0));
+    const volumes = candles.map((c:any)=>Number(c.volume || 0));
 
-    // ===== PRICE (из tape)
-    const currentPrice = trades[0]?.price || 0;
+    if (closes.length < 30) return null;
 
-    // ===== ORDERBOOK
-    const bidVolume = bids.reduce((s:any,b:any)=>s+b.qty,0);
-    const askVolume = asks.reduce((s:any,a:any)=>s+a.qty,0);
-    const obPressure = bidVolume - askVolume;
+    // ===== MA
+    const maFast =
+      closes.slice(-9).reduce((a:number,b:number)=>a+b,0)/9;
 
-    // ===== TAPE
-    const buyVolume = trades.filter((t:any)=>t.isBuy).reduce((s:any,t:any)=>s+t.qty,0);
-    const sellVolume = trades.filter((t:any)=>!t.isBuy).reduce((s:any,t:any)=>s+t.qty,0);
+    const maSlow =
+      closes.slice(-21).reduce((a:number,b:number)=>a+b,0)/21;
 
-    const tapePressure = buyVolume - sellVolume;
+    let maScore = 0;
+    if (maFast > maSlow) maScore = 1;
+    else if (maFast < maSlow) maScore = -1;
 
-    // ===== FINAL
-    const total = obPressure * 0.6 + tapePressure * 0.4;
+    // ===== RSI (фикс)
+    let gains = 0;
+    let losses = 0;
 
-    const strengthRaw = Math.min(100, Math.abs(total));
-    const strength = Math.round(strengthRaw / 10) * 10;
+    for(let i = closes.length - 14; i < closes.length; i++){
+      const prev = closes[i - 1];
+      const curr = closes[i];
 
-    const side = total >= 0 ? "LONG" : "SHORT";
+      if(prev === undefined || curr === undefined) continue;
 
-    // =====================================
-    // 🔥 ENTRY / STOP / TAKE
-    // =====================================
-    let entry = currentPrice;
-    let stop = 0;
-    let take = 0;
+      const diff = curr - prev;
 
-    const risk = currentPrice * 0.002; // 0.2%
-
-    if (side === "LONG") {
-      stop = entry - risk;
-      take = entry + risk * 2;
-    } else {
-      stop = entry + risk;
-      take = entry - risk * 2;
+      if(diff > 0) gains += diff;
+      else losses += Math.abs(diff);
     }
 
-    // =====================================
-    // 🔥 AI SPEED
-    // =====================================
-    const lastTrades = trades.slice(0, 20);
-    const prevTrades = trades.slice(20, 40);
+    const rs = gains / (losses || 1);
+    const rsi = 100 - (100 / (1 + rs));
 
-    const lastVolume = lastTrades.reduce((s:any,t:any)=>s+t.qty,0);
-    const prevVolume = prevTrades.reduce((s:any,t:any)=>s+t.qty,0);
+    let rsiScore = 0;
 
-    let momentum = "FLAT";
+    if (rsi > 65) rsiScore = 1;
+    else if (rsi < 35) rsiScore = -1;
 
-    if (lastVolume > prevVolume * 1.2) momentum = "STRONG";
-    if (lastVolume < prevVolume * 0.8) momentum = "WEAK";
+    // ===== VOLUME
+    const volNow = volumes.at(-1) || 0;
+    const volAvg =
+      volumes.slice(-10).reduce((a:number,b:number)=>a+b,0)/10;
 
-    const speedRaw = (trades.length * 2 + lastVolume) / 2;
-    let speed = Math.min(100, speedRaw);
-    speed = Math.round(speed / 10) * 10;
+    let volScore = 0;
 
-    return {
-      side,
-      strength,
-      entry,
-      stop,
-      take,
-      momentum,
-      speed
-    };
+    if (volNow > volAvg * 1.1) volScore = 1;
+    else if (volNow < volAvg * 0.9) volScore = -1;
 
-  }, [bids, asks, trades]);
+    // ===== FINAL SCORE
+    const raw =
+      maScore * 0.4 +
+      rsiScore * 0.3 +
+      volScore * 0.3;
+
+    const score = Math.max(0, Math.min(100, (raw + 1) / 2 * 100));
+
+    // 🔥 УМНАЯ ЗОНА (не дёргается)
+    let decision = "NO TRADE";
+
+    if (score > 65) decision = "LONG";
+    else if (score < 35) decision = "SHORT";
+
+    return { score, decision, rsi };
+
+  }, [candles]);
 
   if (!signal) return null;
 
-  const color = signal.side === "LONG" ? "#00ff66" : "#ff3b3b";
+  const color =
+    signal.decision === "LONG"
+      ? "#00ff66"
+      : signal.decision === "SHORT"
+      ? "#ff3b3b"
+      : "#999";
 
   return (
     <div style={{
       background:"#0f0f0f",
-      padding:10,
-      marginBottom:10,
       border:"1px solid #111",
-      borderRadius:6
+      borderRadius:12,
+      padding:16,
+      marginBottom:10,
+      textAlign:"center"
     }}>
 
       <div style={{ fontSize:12, opacity:0.6 }}>
-        AI Trade Signal
+        TECHNICAL SIGNAL
+      </div>
+
+      {/* ШКАЛА */}
+      <div style={{
+        marginTop:10,
+        height:14,
+        borderRadius:10,
+        background:"linear-gradient(to right, #ff3b3b, #222, #00ff66)",
+        position:"relative"
+      }}>
+
+        <div style={{
+          position:"absolute",
+          left:`${signal.score}%`,
+          top:"50%",
+          transform:"translate(-50%, -50%)",
+          width:14,
+          height:14,
+          borderRadius:"50%",
+          background:"#ffd700",
+          boxShadow:"0 0 6px #ffd700"
+        }}/>
+
       </div>
 
       <div style={{
+        marginTop:10,
         fontSize:18,
-        color,
-        fontWeight:600
+        fontWeight:700,
+        color
       }}>
-        {signal.side} ({signal.strength}%)
+        {signal.decision}
       </div>
 
-      {/* ENTRY */}
-      <div style={{ marginTop:6, fontSize:12 }}>
-        Entry: {signal.entry.toFixed(2)}
-      </div>
-
-      {/* STOP */}
-      <div style={{ fontSize:12, color:"#ff3b3b" }}>
-        Stop: {signal.stop.toFixed(2)}
-      </div>
-
-      {/* TAKE */}
-      <div style={{ fontSize:12, color:"#00ff66" }}>
-        Take: {signal.take.toFixed(2)}
-      </div>
-
-      {/* MOMENTUM */}
-      <div style={{ fontSize:12, marginTop:4 }}>
-        Momentum: {signal.momentum}
-      </div>
-
-      {/* SPEED */}
       <div style={{ fontSize:12 }}>
-        AI Speed: {signal.speed}
+        {signal.score.toFixed(0)}%
+      </div>
+
+      <div style={{ fontSize:11 }}>
+        RSI: {signal.rsi.toFixed(0)}
       </div>
 
     </div>

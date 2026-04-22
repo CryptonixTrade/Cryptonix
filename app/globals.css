@@ -1,33 +1,48 @@
 @import "tailwindcss";
 
+/* ===== VARIABLES ===== */
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #050505;
+  --background-soft: #0a0a0a;
+  --foreground: #f5f5f5;
+
+  --accent: #e6c200;
+  --accent-soft: #ffd700;
+
+  --border: rgba(230, 194, 0, 0.15);
+  --border-strong: rgba(230, 194, 0, 0.35);
+
+  --glow: 0 0 12px rgba(230, 194, 0, 0.25);
+
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: monospace;
+
+  --transition-fast: 0.15s ease;
+  --transition-smooth: 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-/* ===== ОСНОВА (как Binance) ===== */
+/* ===== BASE ===== */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* ❗ УБРАЛИ СКРОЛЛ */
+  overflow: hidden;
+
+  background: radial-gradient(circle at 50% 20%, #0a0a0a, #050505 80%);
 }
 
-/* ===== ROOT CONTAINER ===== */
+/* ===== BODY ===== */
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 
   display: flex;
   flex-direction: column;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  will-change: transform;
 }
 
 /* ===== NEXT ROOT ===== */
@@ -42,20 +57,83 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* ❗ ВАЖНО */
+  overflow: hidden;
 }
 
-/* ===== FLEX FIX (чтобы не ломались блоки) ===== */
-* {
+/* ===== GLOBAL FIX ===== */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-/* ===== СКРЫВАЕМ СКРОЛЛ БАРЫ (если где-то появятся) ===== */
-::-webkit-scrollbar {
-  display: none;
+/* ===== SMOOTH INTERACTIONS ===== */
+button,
+input,
+select {
+  transition: 
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border var(--transition-fast),
+    transform var(--transition-fast);
 }
 
-/* ===== ПЛАВНОСТЬ ===== */
-* {
-  transition: background 0.2s ease, color 0.2s ease;
+/* ===== HOVER EFFECT ===== */
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* ===== BORDER GLOW ===== */
+.glow {
+  box-shadow: var(--glow);
+}
+
+/* ===== SCROLLBAR (тонкий, аккуратный) ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.15);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 215, 0, 0.35);
+}
+
+/* ===== TEXT ===== */
+::selection {
+  background: rgba(255, 215, 0, 0.2);
+  color: #fff;
+}
+
+/* ===== PERFORMANCE OPTIMIZATION ===== */
+canvas {
+  image-rendering: optimizeSpeed;
+  will-change: transform;
+}
+
+/* ===== MICRO ANIMATION ===== */
+.fade-in {
+  animation: fadeIn 0.25s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

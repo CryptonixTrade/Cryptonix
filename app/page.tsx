@@ -1,6 +1,8 @@
 "use client";
 
 import PressureSignal from "./components/PressureSignal";
+import TechnicalSignal, { Signal } from "./components/TechnicalSignal";
+
 import { useEffect, useState } from "react";
 
 import Chart from "./components/Chart";
@@ -34,7 +36,11 @@ export default function Home() {
     sellVolume: 0
   });
 
-  // ===== LOAD
+  // ✅ ФИКС
+  const [techSignal, setTechSignal] = useState<Signal | null>(null);
+
+  /* ================= LOAD ================= */
+
   useEffect(() => {
     const savedSymbol = localStorage.getItem("symbol");
     const savedInterval = localStorage.getItem("interval");
@@ -43,7 +49,8 @@ export default function Home() {
     if (savedInterval) setIntervalState(savedInterval);
   }, []);
 
-  // ===== SAVE
+  /* ================= SAVE ================= */
+
   useEffect(() => {
     localStorage.setItem("symbol", symbol);
   }, [symbol]);
@@ -52,7 +59,8 @@ export default function Home() {
     localStorage.setItem("interval", interval);
   }, [interval]);
 
-  // ===== RESET
+  /* ================= RESET ================= */
+
   useEffect(() => {
     setSelected(null);
     setTrade(null);
@@ -62,7 +70,8 @@ export default function Home() {
     if (!selected) setTrade(null);
   }, [selected]);
 
-  // ===== BTC SPOT
+  /* ================= BTC SPOT ================= */
+
   useEffect(() => {
     const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
 
@@ -74,7 +83,8 @@ export default function Home() {
     return () => ws.close();
   }, []);
 
-  // ===== BTC FUTURES
+  /* ================= BTC FUTURES ================= */
+
   useEffect(() => {
     const ws = new WebSocket("wss://fstream.binance.com/ws/btcusdt@trade");
 
@@ -86,7 +96,8 @@ export default function Home() {
     return () => ws.close();
   }, []);
 
-  // ===== LIVE PRICE + FLOW
+  /* ================= LIVE PRICE ================= */
+
   useEffect(() => {
     if (!symbol) return;
 
@@ -118,80 +129,107 @@ export default function Home() {
     return () => ws.close();
   }, [symbol]);
 
-  // ===== COINS
+  /* ================= COINS ================= */
+
   useEffect(() => {
     async function fetchCoins(){
-      const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-      const data = await res.json();
+      try {
+        const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
+        const data = await res.json();
 
-      const usdt = data.filter((c:any)=>c.symbol.endsWith("USDT"));
-      setCoins(usdt);
+        const usdt = data.filter((c:any)=>c.symbol.endsWith("USDT"));
+        setCoins(usdt);
+      } catch (e) {
+        console.error("Coins fetch error", e);
+      }
     }
 
     fetchCoins();
   }, []);
 
-  // ===== INITIAL CANDLES
+  /* ================= CANDLES ================= */
+
   async function fetchData() {
-    const res = await fetch(
-      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=100`
-    );
-    const data = await res.json();
+    try {
+      const res = await fetch(
+        `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=100`
+      );
+      const data = await res.json();
 
-    const mapped = data.map((c:any)=>({
-      time: c[0] / 1000,
-      open: +c[1],
-      high: +c[2],
-      low: +c[3],
-      close: +c[4],
-      volume: +c[5]
-    }));
+      const mapped = data.map((c:any)=>({
+        time: c[0] / 1000,
+        open: +c[1],
+        high: +c[2],
+        low: +c[3],
+        close: +c[4],
+        volume: +c[5]
+      }));
 
-    setCandles(mapped);
+      setCandles(mapped);
+    } catch (e) {
+      console.error("Candles fetch error", e);
+    }
   }
 
   useEffect(()=>{
     fetchData();
   },[symbol, interval]);
 
-  // ===== LIVE KLINE
-  useEffect(() => {
-    if (!symbol || !interval) return;
+  /* ================= REALTIME CANDLES ================= */
 
-    const ws = new WebSocket(
-      `wss://fstream.binance.com/ws/${symbol.toLowerCase()}@kline_${interval}`
-    );
+useEffect(() => {
+  if (!symbol || !interval) return;
 
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      const k = data.k;
+  const ws = new WebSocket(
+    `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${interval}`
+  );
 
-      const candle = {
-        time: Math.floor(k.t / 1000),
-        open: +k.o,
-        high: +k.h,
-        low: +k.l,
-        close: +k.c,
-        volume: +k.v
-      };
+  ws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    const k = data.k;
 
-      setCandles(prev => {
-        if (!prev.length) return prev;
+    if (!k) return;
 
-        const last = prev.at(-1);
-
-        if (last.time === candle.time) {
-          return [...prev.slice(0, -1), candle];
-        }
-
-        return [...prev.slice(-99), candle];
-      });
+    const newCandle = {
+      time: Math.floor(k.t / 1000),
+      open: +k.o,
+      high: +k.h,
+      low: +k.l,
+      close: +k.c,
+      volume: +k.v
     };
 
-    return () => ws.close();
-  }, [symbol, interval]);
+    setCandles(prev => {
+      if (!prev.length) return [newCandle];
 
-  // ===== TRADE
+      const last = prev[prev.length - 1];
+
+      // обновление текущей свечи
+      if (last.time === newCandle.time) {
+        const updated = [...prev];
+        updated[updated.length - 1] = newCandle;
+        return updated;
+      }
+
+      // новая свеча
+      if (newCandle.time > last.time) {
+        return [...prev.slice(-500), newCandle];
+      }
+
+      return prev;
+    });
+  };
+
+  ws.onerror = () => {
+    console.log("WS candles error");
+  };
+
+  return () => ws.close();
+
+}, [symbol, interval]);
+
+  /* ================= TRADE ================= */
+
   function createTrade(type:"LONG"|"SHORT"){
 
     if (selected === type) {
@@ -231,6 +269,8 @@ export default function Home() {
     });
   }
 
+  /* ================= UI ================= */
+
   return (
     <main style={{
       height:"100vh",
@@ -251,26 +291,11 @@ export default function Home() {
         btcFutures={btcFutures}
       />
 
-      <div style={{
-        flex:1,
-        display:"flex",
-        gap:10,
-        minHeight:0
-      }}>
+      <div style={{ flex:1, display:"flex", gap:10, minHeight:0 }}>
 
-        <div style={{
-          flex:1,
-          display:"flex",
-          flexDirection:"column",
-          gap:10,
-          minHeight:0
-        }}>
+        <div style={{ flex:1, display:"flex", flexDirection:"column", gap:10, minHeight:0 }}>
 
-          <div style={{
-            display:"flex",
-            justifyContent:"space-between",
-            gap:10
-          }}>
+          <div style={{ display:"flex", justifyContent:"space-between", gap:10 }}>
             <Search
               coins={coins}
               setSymbol={setSymbol}
@@ -285,11 +310,18 @@ export default function Home() {
             />
           </div>
 
+          <TechnicalSignal
+            candles={candles}
+            interval={interval}
+            onSignal={setTechSignal}
+          />
+
           <AISignal
             candles={candles}
             onSignal={setAiSignal}
             flow={tradeFlow}
             interval={interval}
+            techSignal={techSignal}
           />
 
           <div style={{ flex:1, minHeight:0 }}>
@@ -301,12 +333,7 @@ export default function Home() {
 
         </div>
 
-        <div style={{
-          width:260,
-          display:"flex",
-          flexDirection:"column",
-          gap:10
-        }}>
+        <div style={{ width:260, display:"flex", flexDirection:"column", gap:10 }}>
 
           <TradePanel
             trade={selected ? trade : null}
@@ -317,9 +344,9 @@ export default function Home() {
           />
 
           <PressureSignal
-            bids={[{ volume: tradeFlow.buyVolume }]}
-            asks={[{ volume: tradeFlow.sellVolume }]}
-            trades={[]}
+            bids={[{ qty: tradeFlow.buyVolume }]}
+            asks={[{ qty: tradeFlow.sellVolume }]}
+            trades={[{ price: price || 0, qty: 1, isBuy: true }]}
           />
 
         </div>
