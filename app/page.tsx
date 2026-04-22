@@ -316,24 +316,35 @@ export default function Home() {
 
         </div>
 
-        {/* RIGHT PANEL */}
-        <div className="w-full lg:w-[260px] flex flex-col gap-2">
+{/* MOBILE: TradePanel ПОД ГРАФИКОМ */}
+<div className="lg:hidden">
+  <TradePanel
+    trade={selected ? trade : null}
+    selected={selected}
+    onTrade={createTrade}
+    price={price}
+    aiSignal={aiSignal}
+  />
+</div>
 
-          <TradePanel
-            trade={selected ? trade : null}
-            selected={selected}
-            onTrade={createTrade}
-            price={price}
-            aiSignal={aiSignal}
-          />
+{/* DESKTOP RIGHT PANEL */}
+<div className="hidden lg:flex w-[260px] flex-col gap-2">
 
-          <PressureSignal
-            bids={[{ qty: tradeFlow.buyVolume }]}
-            asks={[{ qty: tradeFlow.sellVolume }]}
-            trades={[{ price: price || 0, qty: 1, isBuy: true }]}
-          />
+  <TradePanel
+    trade={selected ? trade : null}
+    selected={selected}
+    onTrade={createTrade}
+    price={price}
+    aiSignal={aiSignal}
+  />
 
-        </div>
+  <PressureSignal
+    bids={[{ qty: tradeFlow.buyVolume }]}
+    asks={[{ qty: tradeFlow.sellVolume }]}
+    trades={[{ price: price || 0, qty: 1, isBuy: true }]}
+  />
+
+</div>
 
       </div>
 
