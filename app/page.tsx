@@ -224,7 +224,6 @@ export default function Home() {
   /* ================= TRADE ================= */
 
   function createTrade(type:"LONG"|"SHORT"){
-
     if (selected === type) {
       setSelected(null);
       setTrade(null);
@@ -265,7 +264,7 @@ export default function Home() {
   /* ================= UI ================= */
 
   return (
-    <main className="h-screen flex flex-col bg-[#0a0a0a] text-yellow-400 border border-yellow-500/30 rounded-lg p-2 overflow-auto">
+    <main className="min-h-screen flex flex-col bg-[#0a0a0a] text-yellow-400 border border-yellow-500/30 rounded-lg p-2 overflow-auto">
 
       <Header
         symbol={symbol}
@@ -274,10 +273,10 @@ export default function Home() {
         btcFutures={btcFutures}
       />
 
-      <div className="flex flex-1 gap-2 min-h-0 flex-col lg:flex-row">
+      <div className="flex flex-1 gap-2 flex-col lg:flex-row">
 
         {/* LEFT SIDE */}
-        <div className="flex flex-1 flex-col gap-2 min-h-0">
+        <div className="flex flex-1 flex-col gap-2">
 
           <div className="flex flex-col md:flex-row gap-2">
             <Search
@@ -308,7 +307,7 @@ export default function Home() {
             techSignal={techSignal}
           />
 
-          <div className="flex-1 min-h-0">
+          <div className="flex-1">
             <Chart
               candles={candles}
               trade={selected ? trade : null}
