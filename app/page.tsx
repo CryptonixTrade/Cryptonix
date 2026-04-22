@@ -265,7 +265,7 @@ export default function Home() {
   /* ================= UI ================= */
 
   return (
-    <main className="h-screen flex flex-col bg-[#0a0a0a] text-yellow-400 border border-yellow-500/30 rounded-lg p-2 overflow-hidden" pb-24>
+    <main className="h-screen flex flex-col bg-[#0a0a0a] text-yellow-400 border border-yellow-500/30 rounded-lg p-2 overflow-hidden">
 
       <Header
         symbol={symbol}
