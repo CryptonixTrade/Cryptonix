@@ -7,129 +7,64 @@ export default function Header({
   btcFutures,
 }: any) {
 
-  const change = 0.85; 
+  const change = 0.85;
   const isUp = change >= 0;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "14px 16px",
-        marginBottom: 10,
+    <div className="relative mb-2 rounded-xl border border-yellow-500/10 bg-gradient-to-br from-[#0f0f0f]/90 to-[#0a0a0a]/95 backdrop-blur-md shadow-[0_0_30px_rgba(255,215,0,0.06),inset_0_0_20px_rgba(255,215,0,0.03)] overflow-hidden">
 
-        /* 🔥 PREMIUM GLASS */
-        background: "linear-gradient(145deg, rgba(15,15,15,0.85), rgba(10,10,10,0.95))",
-        backdropFilter: "blur(12px)",
-        border: "1px solid rgba(255,215,0,0.08)",
-        borderRadius: 12,
+      {/* 🔥 TOP GLOW LINE */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-60" />
 
-        /* 🔥 GLOW */
-        boxShadow: `
-          0 0 30px rgba(255,215,0,0.06),
-          inset 0 0 20px rgba(255,215,0,0.03)
-        `,
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-3 md:p-4">
 
-        position: "relative",
-        overflow: "hidden"
-      }}
-    >
+        {/* LEFT (SYMBOL) */}
+        <div className="flex items-center gap-2">
 
-      {/* 🔥 ENERGY LIGHT */}
-      <div style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 2,
-        background: "linear-gradient(to right, transparent, #ffd700, transparent)",
-        opacity: 0.6
-      }}/>
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_12px_rgba(255,215,0,0.8)]" />
 
-      {/* 🔥 BRAND LEFT */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div>
+            <div className="text-white text-base md:text-lg font-bold tracking-wide">
+              {symbol}
+            </div>
 
-        {/* LOGO DOT */}
-        <div style={{
-          width: 10,
-          height: 10,
-          borderRadius: "50%",
-          background: "#ffd700",
-          boxShadow: "0 0 12px rgba(255,215,0,0.8)"
-        }}/>
-
-        <div>
-          <div style={{
-            fontSize: 18,
-            fontWeight: 700,
-            letterSpacing: 0.6,
-            color: "#fff"
-          }}>
-            {symbol}
-          </div>
-
-          <div style={{
-            fontSize: 10,
-            letterSpacing: 1.5,
-            color: "#ffd700",
-            opacity: 0.8
-          }}>
-            CRYPTONIX
+            <div className="text-[10px] md:text-xs tracking-widest text-yellow-400/80">
+              CRYPTONIX
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* CENTER */}
-      <div style={{
-        textAlign: "center",
-        fontSize: 12
-      }}>
-        <div style={{
-          fontSize: 18,
-          fontWeight: 700,
-          color: "#ffd700",
-          textShadow: "0 0 12px rgba(255,215,0,0.5)"
-        }}>
-          {price ? price.toFixed(2) : "--"}
+        {/* CENTER (PRICE) */}
+        <div className="text-center md:text-center">
+
+          <div className="text-lg md:text-xl font-bold text-yellow-400 drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
+            {price ? price.toFixed(2) : "--"}
+          </div>
+
+          <div
+            className={`text-xs ${
+              isUp ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {isUp ? "+" : ""}
+            {change}%
+          </div>
         </div>
 
-        <div style={{
-          fontSize: 11,
-          color: isUp ? "#00ff66" : "#ff3b3b",
-          textShadow: isUp
-            ? "0 0 6px rgba(0,255,100,0.4)"
-            : "0 0 6px rgba(255,50,50,0.4)"
-        }}>
-          {isUp ? "+" : ""}{change}%
-        </div>
-      </div>
+        {/* RIGHT (SPOT/FUTURES) */}
+        <div className="flex flex-col md:items-end text-xs gap-1">
 
-      {/* RIGHT */}
-      <div style={{
-        textAlign: "right",
-        fontSize: 11,
-        display: "flex",
-        flexDirection: "column",
-        gap: 3
-      }}>
+          <div className="text-green-400">
+            Spot: {btcSpot ? btcSpot.toFixed(2) : "--"}
+          </div>
 
-        <div style={{
-          color: "#00ff66",
-          textShadow: "0 0 8px rgba(0,255,100,0.4)"
-        }}>
-          Spot: {btcSpot?.toFixed(2) || "--"}
-        </div>
+          <div className="text-orange-400">
+            Futures: {btcFutures ? btcFutures.toFixed(2) : "--"}
+          </div>
 
-        <div style={{
-          color: "#ff9900",
-          textShadow: "0 0 8px rgba(255,150,0,0.4)"
-        }}>
-          Futures: {btcFutures?.toFixed(2) || "--"}
         </div>
 
       </div>
-
     </div>
   );
 }

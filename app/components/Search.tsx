@@ -15,7 +15,7 @@ export default function Search({
 
   const ref = useRef<any>(null);
 
-  // ===== LOAD FAVORITES
+  /* ===== LOAD FAVORITES ===== */
   useEffect(() => {
     try {
       const saved = localStorage.getItem("favorites");
@@ -23,12 +23,12 @@ export default function Search({
     } catch {}
   }, []);
 
-  // ===== SAVE FAVORITES
+  /* ===== SAVE FAVORITES ===== */
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  // ===== CLOSE CLICK OUTSIDE
+  /* ===== CLICK OUTSIDE ===== */
   useEffect(() => {
     const handleClick = (e: any) => {
       if (ref.current && !ref.current.contains(e.target)) {
@@ -40,7 +40,7 @@ export default function Search({
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // ===== SEARCH + FAVORITES PRIORITY
+  /* ===== RESULTS ===== */
   const results = useMemo(() => {
     if (!coins?.length) return [];
 
@@ -50,7 +50,6 @@ export default function Search({
         c.symbol.toLowerCase().includes(search.toLowerCase())
       );
 
-    // 🔥 фавориты вверх
     const sorted = filtered.sort((a:any, b:any)=>{
       const aFav = favorites.includes(a.symbol) ? 1 : 0;
       const bFav = favorites.includes(b.symbol) ? 1 : 0;
@@ -72,15 +71,11 @@ export default function Search({
   }
 
   return (
-    <div ref={ref} style={{ width: 260, position: "relative", marginBottom: 12 }}>
+    <div ref={ref} className="w-full md:w-[260px] relative">
 
       {/* SELECTED */}
-      <div style={{
-        marginBottom:6,
-        fontSize:11,
-        color:"#888"
-      }}>
-        Selected: <span style={{color:"#ffd700"}}>{symbol}</span>
+      <div className="mb-1 text-xs text-gray-500">
+        Selected: <span className="text-yellow-400">{symbol}</span>
       </div>
 
       {/* INPUT */}
@@ -92,129 +87,86 @@ export default function Search({
           setSearch(e.target.value);
           setOpen(true);
         }}
-        style={{
-          width:"100%",
-          padding:"9px 10px",
-          background:"#0f0f0f",
-          color:"#fff",
-          border:"1px solid #222",
-          borderRadius:8,
-          outline:"none",
-          transition:"0.2s",
-          boxShadow: open ? "0 0 0 1px #ffd700" : "none"
-        }}
+        className={`
+          w-full px-3 py-2 text-sm rounded-lg outline-none
+          bg-[#0f0f0f] text-white border border-[#222]
+          focus:border-yellow-400 transition
+        `}
       />
 
       {/* DROPDOWN */}
-      <div
-        style={{
-          position:"absolute",
-          top:"100%",
-          left:0,
-          width:"100%",
-          background:"#0a0a0a",
-          border:"1px solid #222",
-          borderRadius:8,
-          marginTop:6,
-          maxHeight: open ? 320 : 0,
-          overflowY:"auto",
-          zIndex:100,
-          opacity: open ? 1 : 0,
-          transform: open ? "translateY(0px)" : "translateY(-5px)",
-          transition:"all 0.15s ease"
-        }}
-      >
+      {open && (
+        <div className="absolute top-full left-0 w-full mt-2 bg-[#0a0a0a] border border-[#222] rounded-lg max-h-[300px] overflow-y-auto z-50">
 
-        {results.map((c:any)=>{
+          {results.map((c:any)=>{
 
-          const change = Number(c.priceChangePercent || 0);
-          const price = Number(c.lastPrice || 0).toFixed(2);
-          const isFav = favorites.includes(c.symbol);
-          const isActive = symbol === c.symbol;
+            const change = Number(c.priceChangePercent || 0);
+            const price = Number(c.lastPrice || 0).toFixed(2);
+            const isFav = favorites.includes(c.symbol);
+            const isActive = symbol === c.symbol;
 
-          return (
-            <div
-              key={c.symbol}
-              onMouseDown={()=>{
-                setSymbol(c.symbol);
-                setOpen(false);
-              }}
-              style={{
-                display:"flex",
-                justifyContent:"space-between",
-                alignItems:"center",
-                padding:"8px 10px",
-                fontSize:12,
-                cursor:"pointer",
-                background: isActive ? "#1a1a1a" : "transparent",
-                transition:"0.12s"
-              }}
-              onMouseEnter={(e)=>{
-                if(!isActive) e.currentTarget.style.background = "#151515";
-              }}
-              onMouseLeave={(e)=>{
-                if(!isActive) e.currentTarget.style.background = "transparent";
-              }}
-            >
+            return (
+              <div
+                key={c.symbol}
+                onMouseDown={()=>{
+                  setSymbol(c.symbol);
+                  setOpen(false);
+                }}
+                className={`
+                  flex justify-between items-center px-3 py-2 text-sm cursor-pointer
+                  ${isActive ? "bg-[#1a1a1a]" : "hover:bg-[#151515]"}
+                `}
+              >
 
-              {/* LEFT */}
-              <div style={{display:"flex",flexDirection:"column"}}>
-                <span style={{fontWeight:500}}>
-                  {c.symbol.replace("USDT","")}
-                </span>
-                <span style={{fontSize:10,opacity:0.5}}>
-                  {price}
-                </span>
-              </div>
-
-              {/* RIGHT */}
-              <div style={{display:"flex",gap:8,alignItems:"center"}}>
-
-                <div style={{
-                  color: change >= 0 ? "#00ff66" : "#ff3b3b",
-                  fontSize:11,
-                  minWidth:40,
-                  textAlign:"right"
-                }}>
-                  {change.toFixed(1)}%
+                {/* LEFT */}
+                <div className="flex flex-col">
+                  <span className="font-medium">
+                    {c.symbol.replace("USDT","")}
+                  </span>
+                  <span className="text-[10px] opacity-50">
+                    {price}
+                  </span>
                 </div>
 
-                <div
-                  onMouseDown={(e)=>{
-                    e.stopPropagation();
-                    toggleFavorite(c.symbol);
-                  }}
-                  style={{
-                    color: isFav ? "#ffd700" : "#444",
-                    cursor:"pointer",
-                    transition:"0.2s",
-                    transform: isFav ? "scale(1.2)" : "scale(1)"
-                  }}
-                >
-                  ★
+                {/* RIGHT */}
+                <div className="flex items-center gap-2">
+
+                  <div className={`text-xs min-w-[45px] text-right ${
+                    change >= 0 ? "text-green-400" : "text-red-400"
+                  }`}>
+                    {change.toFixed(1)}%
+                  </div>
+
+                  <div
+                    onMouseDown={(e)=>{
+                      e.stopPropagation();
+                      toggleFavorite(c.symbol);
+                    }}
+                    className={`cursor-pointer transition ${
+                      isFav ? "text-yellow-400 scale-110" : "text-gray-600"
+                    }`}
+                  >
+                    ★
+                  </div>
+
                 </div>
 
               </div>
+            );
+          })}
 
-            </div>
-          );
-        })}
-
-      </div>
+        </div>
+      )}
 
       {/* FAVORITES */}
       {favorites.length > 0 && (
-        <div style={{marginTop:10, fontSize:11}}>
+        <div className="mt-3 text-xs">
 
-          <div style={{marginBottom:4, color:"#888"}}>
+          <div className="mb-1 text-gray-500">
             ⭐ Favorites
           </div>
 
-          <div style={{
-            display:"flex",
-            gap:6,
-            flexWrap:"wrap"
-          }}>
+          <div className="flex flex-wrap gap-2">
             {favorites.map((f:string)=>{
 
               const isActive = symbol === f;
@@ -223,15 +175,13 @@ export default function Search({
                 <div
                   key={f}
                   onClick={()=>setSymbol(f)}
-                  style={{
-                    padding:"4px 8px",
-                    borderRadius:6,
-                    cursor:"pointer",
-                    background: isActive ? "#ffd700" : "#111",
-                    color: isActive ? "#000" : "#ccc",
-                    fontSize:11,
-                    transition:"0.15s"
-                  }}
+                  className={`
+                    px-2 py-1 rounded-md cursor-pointer text-xs transition
+                    ${isActive
+                      ? "bg-yellow-400 text-black"
+                      : "bg-[#111] text-gray-300 hover:bg-[#1a1a1a]"
+                    }
+                  `}
                 >
                   {f.replace("USDT","")}
                 </div>

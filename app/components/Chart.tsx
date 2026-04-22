@@ -8,8 +8,12 @@ import {
 } from "lightweight-charts";
 
 export default function Chart({ candles, trade }: any) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const priceRef = useRef<HTMLDivElement>(null);
   const volumeRef = useRef<HTMLDivElement>(null);
+
+  const priceChartRef = useRef<any>(null);
+  const volumeChartRef = useRef<any>(null);
 
   const candleSeriesRef = useRef<any>(null);
   const volumeSeriesRef = useRef<any>(null);
@@ -18,27 +22,48 @@ export default function Chart({ candles, trade }: any) {
   const tpLineRef = useRef<any>(null);
   const slLineRef = useRef<any>(null);
 
-  // ===== INIT
+  /* ================= INIT ================= */
+
   useEffect(() => {
-    if (!priceRef.current || !volumeRef.current) return;
+    if (!priceRef.current || !volumeRef.current || !containerRef.current) return;
+
+    const width = containerRef.current.clientWidth;
 
     const priceChart = createChart(priceRef.current, {
-      width: priceRef.current.clientWidth,
-      height: priceRef.current.clientHeight,
+      width,
+      height: priceRef.current.clientHeight || 300,
+
       layout: {
         background: { color: "#0a0a0a" },
         textColor: "#888"
       },
+
       grid: {
         vertLines: { visible: false },
         horzLines: { visible: false }
       },
+
       rightPriceScale: {
         visible: true,
         borderVisible: false
       },
+
       timeScale: {
-        borderVisible: false
+        borderVisible: false,
+        timeVisible: true
+      },
+
+      handleScroll: {
+        mouseWheel: true,
+        pressedMouseMove: true,
+        horzTouchDrag: true,
+        vertTouchDrag: false
+      },
+
+      handleScale: {
+        axisPressedMouseMove: true,
+        mouseWheel: true,
+        pinch: true
       }
     });
 
@@ -51,19 +76,23 @@ export default function Chart({ candles, trade }: any) {
     });
 
     const volumeChart = createChart(volumeRef.current, {
-      width: volumeRef.current.clientWidth,
-      height: volumeRef.current.clientHeight,
+      width,
+      height: volumeRef.current.clientHeight || 100,
+
       layout: {
         background: { color: "#0a0a0a" },
         textColor: "#444"
       },
+
       grid: {
         vertLines: { visible: false },
         horzLines: { visible: false }
       },
+
       rightPriceScale: {
         visible: false
       },
+
       timeScale: {
         borderVisible: false
       }
@@ -73,81 +102,86 @@ export default function Chart({ candles, trade }: any) {
       priceFormat: { type: "volume" }
     });
 
-    // ===== СИНХРОНИЗАЦИЯ (фикс)
+    // ===== SYNC TIME SCALE
     let isSyncing = false;
 
     priceChart.timeScale().subscribeVisibleTimeRangeChange((range: any) => {
-      if (isSyncing) return;
-      if (!range || !range.from || !range.to) return;
-
+      if (isSyncing || !range) return;
+      isSyncing = true;
       try {
-        isSyncing = true;
         volumeChart.timeScale().setVisibleRange(range);
       } catch {}
-      finally {
-        isSyncing = false;
-      }
+      isSyncing = false;
     });
 
     volumeChart.timeScale().subscribeVisibleTimeRangeChange((range: any) => {
-      if (isSyncing) return;
-      if (!range || !range.from || !range.to) return;
-
+      if (isSyncing || !range) return;
+      isSyncing = true;
       try {
-        isSyncing = true;
         priceChart.timeScale().setVisibleRange(range);
       } catch {}
-      finally {
-        isSyncing = false;
-      }
+      isSyncing = false;
     });
+
+    priceChartRef.current = priceChart;
+    volumeChartRef.current = volumeChart;
 
     candleSeriesRef.current = candleSeries;
     volumeSeriesRef.current = volumeSeries;
 
-    // ===== RESIZE
-    const handleResize = () => {
-      if (!priceRef.current || !volumeRef.current) return;
+    /* ================= RESIZE ================= */
+
+    const resize = () => {
+      if (!containerRef.current || !priceRef.current || !volumeRef.current) return;
+
+      const newWidth = containerRef.current.clientWidth;
 
       priceChart.applyOptions({
-        width: priceRef.current.clientWidth,
-        height: priceRef.current.clientHeight
+        width: newWidth,
+        height: priceRef.current.clientHeight || 300
       });
 
       volumeChart.applyOptions({
-        width: volumeRef.current.clientWidth,
-        height: volumeRef.current.clientHeight
+        width: newWidth,
+        height: volumeRef.current.clientHeight || 100
       });
     };
 
-    window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(containerRef.current);
+
+    window.addEventListener("resize", resize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", resize);
+
       priceChart.remove();
       volumeChart.remove();
     };
 
   }, []);
 
-  // ===== DATA
+  /* ================= DATA ================= */
+
   useEffect(() => {
-    if (!candles?.length) return;
+    if (!candles || !Array.isArray(candles) || candles.length === 0) return;
 
     const candleData = candles.map((c: any) => ({
       time: Number(c.time),
       open: c.open,
       high: c.high,
       low: c.low,
-      close: c.close,
+      close: c.close
     }));
 
     const volumeData = candles.map((c: any) => ({
       time: Number(c.time),
-      value: c.volume,
-      color: c.close >= c.open
-        ? "rgba(0,255,100,0.5)"
-        : "rgba(255,0,0,0.5)"
+      value: c.volume || 0,
+      color:
+        c.close >= c.open
+          ? "rgba(0,255,100,0.5)"
+          : "rgba(255,0,0,0.5)"
     }));
 
     candleSeriesRef.current?.setData(candleData);
@@ -155,28 +189,21 @@ export default function Chart({ candles, trade }: any) {
 
   }, [candles]);
 
-  // ===== TRADE LEVELS
+  /* ================= TRADE ================= */
+
   useEffect(() => {
     const series = candleSeriesRef.current;
     if (!series) return;
 
-    // очистка
-    if (entryLineRef.current) {
-      try { series.removePriceLine(entryLineRef.current); } catch {}
-      entryLineRef.current = null;
-    }
+    // очистка старых линий
+    [entryLineRef, tpLineRef, slLineRef].forEach(ref => {
+      if (ref.current) {
+        try { series.removePriceLine(ref.current); } catch {}
+        ref.current = null;
+      }
+    });
 
-    if (tpLineRef.current) {
-      try { series.removePriceLine(tpLineRef.current); } catch {}
-      tpLineRef.current = null;
-    }
-
-    if (slLineRef.current) {
-      try { series.removePriceLine(slLineRef.current); } catch {}
-      slLineRef.current = null;
-    }
-
-    if (!trade) return;
+    if (!trade || !trade.entry || !trade.take || !trade.stop) return;
 
     entryLineRef.current = series.createPriceLine({
       price: trade.entry,
@@ -203,15 +230,17 @@ export default function Chart({ candles, trade }: any) {
 
   }, [trade]);
 
+  /* ================= UI ================= */
+
   return (
-    <div style={{
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column"
-    }}>
-      <div ref={priceRef} style={{ flex: 4 }} />
-      <div ref={volumeRef} style={{ flex: 1 }} />
+    <div ref={containerRef} className="w-full h-full flex flex-col">
+
+      {/* PRICE */}
+      <div ref={priceRef} className="flex-[4] min-h-[200px]" />
+
+      {/* VOLUME */}
+      <div ref={volumeRef} className="flex-[1] min-h-[80px]" />
+
     </div>
   );
 }

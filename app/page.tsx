@@ -36,7 +36,6 @@ export default function Home() {
     sellVolume: 0
   });
 
-  // ✅ ФИКС
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
 
   /* ================= LOAD ================= */
@@ -177,56 +176,50 @@ export default function Home() {
 
   /* ================= REALTIME CANDLES ================= */
 
-useEffect(() => {
-  if (!symbol || !interval) return;
+  useEffect(() => {
+    if (!symbol || !interval) return;
 
-  const ws = new WebSocket(
-    `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${interval}`
-  );
+    const ws = new WebSocket(
+      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${interval}`
+    );
 
-  ws.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    const k = data.k;
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      const k = data.k;
 
-    if (!k) return;
+      if (!k) return;
 
-    const newCandle = {
-      time: Math.floor(k.t / 1000),
-      open: +k.o,
-      high: +k.h,
-      low: +k.l,
-      close: +k.c,
-      volume: +k.v
+      const newCandle = {
+        time: Math.floor(k.t / 1000),
+        open: +k.o,
+        high: +k.h,
+        low: +k.l,
+        close: +k.c,
+        volume: +k.v
+      };
+
+      setCandles(prev => {
+        if (!prev.length) return [newCandle];
+
+        const last = prev[prev.length - 1];
+
+        if (last.time === newCandle.time) {
+          const updated = [...prev];
+          updated[updated.length - 1] = newCandle;
+          return updated;
+        }
+
+        if (newCandle.time > last.time) {
+          return [...prev.slice(-500), newCandle];
+        }
+
+        return prev;
+      });
     };
 
-    setCandles(prev => {
-      if (!prev.length) return [newCandle];
+    return () => ws.close();
 
-      const last = prev[prev.length - 1];
-
-      // обновление текущей свечи
-      if (last.time === newCandle.time) {
-        const updated = [...prev];
-        updated[updated.length - 1] = newCandle;
-        return updated;
-      }
-
-      // новая свеча
-      if (newCandle.time > last.time) {
-        return [...prev.slice(-500), newCandle];
-      }
-
-      return prev;
-    });
-  };
-
-  ws.onerror = () => {
-    console.log("WS candles error");
-  };
-
-  return () => ws.close();
-
-}, [symbol, interval]);
+  }, [symbol, interval]);
 
   /* ================= TRADE ================= */
 
@@ -272,17 +265,7 @@ useEffect(() => {
   /* ================= UI ================= */
 
   return (
-    <main style={{
-      height:"100vh",
-      display:"flex",
-      flexDirection:"column",
-      background:"#0a0a0a",
-      color:"#e6c200",
-      border:"1px solid rgba(230,194,0,0.3)",
-      borderRadius:8,
-      padding:6,
-      overflow:"hidden"
-    }}>
+    <main className="h-screen flex flex-col bg-[#0a0a0a] text-yellow-400 border border-yellow-500/30 rounded-lg p-2 overflow-hidden">
 
       <Header
         symbol={symbol}
@@ -291,11 +274,12 @@ useEffect(() => {
         btcFutures={btcFutures}
       />
 
-      <div style={{ flex:1, display:"flex", gap:10, minHeight:0 }}>
+      <div className="flex flex-1 gap-2 min-h-0 flex-col lg:flex-row">
 
-        <div style={{ flex:1, display:"flex", flexDirection:"column", gap:10, minHeight:0 }}>
+        {/* LEFT SIDE */}
+        <div className="flex flex-1 flex-col gap-2 min-h-0">
 
-          <div style={{ display:"flex", justifyContent:"space-between", gap:10 }}>
+          <div className="flex flex-col md:flex-row gap-2">
             <Search
               coins={coins}
               setSymbol={setSymbol}
@@ -324,7 +308,7 @@ useEffect(() => {
             techSignal={techSignal}
           />
 
-          <div style={{ flex:1, minHeight:0 }}>
+          <div className="flex-1 min-h-0">
             <Chart
               candles={candles}
               trade={selected ? trade : null}
@@ -333,7 +317,8 @@ useEffect(() => {
 
         </div>
 
-        <div style={{ width:260, display:"flex", flexDirection:"column", gap:10 }}>
+        {/* RIGHT PANEL */}
+        <div className="w-full lg:w-[260px] flex flex-col gap-2">
 
           <TradePanel
             trade={selected ? trade : null}

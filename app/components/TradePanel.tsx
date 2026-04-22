@@ -21,7 +21,7 @@ export default function TradePanel({
     return p.toFixed(2);
   }
 
-  // ===== PNL
+  /* ===== PNL ===== */
   useEffect(() => {
     if (!trade || !price) {
       setPnl(null);
@@ -36,7 +36,6 @@ export default function TradePanel({
       result = ((trade.entry - price) / trade.entry) * 100;
     }
 
-    // 🔥 лёгкое сглаживание (чтобы не дёргалось)
     setPnl(prev => {
       if (prev === null) return result;
       return prev * 0.7 + result * 0.3;
@@ -45,137 +44,91 @@ export default function TradePanel({
   }, [price, trade]);
 
   const pnlColor =
-    pnl === null ? "#999" : pnl >= 0 ? "#00ff66" : "#ff3b3b";
+    pnl === null ? "text-gray-400" : pnl >= 0 ? "text-green-400" : "text-red-400";
 
   const activeColor =
     selected === "LONG"
-      ? "#00ff66"
+      ? "text-green-400"
       : selected === "SHORT"
-      ? "#ff3b3b"
-      : "#999";
+      ? "text-red-400"
+      : "text-gray-400";
 
-  // ===== TOGGLE
   function handleClick(type: "LONG" | "SHORT") {
-    if (selected === type) {
-      onTrade(type); // закрытие
-    } else {
-      onTrade(type); // открытие
-    }
+    onTrade(type);
   }
 
-  // ===== AI
+  /* ===== AI ===== */
   const aiDecision = aiSignal?.decision || "NO TRADE";
   const aiConfidence = aiSignal?.confidence || 0;
-
   const isBlocked = aiDecision === "NO TRADE";
 
   return (
-    <div style={{
-      width: 260,
-      background: "#0f0f0f",
-      border: "1px solid #111",
-      borderRadius: 10,
-      padding: 14,
-      display: "flex",
-      flexDirection: "column",
-      gap: 10
-    }}>
+    <div className="w-full lg:w-[260px] bg-[#0f0f0f] border border-[#111] rounded-xl p-4 flex flex-col gap-3">
 
       {/* HEADER */}
-      <div style={{
-        display:"flex",
-        justifyContent:"space-between",
-        alignItems:"center"
-      }}>
-        <div style={{ fontSize: 14, fontWeight: 600 }}>
+      <div className="flex justify-between items-center">
+        <div className="text-sm font-semibold">
           AI Trading
         </div>
       </div>
 
       {/* PRICE */}
-      <div style={{
-        fontSize: 20,
-        color: "#ffd700",
-        textAlign:"center"
-      }}>
+      <div className="text-center text-xl font-bold text-yellow-400">
         {formatPrice(price || 0)}
       </div>
 
       {/* AI STATUS */}
-      <div style={{
-        padding:10,
-        borderRadius:8,
-        background:"#111",
-        fontSize:12,
-        textAlign:"center",
-        border: `1px solid ${
+      <div className={`
+        p-3 rounded-lg text-center text-sm border
+        ${
           aiDecision === "LONG"
-            ? "#00ff6633"
+            ? "border-green-500/30"
             : aiDecision === "SHORT"
-            ? "#ff3b3b33"
-            : "#333"
-        }`
-      }}>
-        <div style={{
-          fontWeight:600,
-          color:
+            ? "border-red-500/30"
+            : "border-[#333]"
+        }
+        bg-[#111]
+      `}>
+        <div className={`
+          font-semibold
+          ${
             aiDecision === "LONG"
-              ? "#00ff66"
+              ? "text-green-400"
               : aiDecision === "SHORT"
-              ? "#ff3b3b"
-              : "#999"
-        }}>
+              ? "text-red-400"
+              : "text-gray-400"
+          }
+        `}>
           {aiDecision}
         </div>
 
-        <div style={{ opacity:0.6 }}>
+        <div className="text-xs opacity-60">
           {aiConfidence.toFixed(0)}% confidence
         </div>
       </div>
 
       {/* MAIN ACTION */}
-      <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+      <div className="flex flex-col gap-2">
 
         <button
           disabled={isBlocked}
           onClick={() => handleClick(aiDecision)}
-          style={{
-            background: isBlocked
-              ? "#222"
-              : aiDecision === "LONG"
-              ? "#00ff66"
-              : "#ff3b3b",
-            color: isBlocked ? "#555" : "#000",
-            padding: 12,
-            borderRadius: 8,
-            fontWeight:700,
-            cursor: isBlocked ? "not-allowed" : "pointer",
-            border:"none",
-            transition:"all 0.15s ease",
-            boxShadow: !isBlocked
-              ? "0 0 10px rgba(255,255,255,0.05)"
-              : "none"
-          }}
-          onMouseEnter={(e)=>{
-            if(!isBlocked){
-              e.currentTarget.style.opacity = "0.85";
+          className={`
+            py-3 rounded-lg font-bold transition
+            ${
+              isBlocked
+                ? "bg-[#222] text-gray-600 cursor-not-allowed"
+                : aiDecision === "LONG"
+                ? "bg-green-400 text-black hover:opacity-90"
+                : "bg-red-400 text-black hover:opacity-90"
             }
-          }}
-          onMouseLeave={(e)=>{
-            if(!isBlocked){
-              e.currentTarget.style.opacity = "1";
-            }
-          }}
+          `}
         >
           {isBlocked ? "NO TRADE" : `ENTER ${aiDecision}`}
         </button>
 
         {!isBlocked && (
-          <div style={{
-            fontSize:10,
-            opacity:0.5,
-            textAlign:"center"
-          }}>
+          <div className="text-[10px] text-center opacity-50">
             Based on AI signal
           </div>
         )}
@@ -183,44 +136,32 @@ export default function TradePanel({
       </div>
 
       {/* MANUAL */}
-      <div style={{ display: "flex", gap: 6, marginTop:6 }}>
+      <div className="flex gap-2 mt-1">
 
         <button
           onClick={() => handleClick("LONG")}
-          style={{
-            flex: 1,
-            background:
+          className={`
+            flex-1 py-2 text-sm rounded-md border transition
+            ${
               selected === "LONG"
-                ? "#00ff66"
-                : "rgba(0,255,100,0.1)",
-            color: selected === "LONG" ? "#000" : "#00ff66",
-            padding: 8,
-            borderRadius: 6,
-            border: "1px solid #003322",
-            cursor: "pointer",
-            fontSize:12,
-            transition:"0.15s"
-          }}
+                ? "bg-green-400 text-black border-green-400"
+                : "bg-green-500/10 text-green-400 border-green-900 hover:bg-green-500/20"
+            }
+          `}
         >
           LONG
         </button>
 
         <button
           onClick={() => handleClick("SHORT")}
-          style={{
-            flex: 1,
-            background:
+          className={`
+            flex-1 py-2 text-sm rounded-md border transition
+            ${
               selected === "SHORT"
-                ? "#ff3b3b"
-                : "rgba(255,0,0,0.1)",
-            color: selected === "SHORT" ? "#000" : "#ff3b3b",
-            padding: 8,
-            borderRadius: 6,
-            border: "1px solid #330000",
-            cursor: "pointer",
-            fontSize:12,
-            transition:"0.15s"
-          }}
+                ? "bg-red-400 text-black border-red-400"
+                : "bg-red-500/10 text-red-400 border-red-900 hover:bg-red-500/20"
+            }
+          `}
         >
           SHORT
         </button>
@@ -229,53 +170,38 @@ export default function TradePanel({
 
       {/* TRADE INFO */}
       {trade ? (
-        <div style={{
-          marginTop: 8,
-          padding: 12,
-          background: "#111",
-          borderRadius: 8,
-          fontSize: 12,
-          border: `1px solid ${activeColor}33`
-        }}>
+        <div className={`
+          mt-2 p-3 bg-[#111] rounded-lg text-sm border
+          ${
+            selected === "LONG"
+              ? "border-green-500/30"
+              : selected === "SHORT"
+              ? "border-red-500/30"
+              : "border-[#333]"
+          }
+        `}>
 
-          <div style={{
-            fontSize:13,
-            fontWeight:600,
-            color: activeColor,
-            marginBottom:8,
-            textAlign:"center"
-          }}>
+          <div className={`text-center font-semibold mb-2 ${activeColor}`}>
             {trade.type}
           </div>
 
           <div>Entry: {formatPrice(trade.entry)}</div>
 
-          <div style={{ color:"#00ff66" }}>
+          <div className="text-green-400">
             TP: {formatPrice(trade.take)}
           </div>
 
-          <div style={{ color:"#ff3b3b" }}>
+          <div className="text-red-400">
             SL: {formatPrice(trade.stop)}
           </div>
 
-          <div style={{
-            marginTop: 10,
-            fontSize: 15,
-            fontWeight: 700,
-            color: pnlColor,
-            textAlign:"center"
-          }}>
+          <div className={`mt-3 text-center text-lg font-bold ${pnlColor}`}>
             {pnl !== null ? pnl.toFixed(2) + "%" : "--"}
           </div>
 
         </div>
       ) : (
-        <div style={{
-          fontSize:11,
-          textAlign:"center",
-          opacity:0.5,
-          marginTop:6
-        }}>
+        <div className="text-xs text-center opacity-50 mt-1">
           Waiting for entry
         </div>
       )}
