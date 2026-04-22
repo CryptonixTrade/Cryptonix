@@ -21,7 +21,6 @@ export default function TradePanel({
     return p.toFixed(2);
   }
 
-  /* ===== PNL ===== */
   useEffect(() => {
     if (!trade || !price) {
       setPnl(null);
@@ -57,13 +56,12 @@ export default function TradePanel({
     onTrade(type);
   }
 
-  /* ===== AI ===== */
   const aiDecision = aiSignal?.decision || "NO TRADE";
   const aiConfidence = aiSignal?.confidence || 0;
   const isBlocked = aiDecision === "NO TRADE";
 
-  const PanelContent = (
-    <div className="bg-[#0f0f0f] border border-[#111] rounded-xl p-4 flex flex-col gap-3">
+  return (
+    <div className="w-full bg-[#0f0f0f] border border-[#111] rounded-xl p-4 flex flex-col gap-3">
 
       {/* HEADER */}
       <div className="text-sm font-semibold">
@@ -193,19 +191,5 @@ export default function TradePanel({
       )}
 
     </div>
-  );
-
-  return (
-    <>
-      {/* DESKTOP */}
-      <div className="hidden lg:block w-[260px]">
-        {PanelContent}
-      </div>
-
-      {/* MOBILE STICKY */}
-      <div className="w-full">
-        {PanelContent}
-      </div>
-    </>
   );
 }

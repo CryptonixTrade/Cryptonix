@@ -38,8 +38,6 @@ export default function Home() {
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
 
-  /* ================= LOAD ================= */
-
   useEffect(() => {
     const savedSymbol = localStorage.getItem("symbol");
     const savedInterval = localStorage.getItem("interval");
@@ -47,8 +45,6 @@ export default function Home() {
     if (savedSymbol) setSymbol(savedSymbol);
     if (savedInterval) setIntervalState(savedInterval);
   }, []);
-
-  /* ================= SAVE ================= */
 
   useEffect(() => {
     localStorage.setItem("symbol", symbol);
@@ -58,8 +54,6 @@ export default function Home() {
     localStorage.setItem("interval", interval);
   }, [interval]);
 
-  /* ================= RESET ================= */
-
   useEffect(() => {
     setSelected(null);
     setTrade(null);
@@ -68,8 +62,6 @@ export default function Home() {
   useEffect(() => {
     if (!selected) setTrade(null);
   }, [selected]);
-
-  /* ================= BTC SPOT ================= */
 
   useEffect(() => {
     const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
@@ -82,8 +74,6 @@ export default function Home() {
     return () => ws.close();
   }, []);
 
-  /* ================= BTC FUTURES ================= */
-
   useEffect(() => {
     const ws = new WebSocket("wss://fstream.binance.com/ws/btcusdt@trade");
 
@@ -94,8 +84,6 @@ export default function Home() {
 
     return () => ws.close();
   }, []);
-
-  /* ================= LIVE PRICE ================= */
 
   useEffect(() => {
     if (!symbol) return;
@@ -128,8 +116,6 @@ export default function Home() {
     return () => ws.close();
   }, [symbol]);
 
-  /* ================= COINS ================= */
-
   useEffect(() => {
     async function fetchCoins(){
       try {
@@ -145,8 +131,6 @@ export default function Home() {
 
     fetchCoins();
   }, []);
-
-  /* ================= CANDLES ================= */
 
   async function fetchData() {
     try {
@@ -173,8 +157,6 @@ export default function Home() {
   useEffect(()=>{
     fetchData();
   },[symbol, interval]);
-
-  /* ================= REALTIME CANDLES ================= */
 
   useEffect(() => {
     if (!symbol || !interval) return;
@@ -221,8 +203,6 @@ export default function Home() {
 
   }, [symbol, interval]);
 
-  /* ================= TRADE ================= */
-
   function createTrade(type:"LONG"|"SHORT"){
     if (selected === type) {
       setSelected(null);
@@ -261,8 +241,6 @@ export default function Home() {
     });
   }
 
-  /* ================= UI ================= */
-
   return (
     <main className="min-h-screen flex flex-col bg-[#0a0a0a] text-yellow-400 border border-yellow-500/30 rounded-lg p-2 overflow-auto">
 
@@ -273,11 +251,10 @@ export default function Home() {
         btcFutures={btcFutures}
       />
 
-      <div className="flex flex-1 gap-2 flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row gap-2">
 
-        {/* LEFT SIDE */}
-        <div className="flex flex-1 flex-col gap-2">
-
+        {/* LEFT */}
+        <div className="flex flex-col flex-1 gap-2">
           <div className="flex flex-col md:flex-row gap-2">
             <Search
               coins={coins}
@@ -286,68 +263,46 @@ export default function Home() {
               favorites={favorites}
               setFavorites={setFavorites}
             />
-
-            <Timeframes
-              interval={interval}
-              setIntervalState={setIntervalState}
-            />
+            <Timeframes interval={interval} setIntervalState={setIntervalState}/>
           </div>
 
-          <TechnicalSignal
-            candles={candles}
-            interval={interval}
-            onSignal={setTechSignal}
-          />
+          <TechnicalSignal candles={candles} interval={interval} onSignal={setTechSignal}/>
+          <AISignal candles={candles} onSignal={setAiSignal} flow={tradeFlow} interval={interval} techSignal={techSignal}/>
 
-          <AISignal
-            candles={candles}
-            onSignal={setAiSignal}
-            flow={tradeFlow}
-            interval={interval}
-            techSignal={techSignal}
-          />
+          <div>
+            <Chart candles={candles} trade={selected ? trade : null}/>
+          </div>
 
-          <div className="flex-1">
-            <Chart
-              candles={candles}
+          {/* MOBILE — панель просто идёт после графика */}
+          <div className="lg:hidden">
+            <TradePanel
               trade={selected ? trade : null}
+              selected={selected}
+              onTrade={createTrade}
+              price={price}
+              aiSignal={aiSignal}
             />
           </div>
-
         </div>
 
-{/* MOBILE: TradePanel ПОД ГРАФИКОМ */}
-<div className="lg:hidden">
-  <TradePanel
-    trade={selected ? trade : null}
-    selected={selected}
-    onTrade={createTrade}
-    price={price}
-    aiSignal={aiSignal}
-  />
-</div>
+        {/* DESKTOP RIGHT */}
+        <div className="hidden lg:flex w-[260px] flex-col gap-2">
+          <TradePanel
+            trade={selected ? trade : null}
+            selected={selected}
+            onTrade={createTrade}
+            price={price}
+            aiSignal={aiSignal}
+          />
 
-{/* DESKTOP RIGHT PANEL */}
-<div className="hidden lg:flex w-[260px] flex-col gap-2">
-
-  <TradePanel
-    trade={selected ? trade : null}
-    selected={selected}
-    onTrade={createTrade}
-    price={price}
-    aiSignal={aiSignal}
-  />
-
-  <PressureSignal
-    bids={[{ qty: tradeFlow.buyVolume }]}
-    asks={[{ qty: tradeFlow.sellVolume }]}
-    trades={[{ price: price || 0, qty: 1, isBuy: true }]}
-  />
-
-</div>
+          <PressureSignal
+            bids={[{ qty: tradeFlow.buyVolume }]}
+            asks={[{ qty: tradeFlow.sellVolume }]}
+            trades={[{ price: price || 0, qty: 1, isBuy: true }]}
+          />
+        </div>
 
       </div>
-
     </main>
   );
 }
