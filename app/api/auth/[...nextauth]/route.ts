@@ -14,29 +14,33 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        // 🔒 проверка
-        if (!credentials?.username || !credentials?.password) {
+        try {
+          if (!credentials?.username || !credentials?.password) {
+            return null;
+          }
+
+          const user = await prisma.user.findUnique({
+            where: { username: credentials.username },
+          });
+
+          if (!user) return null;
+
+          const isValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isValid) return null;
+
+          return {
+            id: user.id,
+            name: user.username,
+            role: user.role,
+          };
+        } catch (e) {
+          console.error("AUTH ERROR:", e); // 👈 ВАЖНО
           return null;
         }
-
-        const user = await prisma.user.findUnique({
-          where: { username: credentials.username },
-        });
-
-        if (!user) return null;
-
-        const isValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isValid) return null;
-
-        return {
-          id: user.id,
-          name: user.username,
-          role: user.role, // 👑 важно
-        };
       },
     }),
   ],
