@@ -30,7 +30,6 @@ export default function LoginPage() {
       } else {
         window.location.href = "/dashboard";
       }
-    } else {
       alert("Неверный логин или пароль");
     }
   };
