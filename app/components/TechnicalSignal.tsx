@@ -23,7 +23,10 @@ type Props = {
   onSignal?: (signal: Signal) => void;
 };
 
-export default function TechnicalSignal({ candles, interval, onSignal }: Props) {
+export default function TechnicalSignal(props: any) {
+
+  const { candles = [], interval = "1m", onSignal } = props;
+
   const lastRef = useRef<number | null>(null);
   const [signal, setSignal] = useState<Signal | null>(null);
 
@@ -53,8 +56,8 @@ export default function TechnicalSignal({ candles, interval, onSignal }: Props) 
     if (last.time === lastRef.current) return;
     lastRef.current = last.time;
 
-    const closes = candles.map(c => c.close);
-    const volumes = candles.map(c => c.volume);
+    const closes = candles.map((c: Candle) => c.close);
+    const volumes = candles.map((c: Candle) => c.volume);
 
     const emaFast = calcEMA(closes.slice(-30), 9);
     const emaSlow = calcEMA(closes.slice(-60), 21);
@@ -82,7 +85,9 @@ export default function TechnicalSignal({ candles, interval, onSignal }: Props) 
     if (!volNow) return;
 
     const volAvg =
-      volumes.slice(-10).reduce((a, b) => a + b, 0) / 10;
+    volumes
+      .slice(-10)
+      .reduce((a: number, b: number) => a + b, 0) / 10;
 
     let volumeScore = 0;
     if (volNow > volAvg * 1.5) volumeScore = trend;

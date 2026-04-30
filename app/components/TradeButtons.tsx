@@ -12,7 +12,13 @@ type Props = {
   } | null;
 };
 
-export default function TradeButtons({ selected, setSelected, aiSignal }: Props) {
+export default function TradeButtons(props: any) {
+
+  const {
+    selected = null,
+    setSelected = () => {},
+    aiSignal = null
+  } = props;
 
   function handleClick(type: "LONG" | "SHORT") {
     if (selected === type) {

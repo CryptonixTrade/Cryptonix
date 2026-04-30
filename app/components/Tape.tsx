@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function Tape({ symbol, onUpdate }: any) {
+export default function Tape(props: any) {
+
+  const { symbol, onUpdate } = props;
 
   const [trades, setTrades] = useState<any[]>([]);
   const bufferRef = useRef<any[]>([]);

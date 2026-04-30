@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-export default function TradePanel({
-  trade,
-  selected,
-  onTrade,
-  price,
-  aiSignal
-}: any) {
+export default function TradePanel(props: any) {
+
+  const {
+    trade = null,
+    price = 0,
+    selected = null,
+    onTrade = () => {},
+    aiSignal = null
+  } = props;
 
   const [pnl, setPnl] = useState<number | null>(null);
 

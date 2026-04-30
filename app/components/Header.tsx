@@ -1,12 +1,12 @@
 "use client";
 
-export default function Header({
-  symbol,
-  price,
-  btcSpot,
-  btcFutures,
-}: any) {
-
+export default function Header(props: any) {
+  const {
+    symbol = "BTCUSDT",
+    price = 0,
+    btcSpot = 0,
+    btcFutures = 0
+  } = props;
   const change = 0.85;
   const isUp = change >= 0;
 

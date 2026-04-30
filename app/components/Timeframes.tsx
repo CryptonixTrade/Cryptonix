@@ -1,6 +1,11 @@
 "use client";
 
-export default function Timeframes({ interval, setIntervalState }: any) {
+export default function Timeframes(props: any) {
+
+  const {
+    interval = "1m",
+    setIntervalState = () => {}
+  } = props;
 
   const tf = ["1m","3m","5m","15m","30m","1h","2h","4h","12h","1d","1w","1M"];
 

@@ -2,7 +2,9 @@
 
 import { useMemo } from "react";
 
-export default function TechnicalSignal({ candles }: any) {
+export default function PressureSignal(props: any) {
+
+  const { candles = [] } = props;
 
   const signal = useMemo(() => {
     if (!candles || candles.length < 30) return null;

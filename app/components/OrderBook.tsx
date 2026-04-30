@@ -11,8 +11,8 @@ type Props = {
   }) => void;
 };
 
-export default function OrderBook({ symbol, onUpdate }: Props) {
-
+export default function OrderBook(props: any) {
+  const { symbol, onUpdate } = props;
   useEffect(() => {
     if (!symbol) return;
 

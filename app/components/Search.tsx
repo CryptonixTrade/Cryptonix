@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState, useMemo } from "react";
 
-export default function Search({
-  coins,
-  setSymbol,
-  symbol,
-  favorites,
-  setFavorites
-}: any) {
+export default function Search(props: any) {
+
+  const {
+    symbol = "BTCUSDT",
+    setSymbol = () => {},
+    coins = []
+  } = props;
+  
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);

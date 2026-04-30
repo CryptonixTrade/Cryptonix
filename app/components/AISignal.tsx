@@ -28,13 +28,9 @@ type AISignalProps = {
   techSignal: any; // <-- ОБОВʼЯЗКОВО ДОДАЙ
 };
 
-export default function AISignal({
-  candles,
-  onSignal,
-  flow,
-  interval
-}: AISignalProps) {
+export default function AISignal(props: any) {
 
+  const { candles = [], onSignal, flow, interval = "1m" } = props;
   const [signal, setSignal] = useState<Signal | null>(null);
 
   const lastCandleRef = useRef<number | null>(null);
@@ -101,7 +97,7 @@ export default function AISignal({
   function calculate() {
     if (candles.length < 60) return null;
 
-    const closes = candles.map(c => c.close);
+const closes = candles.map((c: Candle) => c.close);
 
     const last = closes.at(-1)!;
     const prev = closes.at(-5)!;
