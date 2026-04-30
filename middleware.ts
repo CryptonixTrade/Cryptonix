@@ -7,7 +7,7 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl;
 
-        // ✅ разрешаем API без логина
+        // ❗ ВАЖНО: API НЕ ТРОГАЕМ ВООБЩЕ
         if (pathname.startsWith("/api")) return true;
 
         if (!token) return false;
@@ -30,6 +30,7 @@ export default withAuth(
   }
 );
 
+// ❗ УБРАЛИ /api ОТСЮДА
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/api/:path*"],
+  matcher: ["/dashboard/:path*", "/admin/:path*"],
 };
