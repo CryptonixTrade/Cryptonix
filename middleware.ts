@@ -7,17 +7,23 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl;
 
-        // если не залогинен → нельзя
+        // ✅ разрешаем API без логина
+        if (pathname.startsWith("/api")) return true;
+
         if (!token) return false;
 
-        // админка
         if (pathname.startsWith("/admin")) {
           return token.role === "admin";
+        }
+
+        if (pathname.startsWith("/dashboard")) {
+          return true;
         }
 
         return true;
       },
     },
+
     pages: {
       signIn: "/login",
     },
@@ -25,9 +31,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: [
-    "/",                 // 👈 ВАЖНО
-    "/dashboard/:path*",
-    "/admin/:path*",
-  ],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/api/:path*"],
 };
