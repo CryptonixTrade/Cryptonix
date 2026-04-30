@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
-export const runtime = "nodejs"; // 🔥 ВАЖНО
+export const runtime = "nodejs"; // 🔥 ОБЯЗАТЕЛЬНО
 
 export async function POST(req: Request) {
   try {
