@@ -22,7 +22,7 @@ export default function SessionGuard() {
     checkSession();
 
     // 🔁 периодическая (1 секунда)
-    const interval = setInterval(checkSession, 1000);
+    const interval = setInterval(checkSession, 1);
 
     return () => clearInterval(interval);
   }, [pathname]);
