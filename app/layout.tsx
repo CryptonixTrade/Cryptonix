@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
+import SessionGuard from "./SessionGuard"; // 👈 добавили
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,14 +35,14 @@ export default function RootLayout({
           display: "flex",
           flexDirection: "column",
 
-          // 🔥 золотая рамка (как ты хотел)
           border: "1px solid rgba(255,215,0,0.3)",
           boxSizing: "border-box",
 
           overflow: "hidden",
         }}
-        >
+      >
         <Providers>
+          <SessionGuard /> {/* 👈 вот тут магия */}
           {children}
         </Providers>
       </body>
