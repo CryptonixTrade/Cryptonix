@@ -2,9 +2,15 @@
 
 import { useEffect } from "react";
 import { getSession, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 export default function SessionGuard() {
+  const pathname = usePathname();
+
   useEffect(() => {
+    // ❌ НЕ запускаем на странице логина
+    if (pathname === "/login") return;
+
     const interval = setInterval(async () => {
       try {
         const session = await getSession();
@@ -16,10 +22,10 @@ export default function SessionGuard() {
       } catch (e) {
         await signOut({ callbackUrl: "/login" });
       }
-    }, 5000); // ⏱ 5 секунд
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [pathname]);
 
   return null;
 }
