@@ -7,11 +7,13 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl;
 
-        // API можно оставить открытым или закрыть отдельно
+        // API не трогаем
         if (pathname.startsWith("/api")) return true;
 
-        // ❌ нет токена — нет доступа
-        if (!token) return false;
+        // ❌ если нет нормального токена — сразу редирект
+        if (!token || !token.id || (token as any).invalid) {
+          return false;
+        }
 
         // 🔐 admin доступ
         if (pathname.startsWith("/admin")) {
