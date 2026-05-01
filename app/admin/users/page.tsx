@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function UsersAdmin() {
   const { data: session, status } = useSession();
@@ -79,6 +79,21 @@ export default function UsersAdmin() {
   return (
     <div style={{ padding: 40 }}>
       <h1>👑 Admin Users</h1>
+
+      {/* 🔴 КНОПКА LOGOUT */}
+      <button
+        onClick={() => signOut({ callbackUrl: "/login" })}
+        style={{
+          marginBottom: 20,
+          padding: "8px 16px",
+          background: "red",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Logout
+      </button>
 
       <div style={{ marginBottom: 20 }}>
         <input
