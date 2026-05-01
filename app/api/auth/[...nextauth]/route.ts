@@ -64,24 +64,36 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
+      // 🔥 при логине
       if (user) {
         token.id = user.id;
         token.role = user.role;
         token.sessionId = (user as any).sessionId;
+        token.invalid = false; // 👈 флаг
+        return token;
       }
-      return token;
-    },
 
-    async session({ session, token }) {
-      if (!session.user) return session;
+      if (!token?.id) return token;
 
       const dbUser = await prisma.user.findUnique({
         where: { id: token.id as string },
       });
 
+      // 💣 если сессия не совпадает
       if (!dbUser || dbUser.currentSessionId !== token.sessionId) {
-        throw new Error("Session invalidated"); // 🔥 ключевой момент
+        token.invalid = true; // 👈 просто помечаем
       }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      // ❌ если токен помечен как мёртвый
+      if ((token as any).invalid) {
+        return {} as any;
+      }
+
+      if (!session.user) return session;
 
       session.user.id = token.id as string;
       session.user.role = token.role as string;
