@@ -22,15 +22,19 @@ export default function LoginPage() {
       redirect: false,
     });
 
-    if (res?.ok) {
-      const session = await getSession();
-
-      if (session?.user?.role === "admin") {
-        window.location.href = "/admin/users";
-      } else {
-        window.location.href = "/dashboard";
-      }
+    // ✅ показываем ошибку ТОЛЬКО если реально ошибка
+    if (!res?.ok) {
       alert("Неверный логин или пароль");
+      return;
+    }
+
+    // ✅ успешный вход
+    const session = await getSession();
+
+    if (session?.user?.role === "admin") {
+      window.location.href = "/admin/users";
+    } else {
+      window.location.href = "/dashboard";
     }
   };
 
@@ -39,8 +43,6 @@ export default function LoginPage() {
       <div className="overlay" />
 
       <form onSubmit={handleLogin} className="loginBox">
-        {/* ❌ УБРАЛИ Sign in */}
-
         <input
           ref={inputRef}
           type="text"
@@ -80,12 +82,12 @@ export default function LoginPage() {
           top: 40px;
           right: 40px;
 
-          width: 220px; /* 👈 уменьшили */
+          width: 220px;
 
           background: rgba(15, 15, 15, 0.85);
           backdrop-filter: blur(12px);
 
-          padding: 18px; /* 👈 уменьшили */
+          padding: 18px;
           border-radius: 12px;
 
           border: 1px solid rgba(255, 255, 255, 0.08);
@@ -118,15 +120,12 @@ export default function LoginPage() {
           cursor: pointer;
         }
 
-        /* 📱 мобильная адаптация */
         @media (max-width: 768px) {
           .loginBox {
             top: 50%;
             left: 50%;
             right: auto;
-
             transform: translate(-50%, -50%);
-
             width: 85%;
             max-width: 300px;
           }
