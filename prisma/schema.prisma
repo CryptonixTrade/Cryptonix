@@ -12,4 +12,7 @@ model User {
   username String @unique
   password String
   role     String @default("USER")
+currentSessionId String? // 👈 ВОТ ЭТО
+
+  createdAt DateTime @default(now())
 }

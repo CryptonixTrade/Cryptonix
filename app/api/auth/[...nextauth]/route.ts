@@ -2,6 +2,7 @@ import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { randomUUID } from "crypto";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -32,13 +33,25 @@ export const authOptions: NextAuthOptions = {
 
           if (!isValid) return null;
 
+          // 🔥 создаём уникальную сессию
+          const sessionId = randomUUID();
+
+          // 🔴 сохраняем её в базе (перезапишет старую)
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              currentSessionId: sessionId,
+            },
+          });
+
           return {
             id: user.id,
             name: user.username,
             role: user.role,
+            sessionId,
           };
         } catch (e) {
-          console.error("AUTH ERROR:", e); // 👈 ВАЖНО
+          console.error("AUTH ERROR:", e);
           return null;
         }
       },
@@ -47,6 +60,11 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60 * 6, // ⏱ 6 часов
+  },
+
+  jwt: {
+    maxAge: 60 * 60 * 6, // ⏱ 6 часов
   },
 
   callbacks: {
@@ -54,15 +72,27 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.sessionId = (user as any).sessionId;
       }
       return token;
     },
 
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
+      if (!session.user) return session;
+
+      // 🔴 проверка сессии против базы
+      const dbUser = await prisma.user.findUnique({
+        where: { id: token.id as string },
+      });
+
+      // ❌ если сессия не совпадает — выкидываем
+      if (!dbUser || dbUser.currentSessionId !== token.sessionId) {
+        return {} as any;
       }
+
+      session.user.id = token.id as string;
+      session.user.role = token.role as string;
+
       return session;
     },
   },
