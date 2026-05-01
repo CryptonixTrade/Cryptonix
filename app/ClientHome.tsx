@@ -11,6 +11,7 @@ import Search from "./components/Search";
 import Header from "./components/Header";
 import TradePanel from "./components/TradePanel";
 import AISignal from "./components/AISignal";
+import LogoutButton from "./components/LogoutButton";
 
 export default function Home() {
 
@@ -303,6 +304,7 @@ export default function Home() {
         </div>
 
       </div>
+      <LogoutButton />
     </main>
   );
 }
