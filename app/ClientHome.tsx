@@ -302,7 +302,6 @@ export default function Home() {
             trades={[{ price: price || 0, qty: 1, isBuy: true }]}
           />
         </div>
-
       </div>
       <LogoutButton />
     </main>
