@@ -1,31 +1,34 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 export default function SessionGuard() {
   const pathname = usePathname();
+  const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
-    if (pathname === "/login") return;
+    if (pathname === "/login") {
+      setAllowed(true);
+      return;
+    }
 
-    const checkSession = async () => {
+    const check = async () => {
       const session = await getSession();
 
       if (!session) {
         await signOut({ callbackUrl: "/login" });
+      } else {
+        setAllowed(true);
       }
     };
 
-    // 🔥 мгновенная проверка
-    checkSession();
-
-    // 🔁 периодическая (1 секунда)
-    const interval = setInterval(checkSession, 1);
-
-    return () => clearInterval(interval);
+    check();
   }, [pathname]);
+
+  // ❌ блокируем ВСЁ пока не проверили
+  if (!allowed) return null;
 
   return null;
 }
