@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // 👈 защита
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -16,26 +17,38 @@ export default function LoginPage() {
   const handleLogin = async (e: any) => {
     e.preventDefault();
 
-    // 🔴 ВАЖНО: сбрасываем старую сессию
-    await signOut({ redirect: false });
+    if (loading) return;
+    setLoading(true);
 
-    const res = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
+    try {
+      // 🔴 сбрасываем старую сессию
+      await signOut({ redirect: false });
 
-    if (!res?.ok) {
-      alert("Неверный логин или пароль");
-      return;
-    }
+      // ⏱ даём время очиститься cookie (ВАЖНО)
+      await new Promise((r) => setTimeout(r, 150));
 
-    const session = await getSession();
+      const res = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
 
-    if (session?.user?.role === "admin") {
-      window.location.href = "/admin/users";
-    } else {
-      window.location.href = "/dashboard";
+      if (!res?.ok) {
+        alert("Неверный логин или пароль");
+        setLoading(false);
+        return;
+      }
+
+      const session = await getSession();
+
+      if (session?.user?.role === "admin") {
+        window.location.href = "/admin/users";
+      } else {
+        window.location.href = "/dashboard";
+      }
+    } catch (e) {
+      console.error(e);
+      setLoading(false);
     }
   };
 
@@ -59,7 +72,9 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Login"}
+        </button>
       </form>
 
       <style jsx>{`
@@ -113,6 +128,11 @@ export default function LoginPage() {
           background: linear-gradient(135deg, #f0b90b, #ffd700);
           font-weight: bold;
           cursor: pointer;
+        }
+
+        .loginBox button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
 
         @media (max-width: 768px) {

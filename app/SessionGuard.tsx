@@ -11,7 +11,13 @@ export default function SessionGuard() {
     // ❌ НЕ запускаем на странице логина
     if (pathname === "/login") return;
 
+    let isChecking = false;
+
     const interval = setInterval(async () => {
+      // 🔒 защита от наложения запросов
+      if (isChecking) return;
+      isChecking = true;
+
       try {
         const session = await getSession();
 
@@ -21,6 +27,8 @@ export default function SessionGuard() {
         }
       } catch (e) {
         await signOut({ callbackUrl: "/login" });
+      } finally {
+        isChecking = false;
       }
     }, 5000);
 
