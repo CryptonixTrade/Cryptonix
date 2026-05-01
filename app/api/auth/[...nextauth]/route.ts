@@ -8,7 +8,6 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-
       credentials: {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
@@ -33,15 +32,11 @@ export const authOptions: NextAuthOptions = {
 
           if (!isValid) return null;
 
-          // 🔥 создаём уникальную сессию
           const sessionId = randomUUID();
 
-          // 🔴 сохраняем её в базе (перезапишет старую)
           await prisma.user.update({
             where: { id: user.id },
-            data: {
-              currentSessionId: sessionId,
-            },
+            data: { currentSessionId: sessionId },
           });
 
           return {
@@ -60,11 +55,11 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 6, // ⏱ 6 часов
+    maxAge: 60 * 60 * 6,
   },
 
   jwt: {
-    maxAge: 60 * 60 * 6, // ⏱ 6 часов
+    maxAge: 60 * 60 * 6,
   },
 
   callbacks: {
@@ -80,14 +75,12 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (!session.user) return session;
 
-      // 🔴 проверка сессии против базы
       const dbUser = await prisma.user.findUnique({
         where: { id: token.id as string },
       });
 
-      // ❌ если сессия не совпадает — выкидываем
       if (!dbUser || dbUser.currentSessionId !== token.sessionId) {
-        return {} as any;
+        throw new Error("Session invalidated"); // 🔥 ключевой момент
       }
 
       session.user.id = token.id as string;
@@ -101,5 +94,4 @@ export const authOptions: NextAuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };
