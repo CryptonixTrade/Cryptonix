@@ -8,29 +8,21 @@ export default function SessionGuard() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // ❌ НЕ запускаем на странице логина
     if (pathname === "/login") return;
 
-    let isChecking = false;
+    const checkSession = async () => {
+      const session = await getSession();
 
-    const interval = setInterval(async () => {
-      // 🔒 защита от наложения запросов
-      if (isChecking) return;
-      isChecking = true;
-
-      try {
-        const session = await getSession();
-
-        // ❌ если сессия умерла — выкидываем
-        if (!session) {
-          await signOut({ callbackUrl: "/login" });
-        }
-      } catch (e) {
+      if (!session) {
         await signOut({ callbackUrl: "/login" });
-      } finally {
-        isChecking = false;
       }
-    }, 5000);
+    };
+
+    // 🔥 мгновенная проверка
+    checkSession();
+
+    // 🔁 периодическая (1 секунда)
+    const interval = setInterval(checkSession, 1000);
 
     return () => clearInterval(interval);
   }, [pathname]);
