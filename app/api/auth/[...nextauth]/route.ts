@@ -69,7 +69,6 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.role = user.role;
         token.sessionId = (user as any).sessionId;
-        token.invalid = false; // 👈 флаг
         return token;
       }
 
@@ -79,16 +78,19 @@ export const authOptions: NextAuthOptions = {
         where: { id: token.id as string },
       });
 
-      // 💣 если сессия не совпадает
-      if (!dbUser || dbUser.currentSessionId !== token.sessionId) {
-        token.invalid = true; // 👈 просто помечаем
+      // ❗ если user не найден — не трогаем
+      if (!dbUser) return token;
+
+      // 💣 убиваем ТОЛЬКО если sessionId реально другой
+      if (dbUser.currentSessionId !== token.sessionId) {
+        token.invalid = true;
       }
 
       return token;
     },
 
     async session({ session, token }) {
-      // ❌ если токен помечен как мёртвый
+      // ❌ только если явно инвалид
       if ((token as any).invalid) {
         return {} as any;
       }
