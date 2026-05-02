@@ -119,3 +119,4 @@ export default function TechnicalSignal(props: any) {
   }, [candles, interval, onSignal]);
 
   return null;
+}
