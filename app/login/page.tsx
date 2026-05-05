@@ -91,6 +91,13 @@ export default function LoginPage() {
   z-index: 0;
 }
 
+@media (max-width: 768px) {
+  .container {
+    background: url('/CRYPTONIX-mobile.png') no-repeat center;
+    background-size: cover;
+  }
+}
+
         .overlay {
   position: fixed;
   inset: 0;
