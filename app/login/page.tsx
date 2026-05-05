@@ -101,7 +101,7 @@ export default function LoginPage() {
         .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(9, 8, 8, 0.6);
   z-index: 1;
 }
 
@@ -114,12 +114,12 @@ export default function LoginPage() {
   width: 220px;
   max-width: calc(100% - 40px); 
 
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(32, 4, 4, 0.85);
   backdrop-filter: blur(12px);
   padding:18px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 25px rgba(131, 5, 5, 0.7);
+  box-shadow: 0 0 25px rgba(205, 10, 10, 0.7);
   text-align: center;
   color: white;
   animation: fadeIn 0.5s ease;
@@ -130,8 +130,8 @@ export default function LoginPage() {
           padding: 2px;
           margin-bottom: 4px;
           border-radius: 5px;
-          border: 1px solid rgba(255,255,255,0.1);
-          background: rgba(0,0,0,0.6);
+          border: 1px solid rgba(42, 7, 7, 0.1);
+          background: rgba(53, 3, 3, 0.6);
           color: white;
           font-size: 12px;
         }
@@ -141,7 +141,7 @@ export default function LoginPage() {
           padding: 2px;
           border-radius: 66px;
           border: none;
-          background: linear-gradient(135deg, #f0b90b, #ffd700);
+          background: linear-gradient(135deg,rgb(71, 36, 2),rgb(142, 78, 5));
           font-weight: bold;
           cursor: pointer;
         }
