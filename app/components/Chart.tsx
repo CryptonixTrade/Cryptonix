@@ -240,7 +240,7 @@ export default function Chart(props: any) {
   /* ================= UI ================= */
 
   return (
-    <div ref={containerRef} className="w-full h-full flex flex-col">
+    <div ref={containerRef} className="w-full flex flex-col overflow-hidden">
 
       {/* PRICE */}
       <div ref={priceRef} className="flex-[4] min-h-[200px]" />

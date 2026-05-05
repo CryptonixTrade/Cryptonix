@@ -79,51 +79,60 @@ export default function LoginPage() {
 
       <style jsx>{`
         .container {
-          height: 100vh;
-          width: 100%;
-          background-image: url('/CRYPTONIX.PNG');
-          background-size: cover;
-          background-position: center;
-          position: relative;
-        }
+  position: fixed;   /* фиксируем к экрану */
+  inset: 0;          /* top:0 right:0 bottom:0 left:0 */
+
+  width: 100vw;      /* ширина окна */
+  height: 100vh;     /* высота окна */
+
+  background: url('/CRYPTONIX.PNG') no-repeat center center;
+  background-size: cover;   /* КЛЮЧ — покрывает весь экран */
+
+  z-index: 0;
+}
 
         .overlay {
-          position: absolute;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.6);
-        }
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1;
+}
 
         .loginBox {
-          position: absolute;
-          top: 40px;
-          right: 40px;
-          width: 220px;
-          background: rgba(15, 15, 15, 0.85);
-          backdrop-filter: blur(12px);
-          padding: 18px;
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
-          text-align: center;
-          color: white;
-          animation: fadeIn 0.5s ease;
-        }
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  z-index: 2;
+
+  width: 220px;
+  max-width: calc(100% - 40px); 
+
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  padding:18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 25px rgba(131, 5, 5, 0.7);
+  text-align: center;
+  color: white;
+  animation: fadeIn 0.5s ease;
+}
 
         .loginBox input {
           width: 100%;
-          padding: 8px;
-          margin-bottom: 10px;
-          border-radius: 6px;
+          padding: 2px;
+          margin-bottom: 4px;
+          border-radius: 5px;
           border: 1px solid rgba(255,255,255,0.1);
           background: rgba(0,0,0,0.6);
           color: white;
-          font-size: 14px;
+          font-size: 12px;
         }
 
         .loginBox button {
           width: 100%;
-          padding: 8px;
-          border-radius: 6px;
+          padding: 2px;
+          border-radius: 66px;
           border: none;
           background: linear-gradient(135deg, #f0b90b, #ffd700);
           font-weight: bold;

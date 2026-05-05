@@ -242,7 +242,7 @@ export default function LiveTrading() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-[#0a0a0a] text-yellow-400 border border-yellow-500/30 rounded-lg p-2 overflow-auto">
+    <main className="min-h-screen w-full flex flex-col bg-[#0a0a0a] text-yellow-400 p-2 overflow-x-hidden">
 
       <Header
         symbol={symbol}
@@ -251,7 +251,7 @@ export default function LiveTrading() {
         btcFutures={btcFutures}
       />
 
-      <div className="flex flex-col lg:flex-row gap-2">
+<div className="flex flex-col lg:flex-row gap-2 w-full overflow-x-hidden">
 
         <div className="flex flex-col flex-1 gap-2">
           <div className="flex flex-col md:flex-row gap-2">
@@ -279,7 +279,7 @@ export default function LiveTrading() {
           </div>
         </div>
 
-        <div className="hidden lg:flex w-[260px] flex-col gap-2">
+        <div className="hidden lg:flex flex-col gap-2 min-w-[260px] max-w-[260px]">
           <TradePanel
             trade={selected ? trade : null}
             selected={selected}

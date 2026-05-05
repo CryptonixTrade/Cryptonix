@@ -25,9 +25,13 @@
 html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
   height: 100%;
+  overflow-x: hidden;
+}
 
-  background: radial-gradient(circle at 50% 20%, #0a0a0a, #050505 80%);
+* {
+  max-width: 100%;
 }
 
 /* ===== BODY ===== */
@@ -63,6 +67,10 @@ main {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+html, body {
+  background: #000000;
+  color: #ca8484;
 }
 
 /* ===== SMOOTH INTERACTIONS ===== */
@@ -111,7 +119,7 @@ button:active {
 /* ===== TEXT ===== */
 ::selection {
   background: rgba(255, 215, 0, 0.2);
-  color: #fff;
+  color: #fefefe;
 }
 
 /* ===== PERFORMANCE OPTIMIZATION ===== */

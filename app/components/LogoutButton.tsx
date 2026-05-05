@@ -12,12 +12,12 @@ export default function LogoutButton() {
         right: "20px",
         padding: "8px 12px",
         fontSize: "12px",
-        background: "rgba(97, 4, 4, 0.8)",
+        background: "rgba(90, 4, 4, 0.8)",
         color: "white",
         border: "none",
-        borderRadius: "6px",
+        borderRadius: "55px",
         cursor: "pointer",
-        zIndex: 9999,
+        zIndex: 1000,
       }}
     >
       Exit
