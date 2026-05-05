@@ -160,7 +160,7 @@ export default function LoginPage() {
     transform: none;
 
     width: 85%;
-    max-width: 300px;
+    max-width: 125px;
   }
 }
 
