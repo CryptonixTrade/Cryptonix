@@ -152,15 +152,17 @@ export default function LoginPage() {
         }
 
         @media (max-width: 768px) {
-          .loginBox {
-            top: 50%;
-            left: 50%;
-            right: auto;
-            transform: translate(-50%, -50%);
-            width: 85%;
-            max-width: 300px;
-          }
-        }
+  .loginBox {
+    top: 20px;
+    right: 20px;
+
+    left: auto;
+    transform: none;
+
+    width: 85%;
+    max-width: 300px;
+  }
+}
 
         @keyframes fadeIn {
           from {
