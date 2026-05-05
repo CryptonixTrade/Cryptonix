@@ -1,8 +1,12 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function LogoutButton() {
+  const { data: session } = useSession();
+
+  // ❌ если не залогинен — НЕ показываем кнопку
+  if (!session) return null;
   return (
     <button
       onClick={() => signOut({ callbackUrl: "/login" })}
