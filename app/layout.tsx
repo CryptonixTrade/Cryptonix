@@ -39,11 +39,11 @@ export default function RootLayout({
           border: "1px solid rgba(255,215,0,0.3)",
           boxSizing: "border-box",
 
-          overflow: "hidden",
+          overflowX: "hidden",
+overflowY: "auto",
         }}
       >
         <Providers>
-          <SessionGuard /> {/* 👈 вот тут магия */}
           {children}
           <LogoutButton />
         </Providers>

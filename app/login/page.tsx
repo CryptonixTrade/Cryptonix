@@ -299,6 +299,29 @@ export default function LoginPage() {
           );
         }
 
+.footerLinks {
+  position: fixed;
+
+  right: 3px;
+  bottom: -3px;
+
+  z-index: 9999;
+}
+
+.footerLinks a {
+  color: rgba(164, 7, 7, 0.99);
+
+  text-decoration: none;
+
+  font-size: 11px;
+
+  transition: 0.2s ease;
+}
+
+.footerLinks a:hover {
+  color: #f0c36a;
+}
+
        @media (max-width: 768px) {
 
   .loginBox {
@@ -444,7 +467,14 @@ export default function LoginPage() {
             transform: translateY(0);
           }
         }
+
+
       `}</style>
+
+<div className="footerLinks">
+  <a href="/terms">Terms</a>
+</div>
+
     </div>
   );
 }
