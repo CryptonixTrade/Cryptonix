@@ -63,7 +63,6 @@ export default function LoginPage() {
 
         body: JSON.stringify({
           plan,
-          email: "test@test.com",
         }),
       });
 

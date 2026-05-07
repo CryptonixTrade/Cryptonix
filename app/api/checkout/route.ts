@@ -17,11 +17,10 @@ const PRICE_MAP: Record<PlanType, string> = {
 };
 
 export async function POST(req: Request) {
-  try {
-    const { plan, email }: {
-      plan: PlanType;
-      email: string;
-    } = await req.json();
+    try {
+      const { plan, }: {
+          plan: PlanType;
+      } = await req.json();
 
     const priceId = PRICE_MAP[plan];
 
@@ -32,17 +31,9 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email is required" },
-        { status: 400 }
-      );
-    }
-
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
 
-      customer_email: email,
 
       line_items: [
         {
