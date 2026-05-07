@@ -163,7 +163,7 @@ export default function TermsPage() {
 
   text-decoration: none;
 
-  font-size: 55px;
+  font-size: 50px;
 
   transition: 0.2s ease;
 }
@@ -176,7 +176,7 @@ export default function TermsPage() {
             position: fixed;
             inset: 0;
   
-            background: rgba(49, 27, 27, 0.72);
+            background: rgba(22, 4, 4, 0.72);
   
             backdrop-filter: blur(8px);
   
@@ -194,42 +194,42 @@ export default function TermsPage() {
   
             background: rgba(26, 1, 1, 0.72);
   
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(28, 19, 19, 0.08);
   
-            border-radius: 28px;
+            border-radius: 8px;
   
-            padding: 40px;
+            padding: 30px;
   
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(20spx);
   
             box-shadow:
-              0 0 40px rgba(0,0,0,0.45);
+              0 0 40px rgba(211, 175, 175, 0.5);
           }
   
           h1 {
-            font-size: 42px;
+            font-size: 10px;
   
-            margin-bottom: 10px;
+            margin-bottom: 42px;
   
-            color: #f0c36a;
+            color:rgb(141, 112, 54);
           }
   
           .updated {
             opacity: 0.7;
   
-            margin-bottom: 40px;
+            margin-bottom: 22px;
           }
   
           section {
-            margin-bottom: 34px;
+            margin-bottom: 10px;
           }
   
           h2 {
-            font-size: 22px;
+            font-size: 17px;
   
-            margin-bottom: 12px;
+            margin-bottom: 10px;
   
-            color: #f0c36a;
+            color:rgb(220, 185, 115);
           }
   
           p {

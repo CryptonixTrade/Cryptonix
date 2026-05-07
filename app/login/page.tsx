@@ -110,7 +110,7 @@ export default function LoginPage() {
       <div className="plans">
 
         <div className="planCard">
-          <h3>MONTHLY</h3>
+          <h3>Monthly</h3>
           <p>$20 / month</p>
 
           <button onClick={() => handlePay("monthly")}>
@@ -119,7 +119,7 @@ export default function LoginPage() {
         </div>
 
         <div className="planCard">
-          <h3>3 MONTHS</h3>
+          <h3>3 Months</h3>
           <p>$40</p>
 
           <button onClick={() => handlePay("quarterly")}>
@@ -128,7 +128,7 @@ export default function LoginPage() {
         </div>
 
         <div className="planCard">
-          <h3>YEARLY</h3>
+          <h3>Yearly</h3>
           <p>$70</p>
 
           <button onClick={() => handlePay("yearly")}>
@@ -163,7 +163,7 @@ export default function LoginPage() {
           position: fixed;
           inset: 0;
 
-          background: rgba(152, 116, 103, 0.05);
+          background: rgba(132, 89, 73, 0.05);
 
           z-index: 1;
 
@@ -181,17 +181,17 @@ export default function LoginPage() {
           width: 220px;
           max-width: calc(100% - 40px);
 
-          background: rgba(32, 4, 4, 0.85);
+          background: rgba(103, 69, 34, 0);
 
           backdrop-filter: blur(12px);
 
-          padding: 18px;
+          padding: 12px;
 
           border-radius: 12px;
 
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(117, 13, 13, 0.08);
 
-          box-shadow: 0 0 25px rgba(205, 10, 10, 0.7);
+          box-shadow: 0 0 25px rgba(91, 59, 19, 0.7);
 
           text-align: center;
 
@@ -203,9 +203,9 @@ export default function LoginPage() {
         .loginBox input {
           width: 100%;
 
-          padding: 6px;
+          padding: 1px;
 
-          margin-bottom: 8px;
+          margin-bottom: 3px;
 
           border-radius: 5px;
 
@@ -230,7 +230,7 @@ export default function LoginPage() {
           background: linear-gradient(
             135deg,
             rgb(71, 36, 2),
-            rgb(142, 78, 5)
+            rgb(106, 67, 23)
           );
 
           font-weight: bold;
@@ -258,7 +258,7 @@ export default function LoginPage() {
         .planCard {
           width: 115px;
 
-          background: rgba(8, 12, 0, 0.6);
+          background: rgba(73, 53, 14, 0);
 
           backdrop-filter: blur(12px);
 
@@ -268,7 +268,7 @@ export default function LoginPage() {
 
           color: white;
 
-          border: 1px solid rgb(22, 72, 4);
+          border: 1px solid rgba(66, 193, 15, 0.75);
         }
 
         .planCard h3 {
@@ -294,8 +294,8 @@ export default function LoginPage() {
 
           background: linear-gradient(
             135deg,
-            rgb(87, 54, 3),
-            rgb(34, 56, 2)
+            rgb(64, 112, 5),
+            rgb(125, 167, 64)
           );
         }
 
