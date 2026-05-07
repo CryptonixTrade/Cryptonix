@@ -300,23 +300,49 @@ export default function LoginPage() {
         }
 
         @media (max-width: 768px) {
-          .loginBox {
-            top: 20px;
-            right: 20px;
 
-            width: 85%;
-            max-width: 125px;
-          }
+  .loginBox {
+    top: 20px;
+    right: 20px;
 
-          .plans {
-            left: 20px;
-            bottom: 20px;
+    width: 85%;
+    max-width: 125px;
+  }
 
-            flex-direction: column;
-          }
+  .plans {
+    left: 12px;
+    bottom: 12px;
+
+    flex-direction: column;
+
+    gap: 3px;
+  }
+
+  .planCard {
+    width: 105px;
+
+    padding: 1px;
+  }
+
+  .planCard h3 {
+    font-size: 5px;
+  }
+
+  .planCard p {
+    font-size: 5px;
+  }
+
+  .planCard button {
+    font-size: 5px;
+
+    padding: 2px;
+
+    border-radius: 4px;
+  }
+}
 
           .planCard {
-            width: 150px;
+            width: 105px;
           }
         }
 
