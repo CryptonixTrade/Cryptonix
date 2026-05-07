@@ -299,45 +299,132 @@ export default function LoginPage() {
           );
         }
 
-        @media (max-width: 768px) {
+       @media (max-width: 768px) {
 
   .loginBox {
-    top: 20px;
-    right: 20px;
+    top: 16px;
+    right: 16px;
 
-    width: 85%;
-    max-width: 125px;
+    width: 118px;
+
+    padding: 7px;
+
+    border-radius: 18px;
+
+    backdrop-filter: blur(18px);
+
+    background: rgba(20, 5, 5, 0.72);
+
+    box-shadow:
+      0 0 20px rgba(255, 120, 0, 0.18),
+      inset 0 0 12px rgba(255, 180, 0, 0.06);
+  }
+
+  .loginBox input {
+    font-size: 11px;
+
+    padding: 5px;
+
+    margin-bottom: 6px;
+
+    border-radius: 8px;
+  }
+
+  .loginBox button {
+    font-size: 8px;
+
+    padding: 6px;
+
+    border-radius: 999px;
   }
 
   .plans {
-    left: 12px;
-    bottom: 12px;
+    position: fixed;
 
-    flex-direction: column;
+    left: 14px;
+    bottom: 14px;
 
-    gap: 3px;
+    z-index: 9999;
+
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 5px;
   }
 
   .planCard {
-    width: 105px;
+    width: 118px;
 
-    padding: 1px;
+    padding: 8px;
+
+    border-radius: 22px;
+
+    background: rgba(8, 8, 8, 0.55);
+
+    border: 1px solid rgba(194, 155, 63, 0.28);
+
+    backdrop-filter: blur(16px);
+
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      inset 0 0 10px rgba(255, 215, 120, 0.05);
+
+    overflow: hidden;
   }
 
   .planCard h3 {
-    font-size: 5px;
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+    margin-bottom: 4px;
+
+    color: #f4d27a;
   }
 
   .planCard p {
-    font-size: 5px;
+    font-size: 10px;
+
+    color: rgba(255,255,255,0.88);
+
+    margin-bottom: -3px;
   }
 
   .planCard button {
-    font-size: 5px;
+    width: 100%;
 
-    padding: 2px;
+    padding: 3px;
 
-    border-radius: 4px;
+    font-size: 8px;
+
+    font-weight: 600;
+
+    border: none;
+
+    border-radius: 999px;
+
+    color: #1b1400;
+
+    background: linear-gradient(
+      90deg,
+      #a26b00,
+      #f5d06a,
+      #8d5b00
+    );
+
+    background-size: 200% auto;
+
+    box-shadow:
+      0 4px 14px rgba(214, 162, 26, 0.35);
+
+    transition: all 0.3s ease;
+  }
+
+  .planCard button:active {
+    transform: scale(0.97);
   }
 }
 
