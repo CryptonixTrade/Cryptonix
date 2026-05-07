@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    
+
   });
 
 const baseUrl =
@@ -63,11 +63,14 @@ export async function POST(req: Request) {
       url: session.url,
     });
 
-  } catch (error) {
-    console.error("Stripe error:", error);
-
+} catch (error: any) {
+    console.log("FULL STRIPE ERROR:");
+    console.log(error);
+  
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: error?.message || String(error),
+      },
       { status: 500 }
     );
   }
