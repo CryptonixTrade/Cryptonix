@@ -416,7 +416,7 @@ export default function LoginPage() {
 }
 
   .termsLabel {
-    font-size: 15px;
+    font-size: 14px;
 
     padding: 0 16px;
 
