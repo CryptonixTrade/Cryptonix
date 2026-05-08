@@ -7,6 +7,27 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+
+  const handleCheckout = async (plan: string) => {
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ plan }),
+      });
+  
+      const data = await res.json();
+  
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+    }
+  };
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -113,27 +134,60 @@ export default function LoginPage() {
           <h3>Monthly</h3>
           <p>$20 / month</p>
 
-          <button onClick={() => handlePay("monthly")}>
-            Buy Access
-          </button>
+          <button
+  disabled={!agreed}
+  onClick={() => {
+    if (!agreed) return;
+
+    handleCheckout("monthly");
+  }}
+  style={{
+    opacity: agreed ? 1 : 0.5,
+    cursor: agreed ? "pointer" : "not-allowed",
+  }}
+>
+ Buy Access
+</button>
         </div>
 
         <div className="planCard">
           <h3>3 Months</h3>
           <p>$40</p>
 
-          <button onClick={() => handlePay("quarterly")}>
-            Buy Access
-          </button>
+          <button
+  disabled={!agreed}
+  onClick={() => {
+    if (!agreed) return;
+
+    handleCheckout("3months");
+  }}
+  style={{
+    opacity: agreed ? 1 : 0.5,
+    cursor: agreed ? "pointer" : "not-allowed",
+  }}
+>
+  Buy Access
+</button>
         </div>
 
         <div className="planCard">
           <h3>Yearly</h3>
           <p>$70</p>
 
-          <button onClick={() => handlePay("yearly")}>
-            Buy Access
-          </button>
+          <button
+  disabled={!agreed}
+  onClick={() => {
+    if (!agreed) return;
+
+    handleCheckout("yearly");
+  }}
+  style={{
+    opacity: agreed ? 1 : 0.5,
+    cursor: agreed ? "pointer" : "not-allowed",
+  }}
+>
+  Buy Access
+</button>
         </div>
 
       </div>
@@ -302,18 +356,18 @@ export default function LoginPage() {
 .footerLinks {
   position: fixed;
 
-  right: 3px;
-  bottom: -3px;
+  left: 38px;
+  bottom: 7px;
 
   z-index: 9999;
 }
 
 .footerLinks a {
-  color: rgba(164, 7, 7, 0.99);
+  color: rgba(114, 138, 91, 0.99);
 
   text-decoration: none;
 
-  font-size: 11px;
+  font-size: 16px;
 
   transition: 0.2s ease;
 }
@@ -472,7 +526,28 @@ export default function LoginPage() {
       `}</style>
 
 <div className="footerLinks">
-  <a href="/terms">Terms</a>
+  <label
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "15px",
+      color: "rgba(222, 233, 212, 0.99)",
+      fontSize: "20px",
+    }}
+  >
+    <input
+      type="checkbox"
+      checked={agreed}
+      onChange={(e) => setAgreed(e.target.checked)}
+    />
+
+    <span>
+      I agree to the {" "}
+      <a href="/terms">
+      Terms of Service and Privacy Policy
+      </a>
+    </span>
+  </label>
 </div>
 
     </div>

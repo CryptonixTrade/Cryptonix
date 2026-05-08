@@ -1,6 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 export default function TermsPage() {
+
+  const [agreed, setAgreed] = useState(false);
+
     return (
       <div className="termsPage">
         <div className="overlay" />
@@ -269,5 +274,6 @@ export default function TermsPage() {
           }
         `}</style>
       </div>
+
     );
   }
