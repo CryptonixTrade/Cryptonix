@@ -188,9 +188,29 @@ export default function LoginPage() {
 >
   Buy Access
 </button>
+
         </div>
 
       </div>
+
+      <div className="footerLinks">
+  <label className="termsLabel">
+
+    <input
+      type="checkbox"
+      checked={agreed}
+      onChange={(e) => setAgreed(e.target.checked)}
+    />
+
+    <span>
+      I agree to the{" "}
+      <a href="/terms">
+        Terms of Service and Privacy Policy
+      </a>
+    </span>
+
+  </label>
+</div>
 
       <style jsx>{`
         .container {
@@ -352,14 +372,61 @@ export default function LoginPage() {
             rgb(125, 167, 64)
           );
         }
+        
 
 .footerLinks {
   position: fixed;
-
-  left: 38px;
-  bottom: 7px;
-
+  left: 10px;
+  bottom: 6px;
   z-index: 9999;
+}
+
+.termsLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: rgba(222, 233, 212, 0.99);
+  font-size: 20px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .plans {
+    bottom: 70px;
+  }
+
+}{
+
+  .footerLinks {
+    position: relative;
+
+    left: auto;
+    bottom: auto;
+
+    margin-top: 18px;
+
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+  }
+
+}
+
+  .termsLabel {
+    font-size: 13px;
+
+    padding: 0 15px;
+
+    text-align: center;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+  }
+
 }
 
 .footerLinks a {
@@ -419,7 +486,7 @@ export default function LoginPage() {
     position: fixed;
 
     left: 14px;
-    bottom: 14px;
+    bottom: 30px;
 
     z-index: 9999;
 
@@ -508,7 +575,6 @@ export default function LoginPage() {
           .planCard {
             width: 105px;
           }
-        }
 
         @keyframes fadeIn {
           from {
@@ -524,31 +590,6 @@ export default function LoginPage() {
 
 
       `}</style>
-
-<div className="footerLinks">
-  <label
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "15px",
-      color: "rgba(222, 233, 212, 0.99)",
-      fontSize: "20px",
-    }}
-  >
-    <input
-      type="checkbox"
-      checked={agreed}
-      onChange={(e) => setAgreed(e.target.checked)}
-    />
-
-    <span>
-      I agree to the {" "}
-      <a href="/terms">
-      Terms of Service and Privacy Policy
-      </a>
-    </span>
-  </label>
-</div>
 
     </div>
   );
