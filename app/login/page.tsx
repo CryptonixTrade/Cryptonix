@@ -376,7 +376,7 @@ export default function LoginPage() {
 
 .footerLinks {
   position: fixed;
-  left: 10px;
+  left: 10spx;
   bottom: 6px;
   z-index: 9999;
 }
@@ -386,7 +386,7 @@ export default function LoginPage() {
   align-items: center;
   gap: 10px;
 
-  color: rgba(220, 224, 185, 0.99);
+  color: rgba(230, 232, 215, 0.99);
   font-size: 20px;
 }
 
@@ -416,9 +416,9 @@ export default function LoginPage() {
 }
 
   .termsLabel {
-    font-size: 13px;
+    font-size: 18px;
 
-    padding: 0 15px;
+    padding: 0 16px;
 
     text-align: center;
 
