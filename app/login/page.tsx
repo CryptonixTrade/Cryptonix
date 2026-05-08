@@ -203,7 +203,7 @@ export default function LoginPage() {
     />
 
     <span>
-      I agree to the{" "}
+      I agree to the :{" "}
       <a href="/terms">
         Terms of Service and Privacy Policy
       </a>
@@ -386,7 +386,7 @@ export default function LoginPage() {
   align-items: center;
   gap: 10px;
 
-  color: rgba(222, 233, 212, 0.99);
+  color: rgba(220, 224, 185, 0.99);
   font-size: 20px;
 }
 
@@ -430,7 +430,7 @@ export default function LoginPage() {
 }
 
 .footerLinks a {
-  color: rgba(114, 138, 91, 0.99);
+  color: rgba(116, 137, 96, 0.99);
 
   text-decoration: none;
 
@@ -530,11 +530,11 @@ export default function LoginPage() {
   }
 
   .planCard p {
-    font-size: 10px;
+    font-size: 11px;
 
-    color: rgba(255,255,255,0.88);
+    color: rgb(8, 246, 12);
 
-    margin-bottom: -3px;
+    margin-bottom: -7px;
   }
 
   .planCard button {
