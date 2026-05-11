@@ -545,8 +545,6 @@ export default function Home() {
             ANALYTICS
           </div>
 
-          <LogoutButton />
-
         </div>
 
       </div>

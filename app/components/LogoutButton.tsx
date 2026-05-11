@@ -1,19 +1,16 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+
+import { usePathname } from "next/navigation";
 
 export default function LogoutButton() {
-  const { data: session } = useSession();
+  const pathname = usePathname();
 
-  /* ======================================================
-     HIDE IF NOT AUTHORIZED
-  ====================================================== */
-
-  if (!session) return null;
-
-  /* ======================================================
-     UI
-  ====================================================== */
+  // ❌ скрываем только на login
+  if (pathname === "/login") {
+    return null;
+  }
 
   return (
     <button
@@ -22,50 +19,42 @@ export default function LogoutButton() {
           callbackUrl: "/login",
         })
       }
-      className="
-        group relative overflow-hidden
-        rounded-full
-        border border-red-500/15
-        bg-red-500/10
-        px-5 py-3
-        text-xs font-bold
-        tracking-[0.18em]
-        text-red-300
-        transition-all duration-300
-        hover:border-red-400/30
-        hover:bg-red-500/15
-        hover:text-white
-        hover:shadow-[0_0_24px_rgba(255,70,70,0.18)]
-        active:scale-[0.98]
-      "
+      style={{
+        position: "fixed",
+
+        bottom: "20px",
+        right: "20px",
+
+        padding: "10px 14px",
+
+        fontSize: "12px",
+        fontWeight: 700,
+
+        letterSpacing: "0.08em",
+
+        background:
+          "linear-gradient(135deg, rgba(120,20,20,0.92), rgba(70,0,0,0.92))",
+
+        color: "#ffffff",
+
+        border:
+          "1px solid rgba(255,255,255,0.12)",
+
+        borderRadius: "999px",
+
+        cursor: "pointer",
+
+        zIndex: 999999,
+
+        backdropFilter: "blur(14px)",
+
+        WebkitBackdropFilter: "blur(14px)",
+
+        boxShadow:
+          "0 0 20px rgba(255,0,0,0.18)",
+      }}
     >
-
-      {/* GLOW */}
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/0" />
-
-      </div>
-
-      {/* CONTENT */}
-      <div className="relative z-10 flex items-center gap-2">
-
-        {/* DOT */}
-        <div className="relative flex items-center justify-center">
-
-          <div className="h-2 w-2 rounded-full bg-red-400 shadow-[0_0_12px_rgba(255,70,70,0.8)]" />
-
-          <div className="absolute h-2 w-2 animate-ping rounded-full bg-red-400/40" />
-
-        </div>
-
-        {/* TEXT */}
-        <span>
-          EXIT TERMINAL
-        </span>
-
-      </div>
-
+      EXIT TERMINAL
     </button>
   );
 }
