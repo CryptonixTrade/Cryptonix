@@ -1,90 +1,161 @@
 @import "tailwindcss";
 
-/* ===== VARIABLES ===== */
+/* =========================================================
+   CRYPTONIX PREMIUM TERMINAL UI SYSTEM
+========================================================= */
+
 :root {
-  --background: #050505;
-  --background-soft: #0a0a0a;
+  /* ===== COLORS ===== */
+  --background: #040404;
+  --background-soft: #0b0b0f;
+  --background-card: rgba(15, 15, 18, 0.72);
+
   --foreground: #f5f5f5;
+  --foreground-soft: rgba(255,255,255,0.72);
 
-  --accent: #e6c200;
-  --accent-soft: #ffd700;
+  --accent: #ff9f43;
+  --accent-light: #ffb866;
+  --accent-dark: #ff7b00;
 
-  --border: rgba(230, 194, 0, 0.15);
-  --border-strong: rgba(230, 194, 0, 0.35);
+  --green: #2dff87;
+  --red: #ff5e5e;
 
-  --glow: 0 0 12px rgba(230, 194, 0, 0.25);
+  /* ===== BORDERS ===== */
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,159,67,0.25);
 
+  /* ===== GLOWS ===== */
+  --glow-gold:
+    0 0 12px rgba(255,159,67,0.20),
+    0 0 30px rgba(255,159,67,0.10);
+
+  --glow-green:
+    0 0 14px rgba(45,255,135,0.18);
+
+  /* ===== EFFECTS ===== */
+  --glass-blur: blur(18px);
+
+  /* ===== TYPOGRAPHY ===== */
   --font-sans: Arial, Helvetica, sans-serif;
   --font-mono: monospace;
 
+  /* ===== TRANSITIONS ===== */
   --transition-fast: 0.15s ease;
   --transition-smooth: 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ===== BASE ===== */
-html, body {
+/* =========================================================
+   RESET
+========================================================= */
+
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
-}
+  overflow-y: auto;
+  scroll-behavior: smooth;
 
-* {
-  max-width: 100%;
-}
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255,140,0,0.16),
+      transparent 28%
+    ),
 
-/* ===== BODY ===== */
-body {
+    radial-gradient(
+      circle at bottom right,
+      rgba(255,180,80,0.10),
+      transparent 25%
+    ),
+
+    radial-gradient(
+      circle at center,
+      rgba(255,120,0,0.04),
+      transparent 45%
+    ),
+
+    linear-gradient(
+      180deg,
+      #030303 0%,
+      #070707 100%
+    );
+
   color: var(--foreground);
-  font-family: var(--font-sans);
 
-  display: flex;
-  flex-direction: column;
+  font-family: var(--font-sans);
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  will-change: transform;
+  scroll-behavior: smooth;
 }
 
-/* ===== NEXT ROOT ===== */
-#__next {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ===== MAIN APP ===== */
-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ===== GLOBAL FIX ===== */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-html, body {
-  background: #000000;
-  color: #ca8484;
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+#__next {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ===== SMOOTH INTERACTIONS ===== */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* =========================================================
+   GLOBAL ELEMENTS
+========================================================= */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+canvas {
+  image-rendering: optimizeSpeed;
+  will-change: transform;
+}
+
+/* =========================================================
+   BUTTONS / INPUTS
+========================================================= */
+
 button,
 input,
-select {
-  transition: 
+select,
+textarea {
+  transition:
     background var(--transition-fast),
     color var(--transition-fast),
     border var(--transition-fast),
-    transform var(--transition-fast);
+    transform var(--transition-fast),
+    opacity var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-/* ===== HOVER EFFECT ===== */
+button {
+  cursor: pointer;
+}
+
 button:hover {
   transform: translateY(-1px);
 }
@@ -93,53 +164,155 @@ button:active {
   transform: translateY(0);
 }
 
-/* ===== BORDER GLOW ===== */
-.glow {
-  box-shadow: var(--glow);
+/* =========================================================
+   PREMIUM UI CLASSES
+========================================================= */
+
+.glass-card {
+  background: var(--background-card);
+
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.45);
+
+  border-radius: 22px;
+
+  position: relative;
+
+  overflow: hidden;
 }
 
-/* ===== SCROLLBAR (тонкий, аккуратный) ===== */
+.glass-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.04),
+      transparent
+    );
+
+  pointer-events: none;
+}
+
+.gold-glow {
+  box-shadow: var(--glow-gold);
+}
+
+.green-glow {
+  box-shadow: var(--glow-green);
+}
+
+.premium-border {
+  border: 1px solid var(--border-strong);
+}
+
+/* =========================================================
+   PREMIUM TEXT
+========================================================= */
+
+.text-gold {
+  color: var(--accent);
+}
+
+.text-soft {
+  color: var(--foreground-soft);
+}
+
+.text-green {
+  color: var(--green);
+}
+
+.text-red {
+  color: var(--red);
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #070707;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 215, 0, 0.15);
-  border-radius: 10px;
+  background: rgba(255,159,67,0.28);
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 215, 0, 0.35);
+  background: rgba(255,159,67,0.48);
 }
 
-/* ===== TEXT ===== */
+/* =========================================================
+   SELECTION
+========================================================= */
+
 ::selection {
-  background: rgba(255, 215, 0, 0.2);
-  color: #fefefe;
+  background: rgba(255,159,67,0.22);
+  color: #ffffff;
 }
 
-/* ===== PERFORMANCE OPTIMIZATION ===== */
-canvas {
-  image-rendering: optimizeSpeed;
-  will-change: transform;
-}
+/* =========================================================
+   MICRO ANIMATIONS
+========================================================= */
 
-/* ===== MICRO ANIMATION ===== */
 .fade-in {
-  animation: fadeIn 0.25s ease forwards;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+.float-glow {
+  animation: floatGlow 4s ease-in-out infinite;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes floatGlow {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* =========================================================
+   MOBILE OPTIMIZATION
+========================================================= */
+
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .glass-card {
+    border-radius: 18px;
   }
 }

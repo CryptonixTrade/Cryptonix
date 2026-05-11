@@ -105,6 +105,13 @@ export default function LoginPage() {
 
   return (
     <div className="container">
+
+<img
+  src="/CRYPTONIX.PNG"
+  alt="bg"
+  className="bgImage"
+/>
+
       <div className="overlay" />
 
       <form onSubmit={handleLogin} className="loginBox">
@@ -214,17 +221,33 @@ export default function LoginPage() {
 
       <style jsx>{`
         .container {
-          position: fixed;
-          inset: 0;
+  position: fixed;
+  inset: 0;
 
-          width: 100vw;
-          height: 100vh;
+  left: 0;
+  right: 0;
 
-          background: url('/CRYPTONIX.PNG') no-repeat center center;
-          background-size: cover;
+  width: 100vw;
+  height: 100vh;
 
-          z-index: 0;
-        }
+  overflow: hidden;
+
+  background: #000;
+}
+
+.bgImage {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  object-fit: cover;
+
+  z-index: 0;
+}
 
         @media (max-width: 768px) {
           .container {
@@ -234,7 +257,7 @@ export default function LoginPage() {
         }
 
         .overlay {
-          position: fixed;
+          position: absolute;
           inset: 0;
 
           background: rgba(132, 89, 73, 0.05);
@@ -246,9 +269,9 @@ export default function LoginPage() {
 
         .loginBox {
           position: absolute;
-
-          top: 40px;
-          right: 40px;
+          max-width: calc(100vw - 40px);
+          top: 30px;
+          right: 30px;
 
           z-index: 2;
 
@@ -334,7 +357,7 @@ export default function LoginPage() {
 
           background: rgba(73, 53, 14, 0);
 
-          backdrop-filter: blur(12px);
+          background: rgba(15,15,15,0.72);
 
           border-radius: 17px;
 
@@ -376,8 +399,8 @@ export default function LoginPage() {
 
 .footerLinks {
   position: fixed;
-  left: 10spx;
-  bottom: 6px;
+  left: 12px;
+  bottom: 8px;
   z-index: 9999;
 }
 
@@ -387,46 +410,10 @@ export default function LoginPage() {
   gap: 10px;
 
   color: rgba(230, 232, 215, 0.99);
-  font-size: 20px;
-}
 
-/* MOBILE */
-@media (max-width: 768px) {
+  font-size: 14px;
 
-  .plans {
-    bottom: 70px;
-  }
-
-}{
-
-  .footerLinks {
-    position: relative;
-
-    left: auto;
-    bottom: auto;
-
-    margin-top: 18px;
-
-    display: flex;
-    justify-content: center;
-
-    width: 100%;
-  }
-
-}
-
-  .termsLabel {
-    font-size: 14px;
-
-    padding: 0 16px;
-
-    text-align: center;
-
-    flex-wrap: wrap;
-
-    justify-content: center;
-  }
-
+  flex-wrap: wrap;
 }
 
 .footerLinks a {
@@ -434,9 +421,53 @@ export default function LoginPage() {
 
   text-decoration: none;
 
-  font-size: 16px;
+  font-size: 14px;
 
   transition: 0.2s ease;
+}
+
+.footerLinks a:hover {
+  color: #f0c36a;
+}
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 768px) {
+
+  .footerLinks {
+    left: 10px;
+    right: 10px;
+    bottom: 8px;
+
+    display: flex;
+    justify-content: center;
+  }
+
+  .termsLabel {
+    justify-content: center;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    gap: 6px;
+  }
+
+  .plans {
+    left: 12px;
+    right: 12px;
+
+    bottom: 42px;
+
+    gap: 6px;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+  }
+
 }
 
 .footerLinks a:hover {

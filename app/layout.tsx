@@ -32,7 +32,7 @@ export default function RootLayout({
     >
       <body
         style={{
-          height: "100vh",
+          
           display: "flex",
           flexDirection: "column",
 
