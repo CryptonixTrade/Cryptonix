@@ -106,11 +106,22 @@ export default function LoginPage() {
   return (
     <div className="container">
 
-<img
-  src="/CRYPTONIX.PNG"
-  alt="bg"
-  className="bgImage"
-/>
+<picture>
+
+  {/* MOBILE */}
+  <source
+    media="(max-width: 768px)"
+    srcSet="/CRYPTONIX-mobile.png"
+  />
+
+  {/* DESKTOP */}
+  <img
+    src="/CRYPTONIX.PNG"
+    alt="bg"
+    className="bgImage"
+  />
+
+</picture>
 
       <div className="overlay" />
 
