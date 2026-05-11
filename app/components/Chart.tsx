@@ -4,12 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   createChart,
   CandlestickSeries,
-  HistogramSeries,
+  HistogramSeries
 } from "lightweight-charts";
 
 export default function Chart(props: any) {
   const { candles = [], trade } = props;
-
   const containerRef = useRef<HTMLDivElement>(null);
   const priceRef = useRef<HTMLDivElement>(null);
   const volumeRef = useRef<HTMLDivElement>(null);
@@ -26,20 +25,15 @@ export default function Chart(props: any) {
 
   const [isMobile, setIsMobile] = useState(false);
 
-  /* ================= MOBILE ================= */
-
+  /* ===== DETECT MOBILE ===== */
   useEffect(() => {
     const check = () => {
       setIsMobile(window.innerWidth < 1024);
     };
 
     check();
-
     window.addEventListener("resize", check);
-
-    return () => {
-      window.removeEventListener("resize", check);
-    };
+    return () => window.removeEventListener("resize", check);
   }, []);
 
   /* ================= INIT ================= */
@@ -49,161 +43,100 @@ export default function Chart(props: any) {
 
     const width = containerRef.current.clientWidth;
 
-    /* ================= PRICE CHART ================= */
-
     const priceChart = createChart(priceRef.current, {
       width,
-      height: priceRef.current.clientHeight || 320,
+      height: priceRef.current.clientHeight || 300,
 
       layout: {
-        background: {
-          color: "#07090d",
-        },
-        textColor: "rgba(255,255,255,0.45)",
-        fontFamily: "Inter, sans-serif",
+        background: { color: "#07070a" },
+        textColor: "#888"
       },
 
       grid: {
-        vertLines: {
-          color: "rgba(255,255,255,0.03)",
-        },
-        horzLines: {
-          color: "rgba(255,255,255,0.03)",
-        },
-      },
-
-      crosshair: {
-        vertLine: {
-          color: "rgba(255,255,255,0.12)",
-          width: 1,
-          style: 2,
-          labelBackgroundColor: "#111827",
-        },
-
-        horzLine: {
-          color: "rgba(255,255,255,0.12)",
-          width: 1,
-          style: 2,
-          labelBackgroundColor: "#111827",
-        },
+        vertLines: { visible: false },
+        horzLines: { visible: false }
       },
 
       rightPriceScale: {
         visible: true,
-        borderVisible: false,
-
-        scaleMargins: {
-          top: 0.12,
-          bottom: 0.12,
-        },
+        borderVisible: false
       },
 
       timeScale: {
         borderVisible: false,
-        timeVisible: true,
-
-        barSpacing: 10,
-
-        rightOffset: 8,
-      },
+        timeVisible: true
+      }
     });
 
     const candleSeries = priceChart.addSeries(CandlestickSeries, {
-      upColor: "#00ff9d",
-      downColor: "#ff4d6d",
-
-      borderUpColor: "#00ff9d",
-      borderDownColor: "#ff4d6d",
-
-      wickUpColor: "#00ff9d",
-      wickDownColor: "#ff4d6d",
-
-      priceLineVisible: false,
+      upColor: "#00ff66",
+      downColor: "#ff3b3b",
+      wickUpColor: "#00ff66",
+      wickDownColor: "#ff3b3b",
+      priceLineVisible: false
     });
 
     priceChartRef.current = priceChart;
     candleSeriesRef.current = candleSeries;
 
-    /* ================= VOLUME ================= */
-
+    /* ===== VOLUME (ТОЛЬКО НЕ МОБИЛКА) ===== */
     let volumeChart: any = null;
     let volumeSeries: any = null;
 
     if (!isMobile && volumeRef.current) {
       volumeChart = createChart(volumeRef.current, {
         width,
-        height: volumeRef.current.clientHeight || 90,
+        height: volumeRef.current.clientHeight || 100,
 
         layout: {
-          background: {
-            color: "#07090d",
-          },
-          textColor: "rgba(255,255,255,0.25)",
-          fontFamily: "Inter, sans-serif",
+          background: { color: "#0a0a0a" },
+          textColor: "#444"
         },
 
         grid: {
-          vertLines: {
-            color: "rgba(255,255,255,0.02)",
-          },
-          horzLines: {
-            color: "rgba(255,255,255,0.02)",
-          },
+          vertLines: { visible: false },
+          horzLines: { visible: false }
         },
 
         rightPriceScale: {
-          visible: false,
+          visible: false
         },
 
         timeScale: {
-          borderVisible: false,
-        },
+          borderVisible: false
+        }
       });
 
       volumeSeries = volumeChart.addSeries(HistogramSeries, {
-        priceFormat: {
-          type: "volume",
-        },
+        priceFormat: { type: "volume" }
       });
 
-      /* ================= SYNC ================= */
-
+      // SYNC
       let isSyncing = false;
 
-      priceChart
-        .timeScale()
-        .subscribeVisibleTimeRangeChange((range: any) => {
-          if (isSyncing || !range) return;
+      priceChart.timeScale().subscribeVisibleTimeRangeChange((range: any) => {
+        if (isSyncing || !range) return;
+        isSyncing = true;
+        try {
+          volumeChart.timeScale().setVisibleRange(range);
+        } catch {}
+        isSyncing = false;
+      });
 
-          isSyncing = true;
-
-          try {
-            volumeChart.timeScale().setVisibleRange(range);
-          } catch {}
-
-          isSyncing = false;
-        });
-
-      volumeChart
-        .timeScale()
-        .subscribeVisibleTimeRangeChange((range: any) => {
-          if (isSyncing || !range) return;
-
-          isSyncing = true;
-
-          try {
-            priceChart.timeScale().setVisibleRange(range);
-          } catch {}
-
-          isSyncing = false;
-        });
+      volumeChart.timeScale().subscribeVisibleTimeRangeChange((range: any) => {
+        if (isSyncing || !range) return;
+        isSyncing = true;
+        try {
+          priceChart.timeScale().setVisibleRange(range);
+        } catch {}
+        isSyncing = false;
+      });
 
       volumeChartRef.current = volumeChart;
       volumeSeriesRef.current = volumeSeries;
     }
 
-    /* ================= RESIZE ================= */
-
+    /* ===== RESIZE ===== */
     const resize = () => {
       if (!containerRef.current || !priceRef.current) return;
 
@@ -211,32 +144,30 @@ export default function Chart(props: any) {
 
       priceChart.applyOptions({
         width: newWidth,
-        height: priceRef.current.clientHeight || 320,
+        height: priceRef.current.clientHeight || 300
       });
 
       if (volumeChart && volumeRef.current) {
         volumeChart.applyOptions({
           width: newWidth,
-          height: volumeRef.current.clientHeight || 90,
+          height: volumeRef.current.clientHeight || 100
         });
       }
     };
 
     const resizeObserver = new ResizeObserver(resize);
-
     resizeObserver.observe(containerRef.current);
 
     window.addEventListener("resize", resize);
 
     return () => {
       resizeObserver.disconnect();
-
       window.removeEventListener("resize", resize);
 
       priceChart.remove();
-
       volumeChart?.remove();
     };
+
   }, [isMobile]);
 
   /* ================= DATA ================= */
@@ -244,53 +175,40 @@ export default function Chart(props: any) {
   useEffect(() => {
     if (!candles || candles.length === 0) return;
 
-    const candleData = candles
-      .filter(
-        (c: any) =>
-          Number.isFinite(c.open) &&
-          Number.isFinite(c.high) &&
-          Number.isFinite(c.low) &&
-          Number.isFinite(c.close)
-      )
-      .map((c: any) => ({
-        time: Number(c.time),
-        open: c.open,
-        high: c.high,
-        low: c.low,
-        close: c.close,
-      }));
+    const candleData = candles.map((c: any) => ({
+      time: Number(c.time),
+      open: c.open,
+      high: c.high,
+      low: c.low,
+      close: c.close
+    }));
 
     candleSeriesRef.current?.setData(candleData);
 
     if (!isMobile && volumeSeriesRef.current) {
       const volumeData = candles.map((c: any) => ({
         time: Number(c.time),
-
         value: c.volume || 0,
-
         color:
           c.close >= c.open
-            ? "rgba(0,255,157,0.22)"
-            : "rgba(255,77,109,0.22)",
+            ? "rgba(0, 255, 102, 0.5)"
+            : "rgba(255,0,0,0.5)"
       }));
 
       volumeSeriesRef.current.setData(volumeData);
     }
+
   }, [candles, isMobile]);
 
-  /* ================= TRADE LINES ================= */
+  /* ================= TRADE ================= */
 
   useEffect(() => {
     const series = candleSeriesRef.current;
-
     if (!series) return;
 
-    [entryLineRef, tpLineRef, slLineRef].forEach((ref) => {
+    [entryLineRef, tpLineRef, slLineRef].forEach(ref => {
       if (ref.current) {
-        try {
-          series.removePriceLine(ref.current);
-        } catch {}
-
+        try { series.removePriceLine(ref.current); } catch {}
         ref.current = null;
       }
     });
@@ -299,160 +217,39 @@ export default function Chart(props: any) {
 
     entryLineRef.current = series.createPriceLine({
       price: trade.entry,
-
-      color: "#ffd166",
-
-      lineWidth: 2,
-
-      lineStyle: 0,
-
-      axisLabelVisible: true,
-
-      title: "ENTRY",
+      color: "#ffd700",
+      lineWidth: 2
     });
 
     tpLineRef.current = series.createPriceLine({
       price: trade.take,
-
-      color: "#00ff9d",
-
+      color: "#00ff66",
       lineWidth: 2,
-
-      lineStyle: 2,
-
-      axisLabelVisible: true,
-
-      title: "TP",
+      lineStyle: 2
     });
 
     slLineRef.current = series.createPriceLine({
       price: trade.stop,
-
-      color: "#ff4d6d",
-
+      color: "#ff3b3b",
       lineWidth: 2,
-
-      lineStyle: 2,
-
-      axisLabelVisible: true,
-
-      title: "SL",
+      lineStyle: 2
     });
+
   }, [trade]);
 
   /* ================= UI ================= */
 
   return (
-    <div
-      ref={containerRef}
-      className="
-        w-full
-        flex
-        flex-col
-        overflow-hidden
+    <div ref={containerRef} className="w-full flex flex-col overflow-hidden">
 
-        rounded-2xl
+      {/* PRICE */}
+      <div ref={priceRef} className="flex-[4] min-h-[200px]" />
 
-        border
-        border-white/[0.05]
-
-        bg-[#07090d]
-
-        shadow-[0_0_40px_rgba(0,255,157,0.04)]
-
-        backdrop-blur-xl
-      "
-      style={{
-        background:
-          "linear-gradient(180deg, rgba(18,18,24,0.96) 0%, rgba(7,9,13,1) 100%)",
-      }}
-    >
-      {/* ================= HEADER ================= */}
-
-      <div
-        className="
-          flex
-          items-center
-          justify-between
-
-          px-4
-          py-3
-
-          border-b
-          border-white/[0.04]
-        "
-      >
-        <div className="flex flex-col">
-          <span
-            className="
-              text-white
-              text-[15px]
-              font-semibold
-              tracking-wide
-            "
-          >
-            LIVE MARKET
-          </span>
-
-          <span
-            className="
-              text-white/40
-              text-[11px]
-              mt-[2px]
-            "
-          >
-            AI SIGNAL TERMINAL
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div
-            className="
-              w-2
-              h-2
-              rounded-full
-              bg-[#00ff9d]
-
-              animate-pulse
-            "
-          />
-
-          <span
-            className="
-              text-[#00ff9d]
-              text-[12px]
-              font-medium
-            "
-          >
-            LIVE
-          </span>
-        </div>
-      </div>
-
-      {/* ================= PRICE ================= */}
-
-      <div
-        ref={priceRef}
-        className="
-          flex-[4]
-          min-h-[320px]
-        "
-      />
-
-      {/* ================= VOLUME ================= */}
-
+      {/* VOLUME (ТОЛЬКО DESKTOP) */}
       {!isMobile && (
-        <div
-          ref={volumeRef}
-          className="
-            flex-[1]
-            min-h-[90px]
-
-            border-t
-            border-white/[0.03]
-          "
-        />
+        <div ref={volumeRef} className="flex-[1] min-h-[80px]" />
       )}
+
     </div>
   );
 }
