@@ -7,47 +7,76 @@ export default function PressureSignal(props: any) {
   const { candles = [] } = props;
 
   const signal = useMemo(() => {
+    function calculateEMA(data:number[], period:number) {
+      const k = 2 / (period + 1);
+    
+      let ema = data[0];
+    
+      for (let i = 1; i < data.length; i++) {
+        ema = data[i] * k + ema * (1 - k);
+      }
+    
+      return ema;
+    }
     if (!candles || candles.length < 30) return null;
 
     const closes = candles.map((c:any)=>Number(c.close || 0));
     const volumes = candles.map((c:any)=>Number(c.volume || 0));
+    const basePrice = closes.at(-5) || 1;
 
+const momentum =
+  ((closes.at(-1)! - basePrice) / basePrice) * 100;
+
+     let momentumScore = 0;
+
+if (momentum > 1) momentumScore = 1;
+else if (momentum < -1) momentumScore = -1;
+    
     if (closes.length < 30) return null;
 
-    // ===== MA
-    const maFast =
-      closes.slice(-9).reduce((a:number,b:number)=>a+b,0)/9;
 
-    const maSlow =
-      closes.slice(-21).reduce((a:number,b:number)=>a+b,0)/21;
-
+    const maFast = calculateEMA(closes.slice(-30), 7);
+    const maSlow = calculateEMA(closes.slice(-30), 20);
     let maScore = 0;
+
     if (maFast > maSlow) maScore = 1;
     else if (maFast < maSlow) maScore = -1;
 
-    // ===== RSI (фикс)
-    let gains = 0;
-    let losses = 0;
+    
 
-    for(let i = closes.length - 14; i < closes.length; i++){
-      const prev = closes[i - 1];
-      const curr = closes[i];
+    // ===== RSI
+let gains = 0;
+let losses = 0;
 
-      if(prev === undefined || curr === undefined) continue;
+for (let i = closes.length - 14; i < closes.length; i++) {
+  const prev = closes[i - 1];
+  const curr = closes[i];
 
-      const diff = curr - prev;
+  if (prev === undefined || curr === undefined) continue;
 
-      if(diff > 0) gains += diff;
-      else losses += Math.abs(diff);
-    }
+  const diff = curr - prev;
 
-    const rs = gains / (losses || 1);
-    const rsi = 100 - (100 / (1 + rs));
+  if (diff > 0) gains += diff;
+  else losses += Math.abs(diff);
+}
 
-    let rsiScore = 0;
+const avgGain = gains / 14;
+const avgLoss = losses / 14;
 
-    if (rsi > 65) rsiScore = 1;
-    else if (rsi < 35) rsiScore = -1;
+let rsi = 50;
+
+if (avgLoss === 0) {
+  rsi = 100;
+} else {
+  const rs = avgGain / avgLoss;
+  rsi = 100 - (100 / (1 + rs));
+}
+
+// 👇 ВОТ ЗДЕСЬ ДОЛЖЕН БЫТЬ rsiScore
+let rsiScore = 0;
+
+if (rsi > 65) rsiScore = 1;
+else if (rsi < 35) rsiScore = -1;
 
     // ===== VOLUME
     const volNow = volumes.at(-1) || 0;
@@ -56,22 +85,24 @@ export default function PressureSignal(props: any) {
 
     let volScore = 0;
 
-    if (volNow > volAvg * 1.1) volScore = 1;
-    else if (volNow < volAvg * 0.9) volScore = -1;
-
+    if (volNow > volAvg * 1.5) volScore = 1;
+    else if (volNow < volAvg * 0.7) volScore = -1;
+    
     // ===== FINAL SCORE
     const raw =
-      maScore * 0.4 +
-      rsiScore * 0.3 +
-      volScore * 0.3;
+      maScore * 0.35 +
+      rsiScore * 0.2 +
+      volScore * 0.2 +
+      momentumScore * 0.25;
 
     const score = Math.max(0, Math.min(100, (raw + 1) / 2 * 100));
 
     // 🔥 УМНАЯ ЗОНА (не дёргается)
     let decision = "NO TRADE";
 
-    if (score > 65) decision = "LONG";
-    else if (score < 35) decision = "SHORT";
+    if (score >= 70) decision = "LONG";
+else if (score <= 30) decision = "SHORT";
+else decision = "NO TRADE";
 
     return { score, decision, rsi };
 

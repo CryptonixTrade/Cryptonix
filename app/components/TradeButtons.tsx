@@ -53,7 +53,7 @@ export default function TradeButtons(props: any) {
 
       background: active
         ? `linear-gradient(135deg, ${baseColor}, ${baseColor}cc)`
-        : "rgba(0,0,0,0.6)",
+        : "rgba(0, 0, 0, 0.6)",
 
       color: active ? "#000" : baseColor,
 
@@ -81,12 +81,12 @@ export default function TradeButtons(props: any) {
       gap: 12,
       marginBottom: 16,
 
-      background: "rgba(15,15,15,0.6)",
+      background: "rgba(3, 3, 3, 0.6)",
       backdropFilter: "blur(8px)",
       border: "1px solid rgba(255,215,0,0.08)",
       borderRadius: 12,
       padding: 6,
-      boxShadow: "0 0 25px rgba(255,180,0,0.05)",
+      boxShadow: "0 0 25px rgba(255, 179, 0, 0.05)",
       position: "relative"
     }}>
 
