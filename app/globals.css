@@ -307,9 +307,12 @@ button:active {
 ========================================================= */
 
 @media (max-width: 768px) {
-  html,
+  html {
+    background: #000;
+  }
+  
   body {
-    overflow-x: hidden;
+    background: #000;
   }
 
   .glass-card {

@@ -18,6 +18,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Trading Terminal",
   description: "AI Trading Interface",
+
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -27,9 +29,10 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-    >
+  lang="en"
+  style={{ background: "#000" }}
+  className={`${geistSans.variable} ${geistMono.variable}`}
+>
       <body
         style={{
           
