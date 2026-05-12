@@ -305,8 +305,9 @@ export default function AISignal(props: AISignalProps) {
   ====================================================== */
 
   return (
+    <div className="origin-top-left scale-[0.80] w-[40%] -mb-[40px]">
     <div
-      className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-4 backdrop-blur-xl transition-all duration-300"
+      className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-[10px] backdrop-blur-xl transition-all duration-300"
       style={{
         boxShadow: glow,
       }}
@@ -314,7 +315,7 @@ export default function AISignal(props: AISignalProps) {
 
       {/* BACKGROUND GLOW */}
       <div
-        className="pointer-events-none absolute right-[-60px] top-[-60px] h-[140px] w-[140px] rounded-full blur-3xl"
+        className="pointer-events-none absolute right-[-60px] top-[-60px] h-[80px] w-[80px] rounded-full blur-3xl"
         style={{
           background:
             decision === "LONG"
@@ -340,13 +341,13 @@ export default function AISignal(props: AISignalProps) {
       <div className="relative z-10 flex items-start justify-between">
 
         {/* LEFT */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
 
           {/* SIGNAL DOT */}
           <div className="relative flex items-center justify-center">
 
             <div
-              className="h-3 w-3 rounded-full"
+              className="h-2 w-2 rounded-full"
               style={{
                 background: color,
                 boxShadow: `0 0 16px ${color}`,
@@ -365,11 +366,11 @@ export default function AISignal(props: AISignalProps) {
           {/* TITLES */}
           <div>
 
-            <div className="text-sm font-bold tracking-[0.18em] text-orange-400">
+            <div className="text-[9px] font-bold tracking-[0.18em] text-orange-400">
               CRYPTONIX AI
             </div>
 
-            <div className="mt-[2px] text-[11px] tracking-[0.16em] text-white/35">
+            <div className="mt-[2px] text-[9px] tracking-[0.16em] text-white/35">
               {interval} • ARTIFICIAL INTELLIGENCE SIGNAL
             </div>
 
@@ -379,7 +380,7 @@ export default function AISignal(props: AISignalProps) {
 
         {/* DECISION */}
         <div
-          className="rounded-full border px-3 py-[6px] text-xs font-semibold tracking-[0.16em]"
+          className="rounded-full border px-2 py-[4px] text-[10px] font-semibold tracking-[0.16em]"
           style={{
             color,
             borderColor: `${color}30`,
@@ -395,10 +396,10 @@ export default function AISignal(props: AISignalProps) {
           SCORE BAR
       ====================================================== */}
 
-      <div className="relative z-10 mt-5">
+      <div className="relative z-10 mt-3">
 
         {/* LABELS */}
-        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-white/35">
+        <div className="mb-2 flex items-center justify-between text-[9px] uppercase tracking-[0.18em] text-white/35">
 
           <span>Bearish</span>
 
@@ -416,9 +417,9 @@ export default function AISignal(props: AISignalProps) {
 
           {/* POINTER */}
           <div
-            className="absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full border-2 border-black"
+            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-black"
             style={{
-              left: `calc(${signal.score}% - 10px)`,
+              left: `calc(${signal.score}% - 6px)`,
               background: color,
               boxShadow: `0 0 18px ${color}`,
             }}
@@ -432,17 +433,17 @@ export default function AISignal(props: AISignalProps) {
           STATS
       ====================================================== */}
 
-      <div className="relative z-10 mt-5 grid grid-cols-3 gap-3">
+      <div className="relative z-10 mt-3 grid grid-cols-3 gap-2">
 
         {/* SCORE */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-2">
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[5px] uppercase tracking-[0.18em] text-white/35">
             Score
           </div>
 
           <div
-            className="mt-1 text-lg font-bold"
+            className="mt-1 text-sm font-bold"
             style={{ color }}
           >
             {signal.score.toFixed(0)}%
@@ -453,11 +454,11 @@ export default function AISignal(props: AISignalProps) {
         {/* CONFIDENCE */}
         <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[9px] uppercase tracking-[0.18em] text-white/35">
             Confidence
           </div>
 
-          <div className="mt-1 text-lg font-bold text-orange-400">
+          <div className="mt-1 text-sm font-bold text-orange-400">
             {signal.confidence.toFixed(0)}%
           </div>
 
@@ -470,7 +471,7 @@ export default function AISignal(props: AISignalProps) {
             Hold
           </div>
 
-          <div className="mt-1 text-lg font-bold text-white">
+          <div className="mt-1 text-sm font-bold text-white">
             {signal.hold}
           </div>
 
@@ -482,7 +483,7 @@ export default function AISignal(props: AISignalProps) {
           FOOTER
       ====================================================== */}
 
-      <div className="relative z-10 mt-4 flex items-center justify-between border-t border-white/6 pt-4">
+      <div className="relative z-10 mt-2 flex items-center justify-between border-t border-white/6 pt-2">
 
         <div className="text-[11px] tracking-[0.14em] text-white/35">
           ENTRY:{" "}
@@ -499,10 +500,13 @@ export default function AISignal(props: AISignalProps) {
           }`}
         >
           {getTimeLeft(signal.expiryTime)}
-        </div>
+          </div>
 
-      </div>
+</div>
 
-    </div>
-  );
+</div>
+
+</div>
+
+);
 }

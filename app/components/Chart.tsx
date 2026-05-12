@@ -133,7 +133,7 @@ export default function Chart(props: any) {
     if (!isMobile && volumeRef.current) {
       volumeChart = createChart(volumeRef.current, {
         width,
-        height: volumeRef.current.clientHeight || 100,
+        height: volumeRef.current.clientHeight || 80,
 
         layout: {
           background: {
@@ -414,21 +414,21 @@ export default function Chart(props: any) {
     bg-[rgba(12,12,14,0.72)]
     backdrop-blur-xl
     overflow-visible
-    min-h-[720px]
+    min-h-[520px]
   "
 >
 
         {/* PRICE CHART */}
         <div
   ref={priceRef}
-  className="w-full min-h-[620px]"
+  className="w-full min-h-[420px]"
 />
 
         {/* VOLUME */}
         {!isMobile && (
           <div
           ref={volumeRef}
-          className="w-full min-h-[140px]"
+          className="w-full min-h-[90px]"
         />
         )}
 
