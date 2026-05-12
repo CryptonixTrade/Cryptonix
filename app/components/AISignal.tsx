@@ -305,7 +305,7 @@ export default function AISignal(props: AISignalProps) {
   ====================================================== */
 
   return (
-    <div className="origin-top-left scale-[0.80] w-[40%] -mb-[40px]">
+    <div className="origin-top-left scale-[0.80] w-[49%] -mb-[40px]">
     <div
       className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-[10px] backdrop-blur-xl transition-all duration-300"
       style={{
@@ -341,7 +341,7 @@ export default function AISignal(props: AISignalProps) {
       <div className="relative z-10 flex items-start justify-between">
 
         {/* LEFT */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
 
           {/* SIGNAL DOT */}
           <div className="relative flex items-center justify-center">
@@ -433,7 +433,7 @@ export default function AISignal(props: AISignalProps) {
           STATS
       ====================================================== */}
 
-      <div className="relative z-10 mt-3 grid grid-cols-3 gap-2">
+      <div className="relative z-10 mt-3 grid grid-cols-3 gap-1">
 
         {/* SCORE */}
         <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-2">

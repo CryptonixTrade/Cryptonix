@@ -263,9 +263,23 @@ export default function LiveTrading() {
             <Timeframes interval={interval} setIntervalState={setIntervalState}/>
           </div>
 
-          <TechnicalSignal candles={candles} interval={interval} onSignal={setTechSignal}/>
-          <AISignal candles={candles} onSignal={setAiSignal} flow={tradeFlow} interval={interval} techSignal={techSignal}/>
+          <div className="flex gap-2 items-start">
 
+<TechnicalSignal
+  candles={candles}
+  interval={interval}
+  onSignal={setTechSignal}
+/>
+
+<AISignal
+  candles={candles}
+  onSignal={setAiSignal}
+  flow={tradeFlow}
+  interval={interval}
+  techSignal={techSignal}
+/>
+
+</div>
           <Chart candles={candles} trade={selected ? trade : null}/>
 
           <div className="lg:hidden">

@@ -214,6 +214,7 @@ export default function TechnicalSignal(props: Props) {
       : "0 0 30px rgba(255,170,0,0.08)";
 
   return (
+                  <div className="origin-top-left scale-[0.80] w-[49%] -mb-[40px]">
     <div
       className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-4 backdrop-blur-xl transition-all duration-300"
       style={{
@@ -249,13 +250,13 @@ export default function TechnicalSignal(props: Props) {
       <div className="relative z-10 flex items-start justify-between">
 
         {/* LEFT */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
 
           {/* SIGNAL DOT */}
           <div className="relative flex items-center justify-center">
 
             <div
-              className="h-3 w-3 rounded-full"
+              className="h-2 w-2 rounded-full"
               style={{
                 background: color,
                 boxShadow: `0 0 14px ${color}`,
@@ -274,11 +275,11 @@ export default function TechnicalSignal(props: Props) {
           {/* TITLES */}
           <div>
 
-            <div className="text-sm font-bold tracking-[0.18em] text-orange-400">
+            <div className="text-[9px] font-bold tracking-[0.18em] text-orange-400">
               TREND ENGINE
             </div>
 
-            <div className="mt-[2px] text-[11px] tracking-[0.16em] text-white/35">
+            <div className="mt-[2px] text-[9px] tracking-[0.16em] text-white/35">
               {interval} • TECHNICAL MARKET STRUCTURE
             </div>
 
@@ -288,7 +289,7 @@ export default function TechnicalSignal(props: Props) {
 
         {/* STATUS */}
         <div
-          className="rounded-full border px-3 py-[6px] text-xs font-semibold tracking-[0.16em]"
+          className="rounded-full border px-2 py-[4px] text-[10px]font-semibold tracking-[0.16em]"
           style={{
             color,
             borderColor: `${color}30`,
@@ -304,9 +305,9 @@ export default function TechnicalSignal(props: Props) {
           SCORE BAR
       ====================================================== */}
 
-      <div className="relative z-10 mt-5">
+      <div className="relative z-10 mt-3">
 
-        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-white/35">
+        <div className="mb-2 flex items-center justify-between text-[5px] uppercase tracking-[0.18em] text-white/35">
 
           <span>Bearish</span>
 
@@ -324,9 +325,9 @@ export default function TechnicalSignal(props: Props) {
 
           {/* POINTER */}
           <div
-            className="absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full border-2 border-black"
+            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-black"
             style={{
-              left: `calc(${signal.score}% - 10px)`,
+              left: `calc(${signal.score}% - 6px)`,
               background: color,
               boxShadow: `0 0 18px ${color}`,
             }}
@@ -340,17 +341,17 @@ export default function TechnicalSignal(props: Props) {
           METRICS
       ====================================================== */}
 
-      <div className="relative z-10 mt-5 grid grid-cols-2 gap-3">
+      <div className="relative z-10 mt-3 grid grid-cols-2 gap-1">
 
         {/* SCORE */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-2">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
             Technical Score
           </div>
 
           <div
-            className="mt-1 text-xl font-bold"
+            className="mt-1 text-sm font-bold"
             style={{
               color,
             }}
@@ -363,12 +364,12 @@ export default function TechnicalSignal(props: Props) {
         {/* STATUS */}
         <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[7px] uppercase tracking-[0.18em] text-white/35">
             Direction
           </div>
 
           <div
-            className="mt-1 text-xl font-bold"
+            className="mt-1 text-sm font-bold"
             style={{
               color,
             }}
@@ -384,18 +385,20 @@ export default function TechnicalSignal(props: Props) {
           FOOTER
       ====================================================== */}
 
-      <div className="relative z-10 mt-4 flex items-center justify-between border-t border-white/6 pt-4">
+      <div className="relative z-10 mt-2 flex items-center justify-between border-t border-white/6 pt-2">
 
-        <div className="text-[11px] tracking-[0.14em] text-white/35">
+        <div className="text-[9px] tracking-[0.14em] text-white/35">
           CRYPTONIX ANALYTICS CORE
         </div>
 
-        <div className="text-[11px] tracking-[0.14em] text-orange-300">
+        <div className="text-[9px] tracking-[0.14em] text-orange-300">
           LIVE
         </div>
 
       </div>
-
+      </div>
     </div>
+
+
   );
 }
