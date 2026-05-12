@@ -268,7 +268,7 @@ export default function Search(props: any) {
                   setOpen(false);
                 }}
                 className={`
-                  group relative mb-2 cursor-pointer overflow-hidden rounded-2xl border p-1 transition-all duration-300
+                  group relative mb-1 cursor-pointer overflow-hidden rounded-xl border p-1 transition-all duration-300
                   ${
                     isActive
                       ? "border-orange-400/20 bg-orange-400/10"
@@ -287,7 +287,7 @@ export default function Search(props: any) {
 
                     <div className="flex items-center gap-2">
 
-                      <span className="text-sm font-bold text-white">
+                      <span className="text-[10px] font-bold text-white">
                         {c.symbol.replace(
                           "USDT",
                           ""
@@ -313,7 +313,7 @@ export default function Search(props: any) {
 
                     {/* CHANGE */}
                     <div
-                      className={`text-sm font-semibold ${
+                      className={`text-[10px] font-semibold ${
                         change >= 0
                           ? "text-green-400"
                           : "text-red-400"

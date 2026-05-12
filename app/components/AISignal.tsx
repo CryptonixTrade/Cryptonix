@@ -305,7 +305,7 @@ export default function AISignal(props: AISignalProps) {
   ====================================================== */
 
   return (
-    <div className="origin-top-left scale-[0.80] w-[49%] -mb-[40px]">
+    <div className="w-[49%]">
     <div
       className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-[10px] backdrop-blur-xl transition-all duration-300"
       style={{
@@ -366,12 +366,12 @@ export default function AISignal(props: AISignalProps) {
           {/* TITLES */}
           <div>
 
-            <div className="text-[9px] font-bold tracking-[0.18em] text-orange-400">
+            <div className="text-[10px] font-bold tracking-[0.18em] text-orange-400">
               CRYPTONIX AI
             </div>
 
-            <div className="mt-[2px] text-[9px] tracking-[0.16em] text-white/35">
-              {interval} • ARTIFICIAL INTELLIGENCE SIGNAL
+            <div className="mt-[2px] text-[10px] tracking-[0.08em] text-white/35">
+              {interval} • AI SIGNAL
             </div>
 
           </div>
@@ -399,7 +399,7 @@ export default function AISignal(props: AISignalProps) {
       <div className="relative z-10 mt-3">
 
         {/* LABELS */}
-        <div className="mb-2 flex items-center justify-between text-[9px] uppercase tracking-[0.18em] text-white/35">
+        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.10em] text-white/35">
 
           <span>Bearish</span>
 
@@ -433,17 +433,17 @@ export default function AISignal(props: AISignalProps) {
           STATS
       ====================================================== */}
 
-      <div className="relative z-10 mt-3 grid grid-cols-3 gap-1">
+      <div className="relative z-10 mt-3 grid grid-cols-3 gap-2">
 
         {/* SCORE */}
         <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-2">
 
-          <div className="text-[5px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[8px] uppercase tracking-[0.18em] text-white/35">
             Score
           </div>
 
           <div
-            className="mt-1 text-sm font-bold"
+            className="mt-1 text-[15px] font-bold"
             style={{ color }}
           >
             {signal.score.toFixed(0)}%
@@ -454,11 +454,11 @@ export default function AISignal(props: AISignalProps) {
         {/* CONFIDENCE */}
         <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
 
-          <div className="text-[9px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
             Confidence
           </div>
 
-          <div className="mt-1 text-sm font-bold text-orange-400">
+          <div className="mt-1 text-[15px] font-bold text-orange-400">
             {signal.confidence.toFixed(0)}%
           </div>
 
@@ -471,7 +471,7 @@ export default function AISignal(props: AISignalProps) {
             Hold
           </div>
 
-          <div className="mt-1 text-sm font-bold text-white">
+          <div className="mt-1 text-[15px] font-bold text-white">
             {signal.hold}
           </div>
 
@@ -485,7 +485,7 @@ export default function AISignal(props: AISignalProps) {
 
       <div className="relative z-10 mt-2 flex items-center justify-between border-t border-white/6 pt-2">
 
-        <div className="text-[11px] tracking-[0.14em] text-white/35">
+        <div className="text-[9px] tracking-[0.14em] text-white/35">
           ENTRY:{" "}
           <span className="text-white/80">
             {signal.entryPrice.toFixed(2)}
