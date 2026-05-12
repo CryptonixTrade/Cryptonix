@@ -28,22 +28,22 @@ export default function Timeframes(props: any) {
           HEADER
       ====================================================== */}
 
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-1 flex items-center justify-between">
 
         <div>
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[8px] uppercase tracking-[0.18em] text-white/35">
             Market Timeframes
           </div>
 
-          <div className="mt-1 text-sm font-semibold text-orange-400">
+          <div className="mt-[2px] text-[11px] font-semibold text-orange-400">
             Multi-Timeframe Analysis
           </div>
 
         </div>
 
         {/* ACTIVE */}
-        <div className="rounded-full border border-orange-400/15 bg-orange-400/10 px-3 py-[6px] text-[10px] font-bold tracking-[0.18em] text-orange-300">
+        <div className="rounded-full border border-orange-400/15 bg-orange-400/10 px-2 py-[2px] text-[8px] font-bold tracking-[0.16em] text-orange-300">
 
           {interval}
 
@@ -55,7 +55,7 @@ export default function Timeframes(props: any) {
           TIMEFRAMES GRID
       ====================================================== */}
 
-      <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 xl:grid-cols-4">
+      <div className="flex flex-wrap gap-2">
 
         {tf.map((t) => {
           const active = interval === t;
@@ -70,10 +70,13 @@ export default function Timeframes(props: any) {
               }}
               disabled={active}
               className={`
-                group relative overflow-hidden rounded-2xl border py-3 text-xs font-semibold tracking-[0.16em] transition-all duration-300
+                group relative flex h-[34px] w-[34px] items-center justify-center
+                overflow-hidden rounded-full border
+                text-[9px] font-bold
+                transition-all duration-300
                 ${
                   active
-                    ? "border-orange-400 bg-orange-400 text-black shadow-[0_0_24px_rgba(255,170,0,0.28)]"
+                    ? "border-orange-400 bg-orange-400 text-black shadow-[0_0_18px_rgba(255,170,0,0.22)]"
                     : "border-white/8 bg-white/[0.03] text-white/65 hover:border-white/15 hover:bg-white/[0.06] hover:text-white"
                 }
               `}
@@ -108,13 +111,13 @@ export default function Timeframes(props: any) {
           FOOTER
       ====================================================== */}
 
-      <div className="mt-4 flex items-center justify-between border-t border-white/6 pt-4">
+      <div className="mt-1 flex items-center justify-between border-t border-white/6 pt-1">
 
-        <div className="text-[10px] uppercase tracking-[0.18em] text-white/30">
+        <div className="text-[8px] uppercase tracking-[0.16em] text-white/30">
           Active Interval
         </div>
 
-        <div className="text-sm font-bold text-orange-400">
+        <div className="text-[11px] font-bold text-orange-400">
           {interval}
         </div>
 

@@ -134,11 +134,10 @@ export default function Search(props: any) {
   /* ======================================================
      UI
   ====================================================== */
-
   return (
     <div
       ref={ref}
-      className="relative w-full"
+      className="relative w-[180px]"
     >
 
       {/* ======================================================
@@ -161,7 +160,7 @@ export default function Search(props: any) {
           ACTIVE SYMBOL
       ====================================================== */}
 
-      <div className="mb-3 flex items-center justify-between rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-3">
+      <div className="mb-3 flex items-center justify-between rounded-2xl border border-white/6 bg-white/[0.03] px-2 py-1">
 
         <div>
 
@@ -207,8 +206,8 @@ export default function Search(props: any) {
           className="
             w-full rounded-2xl border border-white/10
             bg-[rgba(255,255,255,0.03)]
-            py-4 pl-12 pr-4
-            text-sm text-white
+            py-2 pl-8 pr-2
+            text-[10px] text-white
             outline-none
             transition-all duration-300
             placeholder:text-white/25
@@ -226,16 +225,16 @@ export default function Search(props: any) {
 
       {open && (
         <div
-          className="
-            absolute left-0 top-full z-50 mt-3
-            max-h-[420px] w-full overflow-y-auto
-            rounded-[24px]
-            border border-white/10
-            bg-[rgba(10,10,12,0.96)]
-            p-2
-            backdrop-blur-2xl
-            shadow-[0_10px_40px_rgba(0,0,0,0.45)]
-          "
+        className="
+        fixed left-[20px] top-[140px] z-[999999]
+        max-h-[220px] w-[320px] overflow-y-auto
+        rounded-[24px]
+        border border-white/10
+        bg-[rgba(10,10,12,0.96)]
+        p-2
+        backdrop-blur-2xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.45)]
+        "
         >
 
           {/* EMPTY */}
@@ -269,7 +268,7 @@ export default function Search(props: any) {
                   setOpen(false);
                 }}
                 className={`
-                  group relative mb-2 cursor-pointer overflow-hidden rounded-2xl border p-3 transition-all duration-300
+                  group relative mb-2 cursor-pointer overflow-hidden rounded-2xl border p-1 transition-all duration-300
                   ${
                     isActive
                       ? "border-orange-400/20 bg-orange-400/10"
@@ -390,7 +389,7 @@ export default function Search(props: any) {
                     setSymbol(f)
                   }
                   className={`
-                    rounded-full border px-3 py-2 text-xs font-semibold tracking-[0.14em] transition-all duration-300
+                    rounded-full border px-2 py-1 text-[9px] font-semibold tracking-[0.14em] transition-all duration-300
                     ${
                       isActive
                         ? "border-orange-400 bg-orange-400 text-black shadow-[0_0_18px_rgba(255,170,0,0.25)]"

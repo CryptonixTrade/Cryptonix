@@ -251,7 +251,7 @@ export default function LiveTrading() {
         btcFutures={btcFutures}
       />
 
-<div className="flex flex-col lg:flex-row gap-2 w-full overflow-x-hidden">
+<div className="flex flex-col lg:flex-row gap-2 w-full overflow-x-visible">
 
         <div className="flex flex-col flex-1 gap-2">
           <div className="flex flex-col md:flex-row gap-2">
