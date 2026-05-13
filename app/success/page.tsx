@@ -22,9 +22,9 @@ export default function SuccessPage() {
         </p>
 
         <p className="sub">
-          If your access is not active
-          within a few minutes,
-          contact support.
+           If your access is not activated
+            within 24 hours,
+           please contact support.
         </p>
 
         <div className="email">
