@@ -177,6 +177,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
     <div className="planButtons">
 
       <button
+      type="button"
         className="buyBtn"
         disabled={!agreed}
         onClick={() => handleCheckout("monthly")}
@@ -185,6 +186,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
       </button>
 
       <button
+      type="button"
         className="cryptoBtn"
         disabled={!agreed}
         onClick={() =>
@@ -209,14 +211,16 @@ const [selectedAmount, setSelectedAmount] = useState("");
     <div className="planButtons">
 
       <button
+      type="button"
         className="buyBtn"
         disabled={!agreed}
-        onClick={() => handleCheckout("3months")}
+        onClick={() => handleCheckout("quarterly")}
       >
         Buy Access
       </button>
 
       <button
+      type="button"
         className="cryptoBtn"
         disabled={!agreed}
         onClick={() =>
@@ -241,6 +245,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
     <div className="planButtons">
 
       <button
+      type="button"
         className="buyBtn"
         disabled={!agreed}
         onClick={() => handleCheckout("yearly")}
@@ -249,6 +254,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
       </button>
 
       <button
+      type="button"
         className="cryptoBtn"
         disabled={!agreed}
         onClick={() =>
@@ -512,35 +518,6 @@ const [selectedAmount, setSelectedAmount] = useState("");
   letter-spacing: -1px;
 }
 
-.planCard::before {
-  content: "";
-  
-  position: relative;
-
-overflow: hidden;
-
-  inset: 0;
-
-  border-radius: inherit;
-
-  padding: 1px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,210,120,0.22),
-      rgba(255,255,255,0.03)
-    );
-
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-
-  -webkit-mask-composite: xor;
-
-  pointer-events: none;
-}
-
 .planButtons {
   margin-top: auto;
 }
@@ -697,6 +674,66 @@ overflow: hidden;
     font-size: 12px;
   }
 
+  .planCard {
+  position: relative;
+
+  overflow: hidden;
+}
+
+.planCard::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  padding: 1px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,210,120,0.22),
+      rgba(255,255,255,0.03)
+    );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+
+  pointer-events: none;
+}
+
+    .planCard::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  padding: 1px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,210,120,0.22),
+      rgba(255,255,255,0.03)
+    );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+
+  pointer-events: none;
+}
+
   .planButtons {
     gap: 6px;
   }
@@ -731,7 +768,7 @@ overflow: hidden;
     transform: scale(0.97);
   }
 
-          .planCard {
+.planCard {
             width: 105px;
           }
 
