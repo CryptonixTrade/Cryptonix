@@ -455,7 +455,7 @@ export default function AISignal(props: AISignalProps) {
         <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
-            Confidence
+            Confid.
           </div>
 
           <div className="mt-1 text-[15px] font-bold text-orange-400">

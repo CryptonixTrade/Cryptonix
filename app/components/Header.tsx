@@ -31,7 +31,7 @@ export default function Header(props: any) {
           <div className="relative flex items-center justify-center">
             <div className="h-3 w-3 rounded-full bg-orange-400 shadow-[0_0_15px_rgba(255,170,0,0.9)]" />
 
-            <div className="absolute h-3 w-3 animate-ping rounded-full bg-orange-400/50" />
+            <div className="absolute h-3 w-3 animate-ping rounded-full bg-green-400/50" />
           </div>
 
           {/* BRAND + SYMBOL */}
@@ -39,12 +39,12 @@ export default function Header(props: any) {
 
             <div className="flex items-center gap-2">
 
-              <span className="text-lg font-bold tracking-[0.18em] text-orange-400 md:text-xl">
-                CRYPTONIX
+              <span className="text-lg font-bold tracking-[0.19em] text-orange-400 md:text-xl">
+                CRYPTONIX.
               </span>
 
-              <div className="rounded-full border border-orange-400/20 bg-orange-400/10 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-widest text-orange-300">
-                Live
+              <div className="rounded-full border border-orange-400/77 bg-orange-400/10 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-widest text-orange-300">
+                LIFE
               </div>
 
             </div>

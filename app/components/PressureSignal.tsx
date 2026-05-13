@@ -251,7 +251,7 @@ export default function PressureSignal(props: any) {
           SCORE BAR
       ====================================================== */}
 
-      <div className="relative z-10 mt-5">
+      <div className="relative z-10s mt-5">
 
         <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-white/35">
 
@@ -322,7 +322,7 @@ export default function PressureSignal(props: any) {
         <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
-            Momentum
+            Momen
           </div>
 
           <div

@@ -33,11 +33,10 @@ export default function Timeframes(props: any) {
         <div>
 
           <div className="text-[8px] uppercase tracking-[0.18em] text-white/35">
-            Market Timeframes
           </div>
 
           <div className="mt-[2px] text-[11px] font-semibold text-orange-400">
-            Multi-Timeframe Analysis
+            Multi-Timeframe
           </div>
 
         </div>
