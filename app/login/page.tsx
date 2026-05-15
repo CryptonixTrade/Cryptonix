@@ -438,24 +438,24 @@ const [selectedAmount, setSelectedAmount] = useState("");
 .plans {
   position: fixed;
 
-  left: 24px;
-  bottom: 70px;
+  left: 20px;
+  bottom: 50px;
 
   z-index: 999;
 
   display: flex;
 
-  gap: 16px;
+  gap: 4px;
 
   align-items: flex-end;
 }
 
 .planCard {
-  width: 155px;
+  width: 99px;
 
-  padding: 18px;
+  padding: 4px;
 
-  border-radius: 24px;
+  border-radius: 16px;
 
   background:
     linear-gradient(
@@ -473,53 +473,40 @@ const [selectedAmount, setSelectedAmount] = useState("");
     inset 0 0 16px rgba(255,215,120,0.04);
 
   display: flex;
+
   flex-direction: column;
 
-  gap: 16px;
+  align-items: center;
+
+  gap: 6px;
 }
 
 .planCard h3 {
   margin: 0;
 
-  min-height: 58px;
-
-  display: flex;
-
-  align-items: flex-start;
-
-  font-size: 20px;
+  font-size: 14px;
 
   font-weight: 800;
 
-  line-height: 1.15;
-
-  letter-spacing: -0.3px;
+  line-height: 1.1;
 
   color: #f6d27b;
+
+  text-align: center;
 }
 
 .planCard p {
   margin: 0;
 
-  min-height: 35px;
-
-  display: flex;
-
-  align-items: center;
-
-  font-size: 28px;
+  font-size: 16px;
 
   font-weight: 900;
 
-  line-height: 1;
+  line-height: 1.1;
 
   color: #8dff7d;
 
-  letter-spacing: -1px;
-}
-
-.planButtons {
-  margin-top: auto;
+  text-align: center;
 }
 
 .planButtons {
@@ -529,19 +516,21 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   gap: 5px;
 
-  margin-top: auto;
+  width: 100%;
+
+  align-items: center;
 }
 
 .planCard button {
-  width: 100%;
+  width: 70%;
 
-  height: 22px;
+  height: 18px;
 
   border: none;
 
   border-radius: 999px;
 
-  font-size: 8px;
+  font-size: 9.5px;
 
   font-weight: 700;
 
@@ -561,6 +550,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   line-height: 1;
 }
+
 .buyBtn {
   background:
     linear-gradient(
@@ -594,7 +584,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 }
 
 .planCard button:disabled {
-  opacity: 0.45;
+  opacity: 0.28;
 
   cursor: not-allowed;
 
@@ -619,7 +609,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   align-items: center;
 
-  gap: 10px;
+  gap: 7px;
 
   color: white;
 
@@ -627,12 +617,12 @@ const [selectedAmount, setSelectedAmount] = useState("");
 }
 
 .termsLabel input {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
 .footerLinks a {
-  color: #f0c36a;
+  color:rgb(240, 185, 75);
 
   text-decoration: none;
 }
@@ -647,31 +637,31 @@ const [selectedAmount, setSelectedAmount] = useState("");
     left: 10px;
     right: 10px;
 
-    bottom: 70px;
+    bottom: 40px;
 
     justify-content: center;
 
-    gap: 8px;
+    gap: 4px;
 
     flex-wrap: wrap;
   }
 
   .planCard {
-    width: 102px;
+    width: 75px;
 
-    padding: 12px;
+    padding: 2px;
 
-    border-radius: 18px;
+    border-radius: 17px;
 
-    gap: 10px;
+    gap: 1px;
   }
 
   .planCard h3 {
-    font-size: 14px;
+    font-size: 8px;
   }
 
   .planCard p {
-    font-size: 12px;
+    font-size: 8px;
   }
 
   .planCard {
@@ -735,22 +725,22 @@ const [selectedAmount, setSelectedAmount] = useState("");
 }
 
   .planButtons {
-    gap: 6px;
+    gap: 3px;
   }
 
   .planCard button {
-    min-height: 34px;
+    min-height: 22px;
 
-    font-size: 10px;
+    font-size: 9px;
 
-    padding: 6px;
+    padding: 4px;
   }
 
   .footerLinks {
     left: 10px;
     right: 10px;
 
-    bottom: 18px;
+    bottom: 17px;
 
     display: flex;
 
@@ -767,10 +757,6 @@ const [selectedAmount, setSelectedAmount] = useState("");
   .planCard button:active {
     transform: scale(0.97);
   }
-
-.planCard {
-            width: 105px;
-          }
 
         @keyframes fadeIn {
           from {
