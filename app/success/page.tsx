@@ -28,7 +28,7 @@ export default function SuccessPage() {
         </p>
 
         <div className="email">
-          cryptonix.life@gmail.com
+        kot235235235@gmail.com
         </div>
 
         <a

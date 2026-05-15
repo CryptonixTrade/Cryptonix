@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         "Cryptonix <onboarding@resend.dev>",
   
       to:
-      "cryptonix.life@gmail.com",
+      "kot235235235@gmail.com",
   
       subject:
         "New Crypto Payment Request",
