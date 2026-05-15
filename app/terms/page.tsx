@@ -11,136 +11,167 @@ export default function TermsPage() {
         <div className="overlay" />
   
         <div className="content">
-          <h1>Terms of Service</h1>
+
 
           <a href="/" className="backBtn">
-  ← Return to Cryptonix.life ←
+          ← Back to Cryptonix.life
 </a>
   
           <p className="updated">
-            Last updated: May 2026
+          Last Updated: May 15, 2026
           </p>
   
           <section>
-            <h2>1. Introduction</h2>
-  
-            <p>
-              Welcome to Cryptonix. By accessing or using this platform,
-              you agree to comply with and be bound by these Terms of Service.
-            </p>
+            <h2>Terms of Service</h2>
+            <p>{`
+By accessing or using Cryptonix.life (“Service”), you acknowledge and agree to be legally bound by these Terms of Service, Privacy Policy, Disclaimer, and all applicable laws and regulations.
+Cryptonix.life provides educational and informational digital content related to cryptocurrency markets, analytics, AI-assisted research, and market commentary.
+All content available through the Service is provided strictly for informational and educational purposes only.
+Cryptonix.life DOES NOT provide:
+• financial or investment advice;• legal or tax advice;• brokerage or exchange services;• portfolio or asset management services;• guarantees of profits, earnings, or financial performance.
+Users are solely responsible for their own decisions, actions, investments, and use of any information provided through the Service.
+Access to subscription-based content may be granted within up to 24 hours after successful payment confirmation.
+Cryptonix.life reserves the right to modify, suspend, or discontinue any part of the Service at any time without prior notice.
+By continuing to use the Service, the User confirms full acceptance of these Terms.
+
+ABOUT CRYPTONIX.LIFE
+
+CRYPTONIX.LIFE is a digital subscription-based platform that provides users with access to AI-powered tools, analytical dashboards, and educational digital content.
+
+The platform is designed to help users explore and interact with modern digital technologies, automation systems, and data-driven insights in an accessible online format.
+
+All content provided on this website is for informational and educational purposes only.
+CRYPTONIX.LIFE does not provide financial, investment, or legal advice, and no guarantees of results are made or implied.
+
+WHAT USERS GET
+
+By subscribing to CRYPTONIX.LIFE, users receive access to the following digital features:
+
+* Access to a secure user dashboard;
+* AI-powered analytical tools and insights;
+* Market data analysis and informational reports;
+* Educational digital content and resources;
+* Regular updates and improvements to platform features.
+
+All features are provided in a fully digital format and become available after successful payment and account activation.
+
+PRIVACY POLICY
+Cryptonix.life respects and values user privacy and is committed to protecting personal information in accordance with applicable international privacy standards.
+The Service may collect limited personal information including:
+• email address;• billing information;• technical and device-related information;• website usage analytics.
+Personal information is used solely for:
+• providing access to the Service;• payment processing;• customer support;• account-related communication;• improving platform functionality and security.
+Cryptonix.life does NOT sell, rent, or trade personal information to third parties.
+Payment transactions are securely processed through third-party payment providers, including Stripe. Cryptonix.life does not directly store full payment card information.
+Reasonable technical and organizational security measures are implemented to protect user data from unauthorized access, misuse, disclosure, or loss.
+By using the Service, Users consent to the collection and use of information as described in this Privacy Policy.
+
+DISCLAIMER
+
+The information and services provided on Cryptonix.life are intended solely for general informational and educational purposes.
+
+While we make reasonable efforts to ensure that the content is accurate and up to date, we do not provide any warranties or guarantees regarding the accuracy, completeness, reliability, or suitability of the information available on the platform.
+
+CRYPTONIX.LIFE does not provide financial, investment, legal, tax, or professional advice. Nothing on this website should be interpreted as a recommendation or instruction to take any specific action. Users are solely responsible for how they choose to interpret and use the information provided.
+
+All services and content are provided on an “as is” and “as available” basis, without any express or implied warranties of any kind.
+
+To the maximum extent permitted by applicable law, Cryptonix.life shall not be held liable for any direct, indirect, incidental, special, consequential, or punitive damages, including, without limitation, loss of data, loss of profits, loss of revenue, or business interruption, resulting from or in any way related to the use of, or inability to use, the platform or its services.
+
+CONTACT INFORMATION
+
+Website: https://cryptonix.life
+Email: cryptonix.life@gmail.com
+Response time: up to 48 hours
+
+For any questions, support requests, or billing inquiries, you may contact our support team via email.
+
+We aim to respond to all requests within 48 hours .
+
+   NO GUARANTEED PROFITS
+
+IMPORTANT RISK DISCLOSURE
+
+Cryptocurrency trading and investing involve substantial financial risk and may result in partial or total loss of capital.
+
+By using CRYPTONIX.LIFE, you acknowledge and agree that:
+
+* There are NO guaranteed profits;
+* Past performance does NOT guarantee future results;
+* Trading signals, forecasts, and analytics may fail or be inaccurate;
+* You may lose part or ALL of your invested funds;
+* All investment and trading decisions are made solely at your own risk and discretion.
+
+The Service, its owners, employees, affiliates, analysts, contributors, partners, or representatives shall NOT be liable for:
+
+* Trading losses;
+* Financial damages;
+* Missed profits;
+* Investment outcomes;
+* User financial decisions.
+
+SUBSCRIPTION TERMS
+
+By purchasing a subscription on CRYPTONIX.LIFE, you agree to the following terms:
+
+⸻
+
+Subscription Access
+
+* The duration of access is specified in the selected pricing plan at the time of purchase;
+* Subscription access is delivered in a fully digital format;
+* Access credentials are sent to the email address provided during checkout;
+* Access is typically delivered within up to 24 hours after successful payment confirmation;
+* The Service is considered fully delivered once access credentials have been successfully issued and sent to the user’s email.
+
+⸻
+
+Payments
+
+* Payments are processed as one-time charges, unless explicitly stated otherwise prior to purchase;
+* Automatic renewal is not enabled, unless clearly disclosed and agreed to before checkout;
+* Prices, subscription plans, features, and Service functionality may be updated, modified, or discontinued at any time without prior notice.
+
+⸻
+
+REFUND POLICY
+
+Due to the digital nature of the services provided by CRYPTONIX.LIFE:
+
+* All payments are considered final once access has been delivered;
+* No refunds are issued after subscription access or digital content has been provided;
+* By completing a purchase, the user acknowledges and agrees that the service is deemed fully delivered upon successful issuance of access credentials;
+* Users are responsible for reviewing all subscription details and conditions before completing payment.
+
+Refunds may only be considered in strictly limited cases, including:
+
+* duplicate payment resulting from a verified technical error;
+* failure to deliver access within the stated 24-hour timeframe;
+* confirmed technical malfunction on the provider’s side preventing access to the service.
+
+All refund requests are subject to individual review.
+
+⸻
+
+FRAUD, DISPUTES & ABUSE
+
+Any activity involving:
+
+* fraudulent or abusive chargebacks;
+* unauthorized or unjustified payment disputes;
+* payment reversals without valid grounds;
+* misuse or exploitation of the refund policy;
+
+may result in:
+
+* immediate suspension or permanent termination of access;
+* restriction from future use of the Service;
+* reporting to payment processors and/or relevant financial institutions where legally required.
+            `}</p>
           </section>
   
-          <section>
-            <h2>2. Service Description</h2>
+
   
-            <p>
-              Cryptonix is an AI-powered crypto analytics and market
-              intelligence platform designed to provide technical insights,
-              informational trading signals, and analytical tools related
-              to digital asset markets.
-            </p>
-  
-            <p>
-              The platform is intended for informational and educational
-              purposes only.
-            </p>
-          </section>
-  
-          <section>
-            <h2>3. No Financial Advice</h2>
-  
-            <p>
-              Cryptonix does not provide financial, investment, legal,
-              or tax advice.
-            </p>
-  
-            <p>
-              All content, signals, analytics, and information provided
-              through the platform are for educational and informational
-              purposes only and should not be interpreted as financial advice.
-            </p>
-          </section>
-  
-          <section>
-            <h2>4. Risk Disclosure</h2>
-  
-            <p>
-              Cryptocurrency markets are highly volatile and involve
-              significant financial risk.
-            </p>
-  
-            <p>
-              Users are solely responsible for their own trading and
-              investment decisions.
-            </p>
-          </section>
-  
-          <section>
-            <h2>5. Subscription Terms</h2>
-  
-            <p>
-              Certain features of Cryptonix require a paid subscription.
-            </p>
-  
-            <p>
-              Subscriptions renew automatically unless cancelled before
-              the next billing cycle.
-            </p>
-  
-            <p>
-              Users may cancel their subscriptions at any time through
-              the payment provider or account settings.
-            </p>
-          </section>
-  
-          <section>
-            <h2>6. Refund Policy</h2>
-  
-            <p>
-              All payments are generally non-refundable unless otherwise
-              required by applicable law.
-            </p>
-  
-            <p>
-              Refund requests may be reviewed on a case-by-case basis.
-            </p>
-          </section>
-  
-          <section>
-            <h2>7. User Responsibilities</h2>
-  
-            <p>
-              Users agree not to misuse, exploit, copy, distribute,
-              or resell any part of the platform without authorization.
-            </p>
-  
-            <p>
-              Users are responsible for maintaining the confidentiality
-              of their account credentials.
-            </p>
-          </section>
-  
-          <section>
-            <h2>8. Limitation of Liability</h2>
-  
-            <p>
-              Cryptonix and its operators shall not be liable for any
-              financial losses, damages, or consequences resulting from
-              the use of the platform or reliance on its content.
-            </p>
-          </section>
-  
-          <section>
-            <h2>9. Contact Information</h2>
-  
-            <p>
-              For support or legal inquiries, please contact:
-            </p>
-  
-            <p className="email">
-              cryptonix.life@gmail.com
-            </p>
-          </section>
         </div>
   
         <style jsx>{`
@@ -156,19 +187,19 @@ export default function TermsPage() {
   
             color: white;
   
-            padding: 80px 20px;
+            padding: 25px 20px;
           }
   
 .backBtn {
   display: inline-block;
 
-  margin-bottom: 24px;
+  margin-bottom: 15px;
 
   color:rgb(144, 247, 19);
 
   text-decoration: none;
 
-  font-size: 50px;
+  font-size: 33px;
 
   transition: 0.2s ease;
 }
@@ -205,7 +236,7 @@ export default function TermsPage() {
   
             padding: 30px;
   
-            backdrop-filter: blur(20spx);
+            backdrop-filter: blur(20px);
   
             box-shadow:
               0 0 40px rgba(211, 175, 175, 0.5);
@@ -237,13 +268,19 @@ export default function TermsPage() {
             color:rgb(220, 185, 115);
           }
   
-          p {
-            line-height: 1.8;
-  
-            color: rgba(255,255,255,0.88);
-  
-            margin-bottom: 12px;
-          }
+p {
+  line-height: 1.9;
+
+  font-size: 15px;
+
+  letter-spacing: 0.2px;
+
+  color: rgba(255,255,255,0.88);
+
+  margin-bottom: 18px;
+
+white-space: pre-wrap;
+}
   
           .email {
             color: #f0c36a;
