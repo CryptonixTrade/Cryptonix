@@ -138,7 +138,7 @@ export default function TermsPage() {
             </p>
   
             <p className="email">
-              kot235235235@gmail.com
+              cryptonix.life@gmail.com
             </p>
           </section>
         </div>
