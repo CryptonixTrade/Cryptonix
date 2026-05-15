@@ -3,6 +3,7 @@
 import { signIn, getSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import CryptoModal from "../components/CryptoModal";
+import BinancePartnerCard from "../components/BinancePartnerCard";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -272,14 +273,20 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
 </div>
 
+
+
       <div className="footerLinks">
   <label className="termsLabel">
+
+
 
     <input
       type="checkbox"
       checked={agreed}
       onChange={(e) => setAgreed(e.target.checked)}
     />
+
+
 
     <span>
       I agree to the :{" "}
@@ -291,7 +298,28 @@ const [selectedAmount, setSelectedAmount] = useState("");
   </label>
 </div>
 
+<div className="binanceWrapper">
+<BinancePartnerCard agreed={agreed} />
+</div>
+
+
       <style jsx>{`
+
+.binanceWrapper {
+  position: fixed;
+
+  left: 10px;
+  right: 10px;
+
+  bottom: 8px;
+
+  z-index: 99999;
+
+  display: flex;
+
+  justify-content: center;
+}
+
         .container {
   position: fixed;
   inset: 0;
@@ -591,9 +619,34 @@ const [selectedAmount, setSelectedAmount] = useState("");
   transform: none;
 }
 
+
 /* =========================================
    TERMS
 ========================================= */
+
+.binanceWrapper {
+  position: fixed;
+
+  left: 20px;
+
+  bottom: 145px;
+
+  z-index: 999;
+
+  width: 305px;
+}
+
+@media (max-width: 768px) {
+  .binanceWrapper {
+    left: 10px;
+    right: 10px;
+
+    bottom: 112px;
+
+    width: auto;
+  }
+}
+
 
 .footerLinks {
   position: fixed;
@@ -770,15 +823,14 @@ const [selectedAmount, setSelectedAmount] = useState("");
           }
         }
 
-`}</style>
+      `}</style>
 
-<CryptoModal
-  open={cryptoOpen}
-  onClose={() => setCryptoOpen(false)}
-  plan={selectedPlan}
-  amount={selectedAmount}
-/>
-
-</div>
+      <CryptoModal
+        open={cryptoOpen}
+        onClose={() => setCryptoOpen(false)}
+        plan={selectedPlan}
+        amount={selectedAmount}
+      />
+    </div>
   );
 }
