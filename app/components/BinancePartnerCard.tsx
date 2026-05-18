@@ -67,7 +67,8 @@ export default function BinancePartnerCard({
               letterSpacing: "0.2px",
             }}
           >
-            Binance
+
+
           </div>
   
           <div

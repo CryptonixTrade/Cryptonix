@@ -31,6 +31,15 @@ export async function POST(req: Request) {
       );
     }
 
+    return NextResponse.json(
+      { error: "Checkout disabled temporarily" },
+      { status: 200 }
+    );
+
+
+
+
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
 
