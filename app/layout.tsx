@@ -17,8 +17,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Trading Terminal",
-  description: "AI Trading Interface",
+  title: "Cryptonix | AI Crypto Signals",
+  description:
+    "AI-powered crypto trading signals with LONG, SHORT, SL and TP analysis.",
+
+  metadataBase: new URL("https://cryptonix.life"),
+
+  openGraph: {
+    title: "Cryptonix | AI Crypto Signals",
+    description:
+      "AI-powered crypto trading signals with LONG, SHORT, SL and TP analysis.",
+    url: "https://cryptonix.life",
+    siteName: "Cryptonix",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Cryptonix AI Crypto Signals",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Cryptonix | AI Crypto Signals",
+    description:
+      "AI-powered crypto trading signals with LONG, SHORT, SL and TP analysis.",
+    images: ["/og-image.png"],
+  },
 
   themeColor: "#000000",
 };
