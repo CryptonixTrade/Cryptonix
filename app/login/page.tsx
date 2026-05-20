@@ -169,6 +169,11 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
 <div className="plans">
 
+
+
+
+  
+
   {/* MONTHLY */}
   <div className="planCard">
     <h3>Monthly</h3>
@@ -301,6 +306,9 @@ const [selectedAmount, setSelectedAmount] = useState("");
 <div className="binanceWrapper">
 <BinancePartnerCard agreed={agreed} />
 </div>
+
+
+
 
 
       <style jsx>{`
@@ -823,6 +831,298 @@ const [selectedAmount, setSelectedAmount] = useState("");
           }
         }
 
+/* =========================================
+   TELEGRAM VIP AI BUTTON
+========================================= */
+
+.tgFloat {
+  position: fixed;
+
+  right: 18px;
+  bottom: 18px;
+
+  width: 68px;
+  height: 68px;
+
+  z-index: 999999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+}
+
+/* MAIN BUTTON */
+
+.tgButton {
+  position: relative;
+
+  width: 68px;
+  height: 68px;
+
+  border-radius: 999px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(0,255,255,0.18),
+      rgba(0,0,0,0.96)
+    );
+
+  border: 1px solid rgba(0,255,255,0.32);
+
+  backdrop-filter: blur(18px);
+
+  overflow: hidden;
+
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.16),
+    0 0 45px rgba(0,255,255,0.12),
+    inset 0 0 20px rgba(255,255,255,0.03);
+
+  transition: all 0.3s ease;
+}
+
+.tgButton:hover {
+  transform:
+    scale(1.08)
+    translateY(-2px);
+
+  box-shadow:
+    0 0 30px rgba(0,255,255,0.28),
+    0 0 70px rgba(0,255,255,0.16);
+}
+
+/* ICON */
+
+.tgIcon {
+  width: 30px;
+  height: 30px;
+
+  color: #8ffcff;
+
+  z-index: 5;
+
+  filter:
+    drop-shadow(0 0 10px rgba(0,255,255,0.65));
+}
+
+/* PULSE */
+
+.tgPulse {
+  position: absolute;
+
+  width: 68px;
+  height: 68px;
+
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,255,255,0.18),
+      transparent 70%
+    );
+
+  animation: tgPulseAnim 3s infinite;
+
+  z-index: 0;
+}
+
+/* ORBIT */
+
+.tgOrbit {
+  position: absolute;
+
+  width: 88px;
+  height: 88px;
+
+  border-radius: 999px;
+
+  border:
+    1px solid rgba(0,255,255,0.12);
+
+  animation:
+    tgRotate 12s linear infinite;
+
+  z-index: 0;
+}
+
+.tgOrbit::before {
+  content: "";
+
+  position: absolute;
+
+  top: -3px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 999px;
+
+  background: #7df9ff;
+
+  box-shadow:
+    0 0 10px rgba(0,255,255,0.8);
+}
+
+/* PARTICLES */
+
+.tgParticles span {
+  position: absolute;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: rgba(125,249,255,0.9);
+
+  box-shadow:
+    0 0 10px rgba(0,255,255,0.8);
+
+  animation:
+    tgParticleFloat 4s infinite ease-in-out;
+}
+
+.tgParticles span:nth-child(1) {
+  top: 10%;
+  left: 20%;
+}
+
+.tgParticles span:nth-child(2) {
+  top: 20%;
+  right: 10%;
+
+  animation-delay: 1s;
+}
+
+.tgParticles span:nth-child(3) {
+  bottom: 18%;
+  left: 12%;
+
+  animation-delay: 2s;
+}
+
+.tgParticles span:nth-child(4) {
+  bottom: 10%;
+  right: 18%;
+
+  animation-delay: 1.5s;
+}
+
+/* ANIMATIONS */
+
+@keyframes tgRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes tgPulseAnim {
+
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.18);
+    opacity: 0.2;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes tgParticleFloat {
+
+  0% {
+    transform:
+      translateY(0px)
+      scale(1);
+
+    opacity: 0.3;
+  }
+
+  50% {
+    transform:
+      translateY(-8px)
+      scale(1.4);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translateY(0px)
+      scale(1);
+
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .tgFloat {
+    right: 6px;
+    bottom: 57px;
+
+    width: 42px;
+    height: 2px;
+  }
+
+  .tgButton {
+    width: 37px;
+    height: 37px;
+
+    border-width: 1px;
+
+    box-shadow:
+      0 0 12px rgba(0,255,255,0.16),
+      0 0 24px rgba(0,255,255,0.08);
+  }
+
+  .tgIcon {
+    width: 16px;
+    height: 16px;
+
+    filter:
+      drop-shadow(0 0 5px rgba(0,255,255,0.55));
+  }
+
+  .tgOrbit {
+    width: 56px;
+    height: 56px;
+  }
+
+  .tgPulse {
+    width: 42px;
+    height: 42px;
+  }
+
+  .tgParticles span {
+    width: 2px;
+    height: 2px;
+  }
+}
+
       `}</style>
 
       <CryptoModal
@@ -831,6 +1131,43 @@ const [selectedAmount, setSelectedAmount] = useState("");
         plan={selectedPlan}
         amount={selectedAmount}
       />
+
+<a
+  href="https://t.me/cryptonix_life_official"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="tgFloat"
+>
+
+  {/* ORBIT */}
+  <div className="tgOrbit" />
+
+  {/* PULSE */}
+  <div className="tgPulse" />
+
+  {/* PARTICLES */}
+  <div className="tgParticles">
+    <span />
+    <span />
+    <span />
+    <span />
+  </div>
+
+  {/* MAIN BUTTON */}
+  <div className="tgButton">
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="tgIcon"
+    >
+      <path d="M21.5 2.5L2.9 9.6c-1.3.5-1.3 1.3-.2 1.6l4.8 1.5 1.8 5.5c.2.6.1.8.8.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.4-16c.3-1.2-.5-1.8-1.5-1.4z"/>
+    </svg>
+
+  </div>
+</a>
+
     </div>
   );
 }
