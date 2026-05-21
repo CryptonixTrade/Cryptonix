@@ -145,6 +145,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 </picture>
 
       <div className="overlay" />
+      
       <CryptonixPortal />
 
       <form onSubmit={handleLogin} className="loginBox">

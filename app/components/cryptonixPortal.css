@@ -328,7 +328,7 @@
     background: transparent;
     border: none;
   
-    color: white;
+    color: rgb(237, 169, 169);
   
     font-size: 28px;
   
@@ -375,7 +375,7 @@
   
     50% {
       box-shadow:
-        0 0 30px rgba(255,210,80,0.8),
+        0 0 30px rgba(244, 200, 67, 0.8),
         0 0 70px rgba(255,160,0,0.45);
     }
   
