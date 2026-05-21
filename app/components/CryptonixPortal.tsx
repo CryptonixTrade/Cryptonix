@@ -56,6 +56,7 @@ export default function CryptonixPortal() {
             ecosystem for modern market participants.
             Cryptonix is more than just a crypto platform.
 It is a new generation digital intelligence environment for modern market participants.
+Support email: support@cryptonix.life
           </p>
 
         </div>

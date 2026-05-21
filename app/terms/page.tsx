@@ -81,7 +81,8 @@ To the maximum extent permitted by applicable law, Cryptonix.life shall not be h
 CONTACT INFORMATION
 
 Website: https://cryptonix.life
-Email: cryptonix.life@gmail.com
+Support email: support@cryptonix.life
+
 Response time: up to 48 hours
 
 For any questions, support requests, or billing inquiries, you may contact our support team via email.
