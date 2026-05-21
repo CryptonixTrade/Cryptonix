@@ -1,0 +1,490 @@
+.portal-wrapper {
+    position: fixed;
+  
+    top: 31%;
+    left: 50%;
+  
+    transform: translate(-50%, -50%);
+  
+    width: 170px;
+    height: 170px;
+  
+    z-index: 9999;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    pointer-events: auto;
+  }
+  
+  /* =========================================
+     MAIN BUTTON
+  ========================================= */
+  
+  .portal-button {
+    position: absolute;
+    z-index: 10;
+  
+    width: 120px;
+    height: 120px;
+  
+    border-radius: 999px;
+    border: 1px solid rgba(255, 210, 90, 0.35);
+  
+    cursor: pointer;
+  
+    background:
+      radial-gradient(
+        circle at top,
+        rgba(255,255,255,0.28),
+        rgba(255,170,0,0.95),
+        rgba(70,25,0,0.98)
+      );
+  
+    color: #fff6d5;
+  
+    font-size: 14px;
+    font-weight: 800;
+  
+    letter-spacing: 0.6px;
+  
+    backdrop-filter: blur(20px);
+  
+    overflow: hidden;
+  
+    box-shadow:
+      0 0 18px rgba(255,170,0,0.45),
+      0 0 45px rgba(255,140,0,0.25),
+      inset 0 0 18px rgba(255,255,255,0.12);
+  
+    animation:
+      portalBreath 4s ease-in-out infinite,
+      portalFloat 6s ease-in-out infinite;
+  
+    transition:
+      transform 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+  
+  /* SHIMMER */
+  
+  .portal-button::before {
+    content: "";
+  
+    position: absolute;
+  
+    top: -120%;
+    left: -40%;
+  
+    width: 80%;
+    height: 320%;
+  
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.35),
+        transparent
+      );
+  
+    transform: rotate(25deg);
+  
+    animation: shimmerMove 4s linear infinite;
+  }
+  
+  /* HOVER */
+  
+  .portal-button:hover {
+    transform: scale(1.12);
+  
+    box-shadow:
+      0 0 30px rgba(255,190,0,0.8),
+      0 0 70px rgba(255,140,0,0.45),
+      inset 0 0 24px rgba(255,255,255,0.18);
+  }
+  
+  /* =========================================
+     ORBITS
+  ========================================= */
+  
+  .orbit {
+    position: absolute;
+  
+    border-radius: 50%;
+  
+    border:
+      1px solid rgba(255,200,90,0.18);
+  }
+  
+  /* FIRST */
+  
+  .orbit1 {
+    width: 135px;
+    height: 135px;
+  
+    animation:
+      rotate 8s linear infinite;
+  }
+  
+  /* SECOND */
+  
+  .orbit2 {
+    width: 160px;
+    height: 160px;
+  
+    animation:
+      rotateReverse 12s linear infinite;
+  }
+  
+  /* THIRD */
+  
+  .orbit3 {
+    width: 185px;
+    height: 185px;
+  
+    animation:
+      rotate 18s linear infinite;
+  }
+  
+  /* SATELLITES */
+  
+  .orbit::before {
+    content: "";
+  
+    position: absolute;
+  
+    top: -4px;
+    left: 50%;
+  
+    transform: translateX(-50%);
+  
+    width: 8px;
+    height: 8px;
+  
+    border-radius: 999px;
+  
+    background: #ffd977;
+  
+    box-shadow:
+      0 0 12px rgba(255,210,80,0.9),
+      0 0 25px rgba(255,180,0,0.7);
+  }
+  
+  /* =========================================
+     ENERGY PULSE
+  ========================================= */
+  
+  .portal-wrapper::before {
+    content: "";
+  
+    position: absolute;
+  
+    width: 140px;
+    height: 140px;
+  
+    border-radius: 999px;
+  
+    background:
+      radial-gradient(
+        circle,
+        rgba(255,180,0,0.16),
+        transparent 70%
+      );
+  
+    animation:
+      pulseWave 3.5s infinite ease-in-out;
+  
+    z-index: 0;
+  }
+  
+  /* =========================================
+     FLOATING PARTICLES
+  ========================================= */
+  
+  .portal-wrapper::after {
+    content: "";
+  
+    position: absolute;
+  
+    width: 220px;
+    height: 220px;
+  
+    border-radius: 50%;
+  
+    background:
+      radial-gradient(circle, rgba(255,220,120,0.18) 1px, transparent 1px);
+  
+    background-size: 24px 24px;
+  
+    animation:
+      particlesMove 14s linear infinite;
+  
+    opacity: 0.5;
+  
+    pointer-events: none;
+  }
+  
+  /* =========================================
+     MODAL
+  ========================================= */
+  
+  .portal-modal {
+    position: fixed;
+    inset: 0;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    background: rgba(0,0,0,0.78);
+  
+    backdrop-filter: blur(12px);
+  
+    opacity: 0;
+    pointer-events: none;
+  
+    transition: 0.5s ease;
+  
+    z-index: 999999;
+  }
+  
+  .portal-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .portal-content {
+    width: 92%;
+    max-width: 700px;
+  
+    padding: 42px;
+  
+    border-radius: 34px;
+  
+    background:
+      linear-gradient(
+        145deg,
+        rgba(20,10,0,0.96),
+        rgba(70,30,0,0.92)
+      );
+  
+    border:
+      1px solid rgba(255,190,80,0.24);
+  
+    box-shadow:
+      0 0 40px rgba(255,160,0,0.22),
+      0 0 120px rgba(255,120,0,0.08);
+  
+    color: white;
+  
+    transform: scale(0.4);
+  
+    opacity: 0;
+  
+    transition:
+      transform 0.7s cubic-bezier(0.22,1,0.36,1),
+      opacity 0.5s ease;
+  }
+  
+  .portal-modal.active .portal-content {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  .portal-content h2 {
+    font-size: 38px;
+  
+    margin-bottom: 20px;
+  
+    background:
+      linear-gradient(
+        90deg,
+        #ffe29f,
+        #ffb300
+      );
+  
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .portal-content p {
+    font-size: 17px;
+  
+    line-height: 1.8;
+  
+    color: rgba(255,255,255,0.88);
+  
+    margin-bottom: 18px;
+  }
+  
+  .close-btn {
+    position: absolute;
+  
+    top: 18px;
+    right: 22px;
+  
+    background: transparent;
+    border: none;
+  
+    color: white;
+  
+    font-size: 28px;
+  
+    cursor: pointer;
+  
+    transition: 0.3s ease;
+  }
+  
+  .close-btn:hover {
+    transform: rotate(90deg) scale(1.2);
+  }
+  
+  /* =========================================
+     ANIMATIONS
+  ========================================= */
+  
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+  
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes rotateReverse {
+    from {
+      transform: rotate(360deg);
+    }
+  
+    to {
+      transform: rotate(0deg);
+    }
+  }
+  
+  @keyframes portalBreath {
+  
+    0% {
+      box-shadow:
+        0 0 18px rgba(255,170,0,0.4),
+        0 0 45px rgba(255,140,0,0.2);
+    }
+  
+    50% {
+      box-shadow:
+        0 0 30px rgba(255,210,80,0.8),
+        0 0 70px rgba(255,160,0,0.45);
+    }
+  
+    100% {
+      box-shadow:
+        0 0 18px rgba(255,170,0,0.4),
+        0 0 45px rgba(255,140,0,0.2);
+    }
+  }
+  
+  @keyframes portalFloat {
+  
+    0% {
+      transform: translateY(0px);
+    }
+  
+    50% {
+      transform: translateY(-6px);
+    }
+  
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes shimmerMove {
+  
+    0% {
+      left: -60%;
+    }
+  
+    100% {
+      left: 160%;
+    }
+  }
+  
+  @keyframes pulseWave {
+  
+    0% {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+  
+    50% {
+      transform: scale(1.3);
+      opacity: 0.08;
+    }
+  
+    100% {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+  }
+  
+  @keyframes particlesMove {
+  
+    from {
+      transform: rotate(0deg);
+    }
+  
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* =========================================
+     MOBILE
+  ========================================= */
+  
+  @media (max-width: 768px) {
+  
+    .portal-wrapper {
+      width: 130px;
+      height: 130px;
+  
+      top: 43%;
+    }
+  
+    .portal-button {
+      width: 84px;
+      height: 84px;
+  
+      font-size: 10px;
+    }
+  
+    .orbit1 {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .orbit2 {
+      width: 118px;
+      height: 118px;
+    }
+  
+    .orbit3 {
+      width: 136px;
+      height: 136px;
+    }
+  
+    .portal-content {
+      padding: 26px;
+    }
+  
+    .portal-content h2 {
+      font-size: 28px;
+    }
+  
+    .portal-content p {
+      font-size: 14px;
+    }
+  }

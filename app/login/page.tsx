@@ -4,6 +4,8 @@ import { signIn, getSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import CryptoModal from "../components/CryptoModal";
 import BinancePartnerCard from "../components/BinancePartnerCard";
+import CryptonixPortal from "../components/CryptonixPortal";
+import "../components/cryptonixPortal.css";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -143,6 +145,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 </picture>
 
       <div className="overlay" />
+      <CryptonixPortal />
 
       <form onSubmit={handleLogin} className="loginBox">
         <input
@@ -698,7 +701,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
     left: 10px;
     right: 10px;
 
-    bottom: 40px;
+    bottom: 38px;
 
     justify-content: center;
 
