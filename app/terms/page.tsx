@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 
 export default function TermsPage() {
-
-  const [agreed, setAgreed] = useState(false);
-
     return (
       <div className="termsPage">
         <div className="overlay" />
@@ -13,9 +10,9 @@ export default function TermsPage() {
         <div className="content">
 
 
-          <a href="/" className="backBtn">
+          <Link href="/" className="backBtn">
           ← Back to Cryptonix.life
-</a>
+</Link>
   
           <p className="updated">
           Last Updated: May 15, 2026

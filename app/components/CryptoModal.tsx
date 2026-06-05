@@ -15,9 +15,6 @@ export default function CryptoModal({
   plan,
   amount,
 }: Props) {
-
-  if (!open) return null;
-
   const wallet =
 "TWo1iyUNwYFh63qRuN7grd4eJmu4LDes3p";
 
@@ -29,6 +26,8 @@ const [sending, setSending] =
 
 const [success, setSuccess] =
   useState(false);
+
+  if (!open) return null;
 
   const submitPayment = async () => {
     try {

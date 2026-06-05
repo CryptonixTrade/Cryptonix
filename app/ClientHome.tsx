@@ -13,7 +13,6 @@ import Search from "./components/Search";
 import Header from "./components/Header";
 import TradePanel from "./components/TradePanel";
 import AISignal from "./components/AISignal";
-import LogoutButton from "./components/LogoutButton";
 import AmbientBackground from "./components/AmbientBackground";
 
 export default function Home() {
@@ -352,7 +351,7 @@ export default function Home() {
       Math.max(...highs) -
       Math.min(...lows);
 
-    let entry = price;
+    const entry = price;
 
     let stop;
     let take;
@@ -380,7 +379,8 @@ export default function Home() {
   ====================================================== */
 
   return (
-    < main className=" <AmbientBackground /> relative min-h-screen overflow-x-hidden px-3 pb-24 pt-3 text-white md:px-4">
+    <main className="relative min-h-screen overflow-x-hidden px-3 pb-24 pt-3 text-white md:px-4">
+      <AmbientBackground />
 
       {/* ======================================================
           BACKGROUND LIGHTS

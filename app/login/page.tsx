@@ -16,27 +16,6 @@ export default function LoginPage() {
 const [selectedPlan, setSelectedPlan] = useState("");
 const [selectedAmount, setSelectedAmount] = useState("");
 
-  const handleCheckout = async (plan: string) => {
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ plan }),
-      });
-
-  
-      const data = await res.json();
-  
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-    }
-  };
-
   const openCryptoModal = (
     plan: string,
     amount: string
@@ -93,36 +72,6 @@ const [selectedAmount, setSelectedAmount] = useState("");
       setLoading(false);
     }
   };
-
-  async function handlePay(plan: string) {
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          plan,
-        }),
-      });
-
-      const data = await res.json();
-
-      console.log("STRIPE:", data);
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || "Stripe error");
-      }
-
-    } catch (e) {
-      console.error(e);
-      alert("Checkout failed");
-    }
-  }
 
   return (
     <div className="container">
@@ -182,18 +131,9 @@ const [selectedAmount, setSelectedAmount] = useState("");
   <div className="planCard">
     <h3>Monthly</h3>
 
-    <p>$20 / month</p>
+    <p>$3 / month</p>
 
     <div className="planButtons">
-
-      <button
-      type="button"
-        className="buyBtn"
-        disabled={!agreed}
-        onClick={() => handleCheckout("monthly")}
-      >
-        Buy Access
-      </button>
 
       <button
       type="button"
@@ -202,7 +142,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
         onClick={() =>
           openCryptoModal(
             "Monthly Plan",
-            "20"
+            "3"
           )
         }
       >
@@ -216,18 +156,9 @@ const [selectedAmount, setSelectedAmount] = useState("");
   <div className="planCard">
     <h3>3 Months</h3>
 
-    <p>$40</p>
+    <p>$10</p>
 
     <div className="planButtons">
-
-      <button
-      type="button"
-        className="buyBtn"
-        disabled={!agreed}
-        onClick={() => handleCheckout("quarterly")}
-      >
-        Buy Access
-      </button>
 
       <button
       type="button"
@@ -236,7 +167,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
         onClick={() =>
           openCryptoModal(
             "3 Months Plan",
-            "40"
+            "10"
           )
         }
       >
@@ -250,18 +181,9 @@ const [selectedAmount, setSelectedAmount] = useState("");
   <div className="planCard">
     <h3>Yearly</h3>
 
-    <p>$70</p>
+    <p>$20</p>
 
     <div className="planButtons">
-
-      <button
-      type="button"
-        className="buyBtn"
-        disabled={!agreed}
-        onClick={() => handleCheckout("yearly")}
-      >
-        Buy Access
-      </button>
 
       <button
       type="button"
@@ -270,7 +192,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
         onClick={() =>
           openCryptoModal(
             "Yearly Plan",
-            "70"
+            "20"
           )
         }
       >

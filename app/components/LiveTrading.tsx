@@ -14,7 +14,6 @@ import AISignal from "@/app/components/AISignal";
 
 export default function LiveTrading() {
 
-  const [favorites, setFavorites] = useState<string[]>([]);
   const [coins, setCoins] = useState<any[]>([]);
 
   const [symbol, setSymbol] = useState("BTCUSDT");
@@ -222,7 +221,7 @@ export default function LiveTrading() {
 
     const range = Math.max(...highs) - Math.min(...lows);
 
-    let entry = price;
+    const entry = price;
     let stop, take;
 
     if(type === "LONG"){

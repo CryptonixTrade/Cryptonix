@@ -12,7 +12,7 @@ type Props = {
   } | null;
 };
 
-export default function TradeButtons(props: any) {
+export default function TradeButtons(props: Props) {
 
   const {
     selected = null,
