@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-type Candle = {
-  time: number;
-  close: number;
-  volume: number;
-};
+import {
+  calculateAiSignal,
+  decisionFromScore,
+  getSignalTtl,
+  smoothSignalScore,
+} from "@/lib/signal-engine";
 
 type Decision = "LONG" | "SHORT" | "NO TRADE" | "EXPIRED";
 
@@ -49,174 +49,6 @@ export default function AISignal(props: AISignalProps) {
   const scoreRef = useRef<number | null>(null);
 
   /* ======================================================
-     HELPERS
-  ====================================================== */
-
-  function clamp(v: number, min = -1, max = 1) {
-    return Math.max(min, Math.min(max, v));
-  }
-
-  function EMA(prev: number | null, value: number, alpha = 0.12) {
-    if (prev === null) return value;
-    return prev * (1 - alpha) + value * alpha;
-  }
-
-  function calcEMA(data: number[], period: number) {
-    if (!data.length) return 0;
-
-    const k = 2 / (period + 1);
-
-    let ema = data[0];
-
-    for (let i = 1; i < data.length; i++) {
-      ema = data[i] * k + ema * (1 - k);
-    }
-
-    return ema;
-  }
-
-  function calcRSI(data: number[], period = 14) {
-    if (data.length < period + 1) return 50;
-
-    let gains = 0;
-    let losses = 0;
-
-    for (let i = data.length - period; i < data.length; i++) {
-      const diff = data[i] - data[i - 1];
-
-      if (diff > 0) gains += diff;
-      else losses -= diff;
-    }
-
-    const rs = gains / (losses || 1);
-
-    return 100 - 100 / (1 + rs);
-  }
-
-  function detectPhase(closes: number[]) {
-    const short = closes.slice(-20);
-    const long = closes.slice(-60);
-
-    const shortRange = Math.max(...short) - Math.min(...short);
-    const longRange = Math.max(...long) - Math.min(...long);
-
-    const ratio = shortRange / (longRange || 1);
-
-    if (ratio < 0.3) return "FLAT";
-    if (ratio > 0.8) return "EXPANSION";
-
-    return "TREND";
-  }
-
-  function getTTL(vol: number) {
-    let base =
-      interval === "1m"
-        ? 2
-        : interval === "5m"
-        ? 8
-        : 25;
-
-    if (vol > 0.001) base *= 0.7;
-    if (vol < 0.0004) base *= 1.3;
-
-    return Math.max(1, Math.round(base));
-  }
-
-  /* ======================================================
-     MAIN AI CALCULATION
-  ====================================================== */
-
-  function calculate() {
-    if (candles.length < 60) return null;
-
-    const closes = candles.map((c: Candle) => c.close);
-
-    const last = closes.at(-1)!;
-    const prev = closes.at(-5)!;
-
-    const emaFast = calcEMA(closes.slice(-30), 9);
-    const emaSlow = calcEMA(closes.slice(-60), 21);
-    const higherEMA = calcEMA(closes.slice(-100), 50);
-
-    const trend = emaFast > emaSlow ? 1 : -1;
-    const higherTrend = last > higherEMA ? 1 : -1;
-
-    const momentum = clamp(((last - prev) / prev) * 40);
-
-    const rsi = calcRSI(closes);
-
-    const rsiScore =
-      rsi > 70
-        ? -0.6
-        : rsi < 30
-        ? 0.6
-        : 0;
-
-    const buy = flow?.buyVolume ?? 0;
-    const sell = flow?.sellVolume ?? 0;
-
-    const flowScore =
-      buy + sell > 0
-        ? clamp((buy - sell) / (buy + sell))
-        : 0;
-
-    const orderBookScore = clamp((orderBook?.imbalance ?? 0) / 0.35);
-
-    const techScore =
-      techSignal?.decision === "LONG"
-        ? 1
-        : techSignal?.decision === "SHORT"
-        ? -1
-        : 0;
-
-    const phase = detectPhase(closes);
-
-    const volatility = Math.abs(last - prev) / last;
-
-    /* ===== PENALTIES ===== */
-
-    let penalty = 1;
-
-    if (trend !== higherTrend) penalty *= 0.7;
-    if (Math.abs(flowScore) < 0.1) penalty *= 0.8;
-    if (volatility < 0.00025) penalty *= 0.75;
-    if (orderBookScore && Math.sign(orderBookScore) !== trend) penalty *= 0.82;
-    if (techScore && techScore !== trend) penalty *= 0.78;
-
-    const agreement =
-      (trend > 0 && momentum > 0 && flowScore > 0 && orderBookScore >= -0.15) ||
-      (trend < 0 && momentum < 0 && flowScore < 0 && orderBookScore <= 0.15);
-
-    if (!agreement) penalty *= 0.7;
-
-    const impulse = Math.abs(last - prev) / prev > 0.0008;
-
-    if (!impulse && phase !== "TREND") penalty *= 0.75;
-
-    let phaseBoost = 1;
-
-    if (phase === "FLAT") phaseBoost = 0.7;
-    if (phase === "EXPANSION") phaseBoost = 1.2;
-
-    const raw =
-      (
-        trend * 0.3 +
-        momentum * 0.22 +
-        flowScore * 0.18 +
-        orderBookScore * 0.16 +
-        techScore * 0.08 +
-        rsiScore * 0.06
-      ) *
-      phaseBoost *
-      penalty;
-
-    return Math.max(
-      0,
-      Math.min(100, ((raw + 1) / 2) * 100)
-    );
-  }
-
-  /* ======================================================
      SIGNAL GENERATION
   ====================================================== */
 
@@ -231,42 +63,34 @@ export default function AISignal(props: AISignalProps) {
 
     lastCandleRef.current = last.time;
 
-    const base = calculate();
+    const engineSignal = calculateAiSignal({
+      candles,
+      flow,
+      orderBook,
+      techSignal,
+    });
 
-    if (base === null) return;
+    if (!engineSignal) return;
 
-    const smooth = EMA(scoreRef.current, base);
+    const smooth = smoothSignalScore(scoreRef.current, engineSignal.score);
 
     scoreRef.current = smooth;
 
-    let decision: Decision = "NO TRADE";
+    const decision = decisionFromScore(smooth);
 
-    if (smooth > 58) decision = "LONG";
-    else if (smooth < 42) decision = "SHORT";
-
-    const prev = candles.at(-5);
+    const prev = candles[candles.length - 5];
 
     if (!prev) return;
 
-    const vol = Math.abs(last.close - prev.close) / last.close;
-
-    const ttl = getTTL(vol);
-
-    const buy = flow?.buyVolume ?? 0;
-    const sell = flow?.sellVolume ?? 0;
-    const orderBookStrength = Math.abs(orderBook?.imbalance ?? 0);
-    const techConfirm =
-      (decision === "LONG" && techSignal?.decision === "LONG") ||
-      (decision === "SHORT" && techSignal?.decision === "SHORT");
-
-    const confidence = Math.min(
-      100,
-      Math.abs(smooth - 50) * 0.6 +
-        Math.abs(buy - sell) * 0.3 +
-        orderBookStrength * 35 +
-        (techConfirm ? 8 : 0) +
-        vol * 200
-    );
+    const volatility = Math.abs(last.close - prev.close) / last.close;
+    const ttl = getSignalTtl(interval, volatility);
+    const confidence =
+      decision === "NO TRADE"
+        ? 0
+        : Math.min(
+            100,
+            engineSignal.confidence + Math.abs(smooth - engineSignal.score) * 0.35
+          );
 
     const now = Date.now();
 
@@ -283,7 +107,7 @@ export default function AISignal(props: AISignalProps) {
     setSignal(newSignal);
 
     onSignal?.(newSignal);
-  }, [candles]);
+  }, [candles, flow, orderBook, interval, techSignal, onSignal]);
 
   /* ======================================================
      EMPTY
@@ -331,7 +155,7 @@ export default function AISignal(props: AISignalProps) {
   ====================================================== */
 
   return (
-    <div className="w-[49%]">
+    <div className="w-full min-w-0">
     <div
       className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-[10px] backdrop-blur-xl transition-all duration-300"
       style={{

@@ -3,7 +3,7 @@
 import PressureSignal from "@/app/components/PressureSignal";
 import TechnicalSignal, { Signal } from "@/app/components/TechnicalSignal";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Chart from "@/app/components/Chart";
 import Timeframes from "@/app/components/Timeframes";
@@ -65,6 +65,11 @@ export default function LiveTrading() {
   });
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
+  const selectedTicker = useMemo(
+    () => coins.find((coin: any) => coin.symbol === symbol),
+    [coins, symbol]
+  );
+  const changePercent = Number(selectedTicker?.priceChangePercent || 0);
 
 	  useEffect(() => {
 	    let savedSymbol = null;
@@ -146,17 +151,21 @@ export default function LiveTrading() {
         buyVolume: isSell ? prev.buyVolume : prev.buyVolume + qty,
         sellVolume: isSell ? prev.sellVolume + qty : prev.sellVolume
       }));
-
-      setTimeout(() => {
-        setTradeFlow(prev => ({
-          buyVolume: prev.buyVolume * 0.9,
-          sellVolume: prev.sellVolume * 0.9
-        }));
-      }, 2000);
     };
 
     return () => ws.close();
   }, [symbol]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setTradeFlow(prev => ({
+        buyVolume: prev.buyVolume * 0.9,
+        sellVolume: prev.sellVolume * 0.9
+      }));
+    }, 2000);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
 	  useEffect(() => {
 	    async function fetchCoins(){
@@ -359,19 +368,20 @@ export default function LiveTrading() {
   }
 
   return (
-    <main className="min-h-screen w-full flex flex-col bg-[#0a0a0a] text-yellow-400 p-2 overflow-x-visible">
+    <main className="cryptonixTerminal min-h-screen w-full flex flex-col bg-[#0a0a0a] text-yellow-400 p-2 overflow-x-visible">
 
       <Header
         symbol={symbol}
         price={price}
         btcSpot={btcSpot}
         btcFutures={btcFutures}
+        changePercent={changePercent}
       />
 
 <div className="flex flex-col lg:flex-row gap-2 w-full overflow-x-visible">
 
         <div className="flex flex-col flex-1 gap-2">
-          <div className="flex flex-col md:flex-row gap-2">
+          <div className="cryptonixControls flex flex-col md:flex-row gap-2">
             <Search
               coins={coins}
               setSymbol={setSymbol}
@@ -380,7 +390,7 @@ export default function LiveTrading() {
             <Timeframes interval={interval} setIntervalState={setIntervalState}/>
           </div>
 
-          <div className="flex gap-2 items-start">
+          <div className="cryptonixSignalGrid grid grid-cols-2 gap-2 items-start">
 
 <TechnicalSignal
   candles={candles}
@@ -398,9 +408,9 @@ export default function LiveTrading() {
 />
 
 </div>
-          <Chart candles={candles} trade={selected ? trade : null}/>
+          <Chart candles={candles} trade={selected ? trade : null} symbol={symbol}/>
 
-          <div className="lg:hidden">
+          <div className="cryptonixMobileTradePanel lg:hidden">
             <TradePanel
               trade={selected ? trade : null}
               selected={selected}

@@ -92,8 +92,9 @@ export default function Chart(props: any) {
       timeScale: {
         borderVisible: false,
         timeVisible: true,
-
         secondsVisible: false,
+        rightOffset: 8,
+        barSpacing: 7,
       },
 
       crosshair: {
@@ -119,7 +120,9 @@ export default function Chart(props: any) {
       wickUpColor: "#2dff87",
       wickDownColor: "#ff5e5e",
 
-      priceLineVisible: false,
+      lastValueVisible: true,
+      priceLineVisible: true,
+      priceLineColor: "rgba(255,179,71,0.62)",
     });
 
     priceChartRef.current = priceChart;
@@ -424,8 +427,16 @@ export default function Chart(props: any) {
         {/* PRICE CHART */}
         <div
   ref={priceRef}
-  className="w-full min-h-[420px]"
-/>
+  className="relative w-full min-h-[420px]"
+>
+  {(!candles || candles.length === 0) && (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <div className="rounded-full border border-orange-400/15 bg-black/30 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
+        Loading Market Data
+      </div>
+    </div>
+  )}
+</div>
 
         {/* VOLUME */}
         {!isMobile && (

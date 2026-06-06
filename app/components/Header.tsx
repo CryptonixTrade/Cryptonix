@@ -6,9 +6,10 @@ export default function Header(props: any) {
     price = 0,
     btcSpot = 0,
     btcFutures = 0,
+    changePercent = 0,
   } = props;
 
-  const change = 0.85;
+  const change = Number(changePercent || 0);
   const isUp = change >= 0;
 
   return (
@@ -90,7 +91,7 @@ export default function Header(props: any) {
               }`}
             >
               {isUp ? "+" : ""}
-              {change}%
+              {change.toFixed(2)}%
             </div>
 
           </div>

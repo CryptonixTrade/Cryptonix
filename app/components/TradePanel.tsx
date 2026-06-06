@@ -98,7 +98,7 @@ export default function TradePanel(props: any) {
   ====================================================== */
 
   return (
-    <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-5 backdrop-blur-xl">
+    <div className="cryptonixTradePanel relative overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-5 backdrop-blur-xl">
 
       {/* BACKGROUND GLOW */}
       <div className="pointer-events-none absolute bottom-[-80px] right-[-80px] h-[180px] w-[180px] rounded-full bg-orange-500/10 blur-3xl" />
