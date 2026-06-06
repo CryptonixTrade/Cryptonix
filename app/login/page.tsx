@@ -8,6 +8,285 @@ import BinancePartnerCard from "../components/BinancePartnerCard";
 import CryptonixPortal from "../components/CryptonixPortal";
 import "../components/cryptonixPortal.css";
 
+const legacyTabletFallbackScript = `
+(function () {
+  if (window.__cryptonixLegacyLoginFallback) return;
+  window.__cryptonixLegacyLoginFallback = true;
+
+  function isTabletWidth() {
+    return window.innerWidth >= 600 && window.innerWidth <= 1180;
+  }
+
+  function ready(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
+    }
+  }
+
+  function qs(selector, root) {
+    return (root || document).querySelector(selector);
+  }
+
+  function qsa(selector, root) {
+    return (root || document).querySelectorAll(selector);
+  }
+
+  function addTap(el, fn) {
+    var lastTouch = 0;
+    if (!el) return;
+    el.addEventListener("touchend", function (event) {
+      lastTouch = Date.now();
+      event.preventDefault();
+      event.stopPropagation();
+      fn(event);
+    }, false);
+    el.addEventListener("click", function (event) {
+      if (Date.now() - lastTouch < 700) return;
+      event.stopPropagation();
+      fn(event);
+    }, false);
+  }
+
+  function ensureStyle() {
+    if (document.getElementById("cryptonix-legacy-fallback-style")) return;
+    var style = document.createElement("style");
+    style.id = "cryptonix-legacy-fallback-style";
+    style.type = "text/css";
+    style.appendChild(document.createTextNode(
+      ".legacyPaymentOverlay{position:fixed;z-index:2147483000;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.84);}" +
+      ".legacyPaymentModal{position:relative;width:360px;max-width:calc(100vw - 24px);max-height:calc(100vh - 24px);overflow:auto;padding:22px;border:1px solid rgba(255,170,0,.16);border-radius:24px;background:rgba(12,12,12,.97);box-shadow:0 0 40px rgba(255,140,0,.1);color:#fff;text-align:center;font-family:Arial,sans-serif;}" +
+      ".legacyPaymentModal button{touch-action:manipulation;cursor:pointer;}" +
+      ".legacyCloseBtn{position:absolute;right:14px;top:10px;border:0;background:transparent;color:rgba(255,255,255,.7);font-size:28px;line-height:32px;}" +
+      ".legacyPaymentTitle{margin:0 0 8px;color:#f0c36a;font-size:24px;}" +
+      ".legacyNetwork{margin:0 0 14px;color:rgba(255,255,255,.75);}" +
+      ".legacyAmount{margin:6px 0 14px;color:#ffd36b;font-size:32px;font-weight:700;}" +
+      ".legacyQrBox{display:flex;justify-content:center;margin:0 auto 16px;padding:16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,180,0,.08);}" +
+      ".legacyQrBox img{width:170px;height:170px;}" +
+      ".legacyWalletBox{margin-bottom:12px;padding:12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,180,0,.08);word-break:break-all;font-size:13px;}" +
+      ".legacyCopyBtn,.legacyPaidBtn{width:100%;margin-bottom:12px;padding:12px;border:0;border-radius:999px;font-weight:700;}" +
+      ".legacyCopyBtn{background:rgba(255,255,255,.08);color:#fff;}" +
+      ".legacyPaidBtn{background:linear-gradient(90deg,#a26b00,#f5d06a);color:#000;}" +
+      ".legacyEmailInput{box-sizing:border-box;width:100%;margin-bottom:12px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;}" +
+      ".legacyAboutText{text-align:left;line-height:1.65;color:rgba(255,255,255,.88);font-size:15px;}"
+    ));
+    document.head.appendChild(style);
+  }
+
+  function encodeForm(data) {
+    var parts = [];
+    var key;
+    for (key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        parts.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+      }
+    }
+    return parts.join("&");
+  }
+
+  function postJson(url, data) {
+    return fetch(url, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).then(function (res) {
+      return res.json();
+    });
+  }
+
+  function closeLegacyModal() {
+    var overlay = document.getElementById("cryptonix-legacy-modal");
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+  }
+
+  function openPayment(plan, amount) {
+    var wallet = "TWo1iyUNwYFh63qRuN7grd4eJmu4LDes3p";
+    ensureStyle();
+    closeLegacyModal();
+
+    var overlay = document.createElement("div");
+    overlay.id = "cryptonix-legacy-modal";
+    overlay.className = "legacyPaymentOverlay";
+    overlay.innerHTML =
+      '<div class="legacyPaymentModal">' +
+      '<button type="button" class="legacyCloseBtn" data-legacy-close="1">×</button>' +
+      '<h2 class="legacyPaymentTitle">Pay with USDT</h2>' +
+      '<p class="legacyNetwork">Network: TRC20</p>' +
+      '<div>' + plan + '</div>' +
+      '<div class="legacyAmount">' + amount + ' USDT</div>' +
+      '<div style="margin-bottom:14px;color:#ff7b7b;font-size:12px;">ONLY SEND VIA TRC20 NETWORK</div>' +
+      '<div class="legacyQrBox"><img src="/usdt-wallet-qr.svg" alt="USDT wallet QR"></div>' +
+      '<div class="legacyWalletBox">' + wallet + '</div>' +
+      '<button type="button" class="legacyCopyBtn" data-legacy-copy="1">Copy Wallet</button>' +
+      '<input class="legacyEmailInput" type="email" placeholder="Your Email">' +
+      '<button type="button" class="legacyPaidBtn" data-legacy-paid="1">I HAVE PAID</button>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+    addTap(qs("[data-legacy-close]", overlay), closeLegacyModal);
+    addTap(qs("[data-legacy-copy]", overlay), function () {
+      var copied = false;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(wallet);
+        copied = true;
+      }
+      if (!copied) window.prompt("Copy wallet", wallet);
+    });
+    addTap(qs("[data-legacy-paid]", overlay), function () {
+      var emailInput = qs(".legacyEmailInput", overlay);
+      var email = emailInput ? emailInput.value : "";
+      if (!email) {
+        alert("Enter email");
+        return;
+      }
+      postJson("/api/crypto-payment", {
+        plan: plan,
+        amount: amount,
+        email: email
+      }).then(function (data) {
+        if (data && data.success) {
+          alert("Payment request sent");
+          closeLegacyModal();
+        } else {
+          alert("Failed");
+        }
+      }).catch(function () {
+        alert("Error sending request");
+      });
+    });
+  }
+
+  function openAbout() {
+    ensureStyle();
+    closeLegacyModal();
+    var overlay = document.createElement("div");
+    overlay.id = "cryptonix-legacy-modal";
+    overlay.className = "legacyPaymentOverlay";
+    overlay.innerHTML =
+      '<div class="legacyPaymentModal">' +
+      '<button type="button" class="legacyCloseBtn" data-legacy-close="1">×</button>' +
+      '<h2 class="legacyPaymentTitle">About Cryptonix</h2>' +
+      '<div class="legacyAboutText">' +
+      '<p>Cryptonix is an AI-powered crypto intelligence platform designed to simplify market analysis through modern technology and premium AI systems.</p>' +
+      '<p>The platform combines advanced market monitoring, intelligent analysis, and futuristic tools to help users stay connected with important market activity in real time.</p>' +
+      '<p>Support email: support@cryptonix.life</p>' +
+      '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    addTap(qs("[data-legacy-close]", overlay), closeLegacyModal);
+  }
+
+  function fallbackLogin(form) {
+    var formInputs = qsa("input", form);
+    var usernameInput = formInputs[0];
+    var passwordInput = qs('input[type="password"]', form) || formInputs[1];
+    var username = usernameInput ? usernameInput.value : "";
+    var password = passwordInput ? passwordInput.value : "";
+    if (!username || !password) {
+      alert("Enter username and password");
+      return;
+    }
+
+    fetch("/api/auth/csrf", { credentials: "same-origin" })
+      .then(function (res) { return res.json(); })
+      .then(function (csrf) {
+        return fetch("/api/auth/callback/credentials", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: encodeForm({
+            username: username,
+            password: password,
+            redirect: "false",
+            json: "true",
+            csrfToken: csrf.csrfToken || "",
+            callbackUrl: window.location.origin + "/dashboard"
+          })
+        });
+      })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.url && data.url.indexOf("error=") !== -1) {
+          alert("Неверный логин или пароль");
+          return;
+        }
+        return fetch("/api/auth/session", { credentials: "same-origin" })
+          .then(function (res) { return res.json(); })
+          .then(function (session) {
+            if (session && session.user && session.user.role === "admin") {
+              window.location.href = "/admin/users";
+            } else {
+              window.location.href = "/dashboard";
+            }
+          });
+      })
+      .catch(function () {
+        alert("Login error");
+      });
+  }
+
+  function startFallback() {
+    if (!isTabletWidth()) return;
+
+    var root = qs(".loginPageRoot");
+    if (!root) return;
+
+    var terms = qs('.termsLabel input[type="checkbox"]', root);
+    var buttons = qsa(".planCard .cryptoBtn", root);
+
+    function syncPlans() {
+      var agreed = terms && terms.checked;
+      var i;
+      for (i = 0; i < buttons.length; i += 1) {
+        buttons[i].setAttribute("aria-disabled", agreed ? "false" : "true");
+      }
+    }
+
+    if (terms) {
+      terms.removeAttribute("checked");
+      terms.checked = false;
+      terms.addEventListener("change", syncPlans, false);
+      terms.addEventListener("click", function () { setTimeout(syncPlans, 0); }, false);
+      terms.addEventListener("touchend", function () { setTimeout(syncPlans, 0); }, false);
+      syncPlans();
+    }
+
+    if (buttons[0]) addTap(buttons[0], function () {
+      if (!terms || !terms.checked) return;
+      openPayment("Monthly Plan", "3");
+    });
+    if (buttons[1]) addTap(buttons[1], function () {
+      if (!terms || !terms.checked) return;
+      openPayment("3 Months Plan", "10");
+    });
+    if (buttons[2]) addTap(buttons[2], function () {
+      if (!terms || !terms.checked) return;
+      openPayment("Yearly Plan", "20");
+    });
+
+    addTap(qs(".portal-button", root), openAbout);
+
+    var form = qs(".loginBox", root);
+    if (form) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        fallbackLogin(form);
+      }, true);
+      addTap(qs('button[type="submit"]', form), function (event) {
+        event.preventDefault();
+        fallbackLogin(form);
+      });
+    }
+  }
+
+  ready(function () {
+    setTimeout(startFallback, 1200);
+  });
+}());
+`;
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -40,6 +319,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   const termsRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    (window as any).__cryptonixReactReady = true;
     inputRef.current?.focus();
   }, []);
 
@@ -1233,6 +1513,12 @@ const [selectedAmount, setSelectedAmount] = useState("");
   </div>
 </a>
 
-    </div>
-  );
-}
+<script
+  dangerouslySetInnerHTML={{
+    __html: legacyTabletFallbackScript,
+  }}
+/>
+
+	    </div>
+	  );
+	}
