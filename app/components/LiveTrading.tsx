@@ -19,6 +19,22 @@ type OrderBookState = {
   askVolume: number;
 };
 
+function isTabletViewport() {
+  return window.innerWidth >= 600 && window.innerWidth <= 1180;
+}
+
+async function fetchTabletMarketData(path: string) {
+  const res = await fetch(`/api/market-data?${path}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error(`Tablet market data failed: ${res.status}`);
+  }
+
+  return res.json();
+}
+
 export default function LiveTrading() {
 
   const [coins, setCoins] = useState<any[]>([]);
@@ -50,21 +66,30 @@ export default function LiveTrading() {
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
 
-  useEffect(() => {
-    const savedSymbol = localStorage.getItem("symbol");
-    const savedInterval = localStorage.getItem("interval");
+	  useEffect(() => {
+	    let savedSymbol = null;
+	    let savedInterval = null;
 
-    if (savedSymbol) setSymbol(savedSymbol);
-    if (savedInterval) setIntervalState(savedInterval);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("symbol", symbol);
-  }, [symbol]);
-
-  useEffect(() => {
-    localStorage.setItem("interval", interval);
-  }, [interval]);
+	    try {
+	      savedSymbol = localStorage.getItem("symbol");
+	      savedInterval = localStorage.getItem("interval");
+	    } catch {}
+	
+	    if (savedSymbol) setSymbol(savedSymbol);
+	    if (savedInterval) setIntervalState(savedInterval);
+	  }, []);
+	
+	  useEffect(() => {
+	    try {
+	      localStorage.setItem("symbol", symbol);
+	    } catch {}
+	  }, [symbol]);
+	
+	  useEffect(() => {
+	    try {
+	      localStorage.setItem("interval", interval);
+	    } catch {}
+	  }, [interval]);
 
   useEffect(() => {
     setSelected(null);
@@ -75,8 +100,10 @@ export default function LiveTrading() {
     if (!selected) setTrade(null);
   }, [selected]);
 
-  useEffect(() => {
-    const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+	  useEffect(() => {
+	    if (isTabletViewport()) return;
+
+	    const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
 
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
@@ -86,8 +113,10 @@ export default function LiveTrading() {
     return () => ws.close();
   }, []);
 
-  useEffect(() => {
-    const ws = new WebSocket("wss://fstream.binance.com/ws/btcusdt@trade");
+	  useEffect(() => {
+	    if (isTabletViewport()) return;
+
+	    const ws = new WebSocket("wss://fstream.binance.com/ws/btcusdt@trade");
 
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
@@ -97,10 +126,11 @@ export default function LiveTrading() {
     return () => ws.close();
   }, []);
 
-  useEffect(() => {
-    if (!symbol) return;
-
-    const ws = new WebSocket(
+	  useEffect(() => {
+	    if (!symbol) return;
+	    if (isTabletViewport()) return;
+	
+	    const ws = new WebSocket(
       `wss://fstream.binance.com/ws/${symbol.toLowerCase()}@trade`
     );
 
@@ -128,13 +158,19 @@ export default function LiveTrading() {
     return () => ws.close();
   }, [symbol]);
 
-  useEffect(() => {
-    async function fetchCoins(){
-      try {
-        const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-        const data = await res.json();
+	  useEffect(() => {
+	    async function fetchCoins(){
+	      try {
+	        let data;
 
-        const usdt = data.filter((c:any)=>c.symbol.endsWith("USDT"));
+	        if (isTabletViewport()) {
+	          data = await fetchTabletMarketData("type=tickers");
+	        } else {
+	          const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
+	          data = await res.json();
+	        }
+	
+	        const usdt = data.filter((c:any)=>c.symbol.endsWith("USDT"));
         setCoins(usdt);
       } catch (e) {
         console.error("Coins fetch error", e);
@@ -144,12 +180,20 @@ export default function LiveTrading() {
     fetchCoins();
   }, []);
 
-  async function fetchData() {
-    try {
-      const res = await fetch(
-        `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=100`
-      );
-      const data = await res.json();
+	  async function fetchData() {
+	    try {
+	      let data;
+
+	      if (isTabletViewport()) {
+	        data = await fetchTabletMarketData(
+	          `type=klines&symbol=${symbol}&interval=${interval}&limit=100`
+	        );
+	      } else {
+	        const res = await fetch(
+	          `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=100`
+	        );
+	        data = await res.json();
+	      }
 
       const mapped = data.map((c:any)=>({
         time: c[0] / 1000,
@@ -166,14 +210,50 @@ export default function LiveTrading() {
     }
   }
 
-  useEffect(()=>{
-    fetchData();
-  },[symbol, interval]);
+	  useEffect(()=>{
+	    fetchData();
+	  },[symbol, interval]);
 
-  useEffect(() => {
-    if (!symbol || !interval) return;
+	  useEffect(() => {
+	    if (!symbol || !isTabletViewport()) return;
 
-    const ws = new WebSocket(
+	    let cancelled = false;
+
+	    async function fetchTabletPrices() {
+	      try {
+	        const data = await fetchTabletMarketData(`type=prices&symbol=${symbol}`);
+
+	        if (cancelled) return;
+	        if (data?.price) setPrice(Number(data.price));
+	        if (data?.btcSpot) setBtcSpot(Number(data.btcSpot));
+	        if (data?.btcFutures) setBtcFutures(Number(data.btcFutures));
+	      } catch (e) {
+	        console.error("Tablet prices fetch error", e);
+	      }
+	    }
+
+	    fetchTabletPrices();
+	    const timer = window.setInterval(fetchTabletPrices, 5000);
+
+	    return () => {
+	      cancelled = true;
+	      window.clearInterval(timer);
+	    };
+	  }, [symbol]);
+
+	  useEffect(() => {
+	    if (!symbol || !interval || !isTabletViewport()) return;
+
+	    const timer = window.setInterval(fetchData, 15000);
+
+	    return () => window.clearInterval(timer);
+	  }, [symbol, interval]);
+	
+	  useEffect(() => {
+	    if (!symbol || !interval) return;
+	    if (isTabletViewport()) return;
+	
+	    const ws = new WebSocket(
       `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${interval}`
     );
 

@@ -224,14 +224,17 @@ export default function Chart(props: any) {
       }
     };
 
-    const resizeObserver = new ResizeObserver(resize);
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(resize)
+        : null;
 
-    resizeObserver.observe(containerRef.current);
+    resizeObserver?.observe(containerRef.current);
 
     window.addEventListener("resize", resize);
 
     return () => {
-      resizeObserver.disconnect();
+      resizeObserver?.disconnect();
 
       window.removeEventListener("resize", resize);
 

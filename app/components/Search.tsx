@@ -44,12 +44,14 @@ export default function Search(props: any) {
      SAVE FAVORITES
   ====================================================== */
 
-  useEffect(() => {
-    localStorage.setItem(
-      "favorites",
-      JSON.stringify(favorites)
-    );
-  }, [favorites]);
+	  useEffect(() => {
+	    try {
+	      localStorage.setItem(
+	        "favorites",
+	        JSON.stringify(favorites)
+	      );
+	    } catch {}
+	  }, [favorites]);
 
   /* ======================================================
      CLICK OUTSIDE
@@ -129,6 +131,11 @@ export default function Search(props: any) {
 
       return [...prev, sym];
     });
+  }
+
+  function selectSymbol(sym: string) {
+    setSymbol(sym);
+    setOpen(false);
   }
 
   /* ======================================================
@@ -261,13 +268,15 @@ export default function Search(props: any) {
               symbol === c.symbol;
 
             return (
-              <div
-                key={c.symbol}
-                onMouseDown={() => {
-                  setSymbol(c.symbol);
-                  setOpen(false);
-                }}
-                className={`
+	              <div
+	                key={c.symbol}
+	                onMouseDown={() => selectSymbol(c.symbol)}
+	                onClick={() => selectSymbol(c.symbol)}
+	                onTouchEnd={(e) => {
+	                  e.preventDefault();
+	                  selectSymbol(c.symbol);
+	                }}
+	                className={`
                   group relative mb-1 cursor-pointer overflow-hidden rounded-xl border p-1 transition-all duration-300
                   ${
                     isActive
