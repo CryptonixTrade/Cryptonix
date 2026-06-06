@@ -63,10 +63,10 @@ export default function SuccessPage() {
           max-width: 100%;
 
           background:
-            rgba(15,15,15,0.92);
+            linear-gradient(180deg, rgba(18,16,13,0.96), rgba(7,7,8,0.96));
 
           border:
-            1px solid rgba(255,170,0,0.14);
+            1px solid rgba(242,213,138,0.18);
 
           border-radius: 28px;
 
@@ -79,7 +79,8 @@ export default function SuccessPage() {
           backdrop-filter: blur(18px);
 
           box-shadow:
-            0 0 40px rgba(255,140,0,0.08);
+            0 24px 80px rgba(0,0,0,0.55),
+            0 0 44px rgba(215,168,79,0.1);
         }
 
         .check {
@@ -102,8 +103,8 @@ export default function SuccessPage() {
           background:
             linear-gradient(
               135deg,
-              #f5d06a,
-              #a26b00
+              #f2d58a,
+              #8b5e18
             );
         }
 
@@ -112,7 +113,7 @@ export default function SuccessPage() {
 
           margin-bottom: 16px;
 
-          color: #f5d06a;
+          color: #f2d58a;
         }
 
         .text {
@@ -136,7 +137,7 @@ export default function SuccessPage() {
         .email {
           margin-bottom: 28px;
 
-          color: #ffd36b;
+          color: #f2d58a;
 
           font-weight: 600;
         }
@@ -162,8 +163,9 @@ export default function SuccessPage() {
           background:
             linear-gradient(
               90deg,
-              #a26b00,
-              #f5d06a
+              #8b5e18,
+              #d7a84f,
+              #f2d58a
             );
 
           transition: 0.25s ease;

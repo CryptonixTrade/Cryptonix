@@ -153,11 +153,11 @@ export default function Search(props: any) {
 
       <div className="mb-2 flex items-center justify-between">
 
-        <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
           Market Search
         </div>
 
-        <div className="rounded-full border border-orange-400/15 bg-orange-400/10 px-2 py-[4px] text-[10px] font-semibold tracking-[0.18em] text-orange-300">
+        <div className="cx-chip px-2 py-[4px]">
           LIVE
         </div>
 
@@ -167,15 +167,15 @@ export default function Search(props: any) {
           ACTIVE SYMBOL
       ====================================================== */}
 
-      <div className="mb-3 flex items-center justify-between rounded-2xl border border-white/6 bg-white/[0.03] px-2 py-1">
+      <div className="cx-card-sm mb-3 flex items-center justify-between border border-[var(--cx-line-soft)] bg-white/[0.025] px-2 py-1">
 
         <div>
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
             Selected Pair
           </div>
 
-          <div className="mt-1 text-lg font-bold text-orange-400">
+          <div className="mt-1 text-lg font-bold text-[var(--cx-gold-soft)]">
             {symbol}
           </div>
 
@@ -211,16 +211,13 @@ export default function Search(props: any) {
             setOpen(true);
           }}
           className="
-            w-full rounded-2xl border border-white/10
-            bg-[rgba(255,255,255,0.03)]
+            cx-input
+            w-full
             py-2 pl-8 pr-2
             text-[10px] text-white
             outline-none
             transition-all duration-300
             placeholder:text-white/25
-            focus:border-orange-400/40
-            focus:bg-[rgba(255,255,255,0.05)]
-            focus:shadow-[0_0_25px_rgba(255,170,0,0.12)]
           "
         />
 
@@ -235,12 +232,8 @@ export default function Search(props: any) {
         className="
         fixed left-[20px] top-[140px] z-[999999]
         max-h-[220px] w-[320px] overflow-y-auto
-        rounded-[24px]
-        border border-white/10
-        bg-[rgba(10,10,12,0.96)]
+        cx-panel
         p-2
-        backdrop-blur-2xl
-        shadow-[0_10px_40px_rgba(0,0,0,0.45)]
         "
         >
 

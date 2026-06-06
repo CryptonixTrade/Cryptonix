@@ -162,7 +162,7 @@ export default function PressureSignal(props: any) {
 
   return (
     <div
-      className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-4 backdrop-blur-xl transition-all duration-300"
+      className="cx-panel relative overflow-hidden p-4 transition-all duration-300"
       style={{
         boxShadow: glow,
       }}
@@ -221,11 +221,11 @@ export default function PressureSignal(props: any) {
           {/* TITLES */}
           <div>
 
-            <div className="text-sm font-bold tracking-[0.18em] text-orange-400">
+            <div className="text-sm font-bold tracking-[0.18em] text-[var(--cx-gold-soft)]">
               TECHNICAL SIGNAL
             </div>
 
-            <div className="mt-[2px] text-[11px] tracking-[0.16em] text-white/35">
+            <div className="mt-[2px] text-[11px] tracking-[0.16em] text-[var(--cx-text-muted)]">
               MARKET PRESSURE ANALYSIS
             </div>
 
@@ -253,7 +253,7 @@ export default function PressureSignal(props: any) {
 
       <div className="relative z-10 mt-5">
 
-        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-white/35">
+        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
 
           <span>Sell Pressure</span>
 

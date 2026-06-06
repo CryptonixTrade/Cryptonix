@@ -126,7 +126,7 @@ const [success, setSuccess] =
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.82);
+            background: rgba(0,0,0,0.86);
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             pointer-events: auto;
@@ -136,11 +136,11 @@ const [success, setSuccess] =
             width: 360px;
             max-width: calc(100vw - 24px);
             padding: 22px;
-            border: 1px solid rgba(255,170,0,0.16);
+            border: 1px solid rgba(242,213,138,0.18);
             border-radius: 24px;
-            background: rgba(12,12,12,0.96);
+            background: linear-gradient(180deg, rgba(18,16,13,0.98), rgba(7,7,8,0.98));
             color: white;
-            box-shadow: 0 0 40px rgba(255,140,0,0.08);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.55), 0 0 44px rgba(215,168,79,0.1);
           }
 
           .network {
@@ -156,7 +156,7 @@ const [success, setSuccess] =
             font-weight: bold;
             cursor: pointer;
             color: black;
-            background: linear-gradient(90deg, #a26b00, #f5d06a);
+            background: linear-gradient(135deg, #8b5e18, #d7a84f, #f2d58a);
             touch-action: manipulation;
           }
         `}</style>
@@ -256,7 +256,7 @@ const [success, setSuccess] =
           position: fixed;
           inset: 0;
 
-          background: rgba(0,0,0,0.82);
+          background: rgba(0,0,0,0.86);
 
           backdrop-filter: blur(10px);
 
@@ -318,10 +318,10 @@ const [success, setSuccess] =
           max-width: calc(100vw - 24px);
 
           background:
-            rgba(12,12,12,0.96);
+            linear-gradient(180deg, rgba(18,16,13,0.98), rgba(7,7,8,0.98));
 
           border:
-            1px solid rgba(255,170,0,0.16);
+            1px solid rgba(242,213,138,0.18);
 
           border-radius: 24px;
 
@@ -332,7 +332,8 @@ const [success, setSuccess] =
           position: relative;
 
           box-shadow:
-            0 0 40px rgba(255,140,0,0.08);
+            0 24px 80px rgba(0,0,0,0.55),
+            0 0 44px rgba(215,168,79,0.1);
         }
 
         .closeBtn {
@@ -356,7 +357,7 @@ const [success, setSuccess] =
         h2 {
           margin-bottom: 8px;
 
-          color: #f0c36a;
+          color: #f2d58a;
         }
 
         .network {
@@ -379,7 +380,7 @@ const [success, setSuccess] =
 
           margin-bottom: 18px;
 
-          color: #ffd36b;
+          color: #f2d58a;
         }
 
         .warning {
@@ -444,8 +445,9 @@ const [success, setSuccess] =
 	          background:
 	            linear-gradient(
 	              90deg,
-	              #a26b00,
-	              #f5d06a
+	              #8b5e18,
+	              #d7a84f,
+	              #f2d58a
 	            );
 	          touch-action: manipulation;
 	        }

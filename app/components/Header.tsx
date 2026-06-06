@@ -13,7 +13,7 @@ export default function Header(props: any) {
   const isUp = change >= 0;
 
   return (
-    <div className="relative mb-4 overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,12,14,0.72)] backdrop-blur-xl shadow-[0_8px_40px_rgba(0,0,0,0.45)]">
+    <div className="cx-panel relative mb-4 overflow-hidden">
 
       {/* ===== TOP GLOW ===== */}
       <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-80" />
@@ -40,11 +40,11 @@ export default function Header(props: any) {
 
             <div className="flex items-center gap-2">
 
-              <span className="text-lg font-bold tracking-[0.19em] text-orange-400 md:text-xl">
+              <span className="text-lg font-bold tracking-[0.19em] text-[var(--cx-gold-soft)] md:text-xl">
                 CRYPTONIX.
               </span>
 
-              <div className="rounded-full border border-orange-400/77 bg-orange-400/10 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-widest text-orange-300">
+              <div className="cx-chip px-2 py-[2px]">
                 LIFE
               </div>
 
@@ -56,7 +56,7 @@ export default function Header(props: any) {
                 {symbol}
               </span>
 
-              <span className="text-xs text-white/35">
+              <span className="text-xs text-[var(--cx-text-muted)]">
                 AI Trading Terminal
               </span>
 
@@ -96,7 +96,7 @@ export default function Header(props: any) {
 
           </div>
 
-          <div className="mt-1 text-xs tracking-widest text-white/35">
+          <div className="mt-1 text-xs tracking-widest text-[var(--cx-text-muted)]">
             REAL-TIME MARKET DATA
           </div>
 
@@ -108,7 +108,7 @@ export default function Header(props: any) {
         <div className="grid grid-cols-2 gap-3 md:gap-4">
 
           {/* SPOT */}
-          <div className="rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-3">
+          <div className="cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
 
             <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
               Spot
@@ -126,7 +126,7 @@ export default function Header(props: any) {
           </div>
 
           {/* FUTURES */}
-          <div className="rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-3">
+          <div className="cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
 
             <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
               Futures

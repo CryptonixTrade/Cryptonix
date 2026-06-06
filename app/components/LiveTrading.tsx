@@ -368,7 +368,7 @@ export default function LiveTrading() {
   }
 
   return (
-    <main className="cryptonixTerminal min-h-screen w-full flex flex-col bg-[#0a0a0a] text-yellow-400 p-2 overflow-x-visible">
+    <main className="cryptonixTerminal cx-terminal min-h-screen w-full flex flex-col text-yellow-400 p-2 overflow-x-visible">
 
       <Header
         symbol={symbol}

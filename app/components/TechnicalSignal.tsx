@@ -86,9 +86,9 @@ export default function TechnicalSignal(props: Props) {
       : "0 0 30px rgba(255,170,0,0.08)";
 
   return (
-                  <div className="w-full min-w-0">
+    <div className="w-full min-w-0">
     <div
-      className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-[10px] backdrop-blur-xl transition-all duration-300"
+      className="cx-card cx-card-sm relative p-[10px] transition-all duration-300"
       style={{
         boxShadow: glow,
       }}
@@ -147,11 +147,11 @@ export default function TechnicalSignal(props: Props) {
           {/* TITLES */}
           <div>
 
-            <div className="text-[9px] font-bold tracking-[0.10em] text-orange-400">
+            <div className="text-[9px] font-bold tracking-[0.10em] text-[var(--cx-gold-soft)]">
               TREND ENGINE
             </div>
 
-            <div className="mt-[2px] text-[9px] tracking-[0.16em] text-white/35">
+            <div className="mt-[2px] text-[9px] tracking-[0.16em] text-[var(--cx-text-muted)]">
               {interval} • TECHNICAL MARKET STRUCTURE
             </div>
 
@@ -179,7 +179,7 @@ export default function TechnicalSignal(props: Props) {
 
       <div className="relative z-10 mt-3">
 
-        <div className="mb-2 flex items-center justify-between text-[9px] uppercase tracking-[0.10em] text-white/35">
+        <div className="mb-2 flex items-center justify-between text-[9px] uppercase tracking-[0.10em] text-[var(--cx-text-muted)]">
 
           <span>Bearish</span>
 
@@ -216,9 +216,9 @@ export default function TechnicalSignal(props: Props) {
       <div className="relative z-10 mt-3 grid grid-cols-2 gap-1">
 
         {/* SCORE */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-2">
+        <div className="rounded-2xl border border-[var(--cx-line-soft)] bg-white/[0.025] p-2">
 
-          <div className="text-[7px] uppercase tracking-[0.10em] text-white/35">
+          <div className="text-[7px] uppercase tracking-[0.10em] text-[var(--cx-text-muted)]">
             Technical Score
           </div>
 
@@ -234,9 +234,9 @@ export default function TechnicalSignal(props: Props) {
         </div>
 
         {/* STATUS */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="rounded-2xl border border-[var(--cx-line-soft)] bg-white/[0.025] p-3">
 
-          <div className="text-[7px] uppercase tracking-[0.10em] text-white/35">
+          <div className="text-[7px] uppercase tracking-[0.10em] text-[var(--cx-text-muted)]">
             Direction
           </div>
 

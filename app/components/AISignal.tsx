@@ -157,7 +157,7 @@ export default function AISignal(props: AISignalProps) {
   return (
     <div className="w-full min-w-0">
     <div
-      className="relative overflow-hidden rounded-[14px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-[10px] backdrop-blur-xl transition-all duration-300"
+      className="cx-card cx-card-sm relative p-[10px] transition-all duration-300"
       style={{
         boxShadow: glow,
       }}
@@ -216,11 +216,11 @@ export default function AISignal(props: AISignalProps) {
           {/* TITLES */}
           <div>
 
-            <div className="text-[10px] font-bold tracking-[0.18em] text-orange-400">
+            <div className="text-[10px] font-bold tracking-[0.18em] text-[var(--cx-gold-soft)]">
               CRYPTONIX AI
             </div>
 
-            <div className="mt-[2px] text-[10px] tracking-[0.08em] text-white/35">
+            <div className="mt-[2px] text-[10px] tracking-[0.08em] text-[var(--cx-text-muted)]">
               {interval} • AI SIGNAL
             </div>
 
@@ -249,7 +249,7 @@ export default function AISignal(props: AISignalProps) {
       <div className="relative z-10 mt-3">
 
         {/* LABELS */}
-        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.10em] text-white/35">
+        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.10em] text-[var(--cx-text-muted)]">
 
           <span>Bearish</span>
 
@@ -286,9 +286,9 @@ export default function AISignal(props: AISignalProps) {
       <div className="relative z-10 mt-3 grid grid-cols-3 gap-2">
 
         {/* SCORE */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-2">
+        <div className="rounded-2xl border border-[var(--cx-line-soft)] bg-white/[0.025] p-2">
 
-          <div className="text-[8px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[8px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
             Score
           </div>
 
@@ -302,9 +302,9 @@ export default function AISignal(props: AISignalProps) {
         </div>
 
         {/* CONFIDENCE */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="rounded-2xl border border-[var(--cx-line-soft)] bg-white/[0.025] p-3">
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
             Confid.
           </div>
 
@@ -315,9 +315,9 @@ export default function AISignal(props: AISignalProps) {
         </div>
 
         {/* HOLD */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="rounded-2xl border border-[var(--cx-line-soft)] bg-white/[0.025] p-3">
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
             Hold
           </div>
 

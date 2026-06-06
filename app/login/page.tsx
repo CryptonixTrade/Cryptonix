@@ -1230,19 +1230,19 @@ const [selectedAmount, setSelectedAmount] = useState("");
   background:
     radial-gradient(
       circle at top,
-      rgba(0,255,255,0.18),
+      rgba(242,213,138,0.16),
       rgba(0,0,0,0.96)
     );
 
-  border: 1px solid rgba(0,255,255,0.32);
+  border: 1px solid rgba(242,213,138,0.24);
 
   backdrop-filter: blur(18px);
 
   overflow: hidden;
 
   box-shadow:
-    0 0 18px rgba(0,255,255,0.16),
-    0 0 45px rgba(0,255,255,0.12),
+    0 0 18px rgba(215,168,79,0.18),
+    0 0 45px rgba(215,168,79,0.10),
     inset 0 0 20px rgba(255,255,255,0.03);
 
   transition: all 0.3s ease;
@@ -1254,8 +1254,8 @@ const [selectedAmount, setSelectedAmount] = useState("");
     translateY(-2px);
 
   box-shadow:
-    0 0 30px rgba(0,255,255,0.28),
-    0 0 70px rgba(0,255,255,0.16);
+    0 0 30px rgba(215,168,79,0.26),
+    0 0 70px rgba(215,168,79,0.14);
 }
 
 /* ICON */
@@ -1264,12 +1264,12 @@ const [selectedAmount, setSelectedAmount] = useState("");
   width: 30px;
   height: 30px;
 
-  color: #8ffcff;
+  color: #f2d58a;
 
   z-index: 5;
 
   filter:
-    drop-shadow(0 0 10px rgba(0,255,255,0.65));
+    drop-shadow(0 0 10px rgba(215,168,79,0.58));
 }
 
 /* PULSE */
@@ -1285,7 +1285,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   background:
     radial-gradient(
       circle,
-      rgba(0,255,255,0.18),
+      rgba(242,213,138,0.14),
       transparent 70%
     );
 
@@ -1305,7 +1305,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   border-radius: 999px;
 
   border:
-    1px solid rgba(0,255,255,0.12);
+    1px solid rgba(242,213,138,0.12);
 
   animation:
     tgRotate 12s linear infinite;
@@ -1328,10 +1328,10 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   border-radius: 999px;
 
-  background: #7df9ff;
+  background: #f2d58a;
 
   box-shadow:
-    0 0 10px rgba(0,255,255,0.8);
+    0 0 10px rgba(215,168,79,0.8);
 }
 
 /* PARTICLES */
@@ -1344,10 +1344,10 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   border-radius: 999px;
 
-  background: rgba(125,249,255,0.9);
+  background: rgba(242,213,138,0.9);
 
   box-shadow:
-    0 0 10px rgba(0,255,255,0.8);
+    0 0 10px rgba(215,168,79,0.8);
 
   animation:
     tgParticleFloat 4s infinite ease-in-out;
@@ -1453,8 +1453,8 @@ const [selectedAmount, setSelectedAmount] = useState("");
     border-width: 1px;
 
     box-shadow:
-      0 0 12px rgba(0,255,255,0.16),
-      0 0 24px rgba(0,255,255,0.08);
+      0 0 12px rgba(215,168,79,0.16),
+      0 0 24px rgba(215,168,79,0.08);
   }
 
   .tgIcon {
@@ -1462,7 +1462,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
     height: 16px;
 
     filter:
-      drop-shadow(0 0 5px rgba(0,255,255,0.55));
+      drop-shadow(0 0 5px rgba(215,168,79,0.55));
   }
 
   .tgOrbit {

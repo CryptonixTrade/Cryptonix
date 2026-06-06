@@ -193,7 +193,7 @@ may result in:
 
   margin-bottom: 15px;
 
-  color:rgb(144, 247, 19);
+  color: #f2d58a;
 
   text-decoration: none;
 
@@ -210,7 +210,7 @@ may result in:
             position: fixed;
             inset: 0;
   
-            background: rgba(22, 4, 4, 0.72);
+            background: rgba(0, 0, 0, 0.76);
   
             backdrop-filter: blur(8px);
   
@@ -226,7 +226,7 @@ may result in:
   
             margin: 0 auto;
   
-            background: rgba(26, 1, 1, 0.72);
+            background: linear-gradient(180deg, rgba(18,16,13,0.88), rgba(7,7,8,0.88));
   
             border: 1px solid rgba(28, 19, 19, 0.08);
   
@@ -237,7 +237,8 @@ may result in:
             backdrop-filter: blur(20px);
   
             box-shadow:
-              0 0 40px rgba(211, 175, 175, 0.5);
+              0 24px 80px rgba(0,0,0,0.55),
+              0 0 44px rgba(215,168,79,0.1);
           }
   
           h1 {
@@ -245,7 +246,7 @@ may result in:
   
             margin-bottom: 42px;
   
-            color:rgb(141, 112, 54);
+            color: #d7a84f;
           }
   
           .updated {
@@ -263,7 +264,7 @@ may result in:
   
             margin-bottom: 10px;
   
-            color:rgb(220, 185, 115);
+            color: #f2d58a;
           }
   
 p {

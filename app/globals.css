@@ -42,6 +42,31 @@
   /* ===== TRANSITIONS ===== */
   --transition-fast: 0.15s ease;
   --transition-smooth: 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ===== CRYPTONIX LUXURY SYSTEM ===== */
+  --cx-bg-void: #030303;
+  --cx-bg-panel: rgba(10, 10, 12, 0.82);
+  --cx-bg-elevated: rgba(18, 16, 13, 0.86);
+  --cx-bg-control: rgba(255,255,255,0.035);
+  --cx-gold-core: #d7a84f;
+  --cx-gold-soft: #f2d58a;
+  --cx-gold-deep: #8b5e18;
+  --cx-text-main: #f4efe3;
+  --cx-text-muted: rgba(244, 239, 227, 0.52);
+  --cx-line-soft: rgba(242, 213, 138, 0.12);
+  --cx-line-strong: rgba(242, 213, 138, 0.28);
+  --cx-long: #35d07f;
+  --cx-short: #e35d5d;
+  --cx-neutral: #8d8a80;
+  --cx-radius: 18px;
+  --cx-radius-sm: 12px;
+  --cx-shadow-panel:
+    0 18px 58px rgba(0,0,0,0.46),
+    inset 0 1px 0 rgba(255,255,255,0.045);
+  --cx-shadow-gold:
+    0 0 0 1px rgba(242,213,138,0.08),
+    0 18px 64px rgba(0,0,0,0.52),
+    0 0 34px rgba(215,168,79,0.08);
 }
 
 /* =========================================================
@@ -215,6 +240,106 @@ button:active {
 }
 
 /* =========================================================
+   CRYPTONIX LUXURY UI SYSTEM
+========================================================= */
+
+.cx-terminal {
+  background:
+    radial-gradient(circle at 12% -8%, rgba(215,168,79,0.12), transparent 34%),
+    radial-gradient(circle at 100% 8%, rgba(242,213,138,0.055), transparent 28%),
+    linear-gradient(180deg, #030303 0%, #060606 100%);
+  color: var(--cx-text-main);
+}
+
+.cx-panel,
+.cx-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--cx-line-soft);
+  border-radius: var(--cx-radius);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 42%),
+    var(--cx-bg-panel);
+  box-shadow: var(--cx-shadow-panel);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.cx-panel::before,
+.cx-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(242,213,138,0.085), transparent) top / 100% 1px no-repeat,
+    radial-gradient(circle at 12% 0%, rgba(215,168,79,0.075), transparent 34%);
+}
+
+.cx-card-sm {
+  border-radius: var(--cx-radius-sm);
+}
+
+.cx-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--cx-line-soft);
+  border-radius: 999px;
+  background: rgba(215,168,79,0.085);
+  color: var(--cx-gold-soft);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.cx-button-gold {
+  border: 1px solid rgba(242,213,138,0.22);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, var(--cx-gold-deep), var(--cx-gold-core) 45%, var(--cx-gold-soft));
+  color: #15100a;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.34),
+    0 0 28px rgba(215,168,79,0.14);
+  font-weight: 800;
+}
+
+.cx-button-ghost {
+  border: 1px solid var(--cx-line-soft);
+  border-radius: 999px;
+  background: var(--cx-bg-control);
+  color: var(--cx-text-muted);
+}
+
+.cx-muted {
+  color: var(--cx-text-muted);
+}
+
+.cx-gold-text {
+  color: var(--cx-gold-soft);
+}
+
+.cx-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cx-line-soft), transparent);
+}
+
+.cx-input {
+  border: 1px solid var(--cx-line-soft);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+  color: var(--cx-text-main);
+  outline: none;
+}
+
+.cx-input:focus {
+  border-color: var(--cx-line-strong);
+  box-shadow: 0 0 0 3px rgba(215,168,79,0.08);
+}
+
+/* =========================================================
    PREMIUM TEXT
 ========================================================= */
 
@@ -354,6 +479,14 @@ button:active {
 
   .cryptonixTradePanel > div:nth-child(5) {
     margin-top: 14px;
+  }
+
+  .cryptonixSignalGrid .cx-card {
+    min-height: 176px;
+  }
+
+  .cryptonixSignalGrid .cx-card::before {
+    opacity: 0.72;
   }
 }
 

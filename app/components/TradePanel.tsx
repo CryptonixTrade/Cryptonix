@@ -98,7 +98,7 @@ export default function TradePanel(props: any) {
   ====================================================== */
 
   return (
-    <div className="cryptonixTradePanel relative overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-5 backdrop-blur-xl">
+    <div className="cryptonixTradePanel cx-panel relative overflow-hidden p-5">
 
       {/* BACKGROUND GLOW */}
       <div className="pointer-events-none absolute bottom-[-80px] right-[-80px] h-[180px] w-[180px] rounded-full bg-orange-500/10 blur-3xl" />
@@ -115,18 +115,18 @@ export default function TradePanel(props: any) {
         {/* LEFT */}
         <div>
 
-          <div className="text-sm font-bold tracking-[0.18em] text-orange-400">
+          <div className="text-sm font-bold tracking-[0.18em] text-[var(--cx-gold-soft)]">
             AI TRADE PANEL
           </div>
 
-          <div className="mt-1 text-[11px] tracking-[0.16em] text-white/35">
+          <div className="mt-1 text-[11px] tracking-[0.16em] text-[var(--cx-text-muted)]">
             EXECUTION TERMINAL
           </div>
 
         </div>
 
         {/* LIVE STATUS */}
-        <div className="flex items-center gap-2 rounded-full border border-orange-400/15 bg-orange-400/10 px-3 py-[6px]">
+        <div className="cx-chip flex items-center gap-2 px-3 py-[6px]">
 
           <div className="h-2 w-2 animate-pulse rounded-full bg-orange-400" />
 
@@ -144,7 +144,7 @@ export default function TradePanel(props: any) {
 
       <div className="relative z-10 mt-6 text-center">
 
-        <div className="text-[11px] uppercase tracking-[0.18em] text-white/35">
+        <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
           Current Price
         </div>
 
@@ -182,7 +182,7 @@ export default function TradePanel(props: any) {
           {/* LEFT */}
           <div>
 
-            <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
               AI Signal
             </div>
 
@@ -200,7 +200,7 @@ export default function TradePanel(props: any) {
           {/* CONFIDENCE */}
           <div className="text-right">
 
-            <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
               Confidence
             </div>
 

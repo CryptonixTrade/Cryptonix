@@ -347,7 +347,7 @@ export default function Chart(props: any) {
   ====================================================== */
 
   return (
-    <div className="glass-card gold-glow relative w-full overflow-hidden border border-white/10">
+    <div className="cx-panel relative w-full overflow-hidden">
 
       {/* ======================================================
           BACKGROUND GLOW
@@ -376,11 +376,11 @@ export default function Chart(props: any) {
 
           <div className="flex flex-col">
 
-            <div className="text-sm font-semibold tracking-[0.18em] text-orange-400">
+          <div className="text-sm font-semibold tracking-[0.18em] text-[var(--cx-gold-soft)]">
               CRYPTONIX CHART
             </div>
 
-            <div className="text-[11px] tracking-[0.16em] text-white/35">
+            <div className="text-[11px] tracking-[0.16em] text-[var(--cx-text-muted)]">
               {symbol} • REAL-TIME MARKET ANALYSIS
             </div>
 
@@ -391,11 +391,11 @@ export default function Chart(props: any) {
         {/* RIGHT */}
         <div className="hidden items-center gap-2 md:flex">
 
-          <div className="rounded-full border border-white/8 bg-white/[0.03] px-3 py-[6px] text-[11px] tracking-widest text-white/45">
+          <div className="cx-chip px-3 py-[6px] text-white/45">
             AI POWERED
           </div>
 
-          <div className="rounded-full border border-orange-400/15 bg-orange-400/10 px-3 py-[6px] text-[11px] tracking-widest text-orange-300">
+          <div className="cx-chip px-3 py-[6px]">
             LIVE
           </div>
 
@@ -414,10 +414,10 @@ export default function Chart(props: any) {
     w-full
     flex
     flex-col
-    rounded-[24px]
+    rounded-[22px]
     border
-    border-white/10
-    bg-[rgba(12,12,14,0.72)]
+    border-[var(--cx-line-soft)]
+    bg-[rgba(3,3,3,0.28)]
     backdrop-blur-xl
     overflow-visible
     min-h-[520px]
