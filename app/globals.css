@@ -439,6 +439,39 @@ button:active {
   }
 }
 
+@keyframes cxAiCoreAura {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: translate3d(-1%, -1%, 0) scale(1);
+  }
+
+  50% {
+    opacity: 0.78;
+    transform: translate3d(1%, 1%, 0) scale(1.04);
+  }
+}
+
+@keyframes cxAiCoreSweep {
+  0% {
+    transform: translateX(-120%) rotate(8deg);
+    opacity: 0;
+  }
+
+  32% {
+    opacity: 0.42;
+  }
+
+  72% {
+    opacity: 0.18;
+  }
+
+  100% {
+    transform: translateX(120%) rotate(8deg);
+    opacity: 0;
+  }
+}
+
 @keyframes cxRevealUp {
   from {
     opacity: 0;
@@ -1186,6 +1219,45 @@ button:active {
 
 .cryptonixSignalCard::after {
   opacity: 0.32 !important;
+}
+
+.cryptonixAiPrimeCard {
+  isolation: isolate;
+  border-color: rgba(242,213,138,0.22) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(242,213,138,0.15), transparent 34%),
+    radial-gradient(circle at 82% 110%, rgba(45,255,135,0.055), transparent 32%),
+    linear-gradient(145deg, rgba(255,255,255,0.092), rgba(255,255,255,0.022)),
+    rgba(7,7,8,0.92) !important;
+}
+
+.cryptonixAiPrimeCard::before {
+  background:
+    linear-gradient(90deg, transparent, rgba(242,213,138,0.36), transparent) top / 100% 1px no-repeat,
+    radial-gradient(circle at 50% -20%, rgba(242,213,138,0.2), transparent 42%) !important;
+}
+
+.cxAiCoreHalo,
+.cxAiCoreGrid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cxAiCoreHalo {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(242,213,138,0.16), transparent 42%),
+    conic-gradient(from 140deg at 50% 50%, transparent, rgba(242,213,138,0.11), transparent, rgba(45,255,135,0.05), transparent);
+  mix-blend-mode: screen;
+  animation: cxAiCoreAura 6.8s ease-in-out infinite;
+}
+
+.cxAiCoreGrid {
+  inset: -42% -25%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent);
+  filter: blur(8px);
+  animation: cxAiCoreSweep 7.5s ease-in-out infinite;
 }
 
 .cxSignalModule {

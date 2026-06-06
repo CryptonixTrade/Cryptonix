@@ -86,8 +86,8 @@ export default function Timeframes(props: any) {
               `}
               title={
                 signal
-                  ? `${t}: ${signal} signal`
-                  : `${t}: no active signal`
+                  ? `${t}: AI ${signal} signal`
+                  : `${t}: no active AI signal`
               }
             >
 
@@ -113,7 +113,7 @@ export default function Timeframes(props: any) {
               {signal && (
                 <span
                   className={`cxTimeframeSignal ${signalClass}`}
-                  aria-label={`${signal} signal on ${t}`}
+                  aria-label={`AI ${signal} signal on ${t}`}
                 />
               )}
 

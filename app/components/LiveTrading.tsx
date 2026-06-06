@@ -3,7 +3,7 @@
 import PressureSignal from "@/app/components/PressureSignal";
 import TechnicalSignal, { Signal } from "@/app/components/TechnicalSignal";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Chart from "@/app/components/Chart";
 import Timeframes from "@/app/components/Timeframes";
@@ -12,7 +12,7 @@ import Header from "@/app/components/Header";
 import TradePanel from "@/app/components/TradePanel";
 import AISignal from "@/app/components/AISignal";
 import OrderBook from "@/app/components/OrderBook";
-import { calculateTechnicalSignal } from "@/lib/signal-engine";
+import { calculateAiSignal, calculateTechnicalSignal } from "@/lib/signal-engine";
 
 type OrderBookState = {
   imbalance: number;
@@ -82,11 +82,22 @@ export default function LiveTrading() {
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
   const [timeframeSignals, setTimeframeSignals] = useState<Record<string, string>>({});
+  const latestFlowRef = useRef(tradeFlow);
+  const latestOrderBookRef = useRef(orderBook);
+
   const selectedTicker = useMemo(
     () => coins.find((coin: any) => coin.symbol === symbol),
     [coins, symbol]
   );
   const changePercent = Number(selectedTicker?.priceChangePercent || 0);
+
+  useEffect(() => {
+    latestFlowRef.current = tradeFlow;
+  }, [tradeFlow]);
+
+  useEffect(() => {
+    latestOrderBookRef.current = orderBook;
+  }, [orderBook]);
 
 	  useEffect(() => {
 	    let savedSymbol = null;
@@ -255,11 +266,11 @@ export default function LiveTrading() {
 
 	            if (isTabletViewport()) {
 	              data = await fetchTabletMarketData(
-	                `type=klines&symbol=${symbol}&interval=${timeframe}&limit=100`
+	                `type=klines&symbol=${symbol}&interval=${timeframe}&limit=120`
 	              );
 	            } else {
 	              const res = await fetch(
-	                `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=100`
+	                `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=120`
 	              );
 
 	              if (!res.ok) return [timeframe, ""] as const;
@@ -274,7 +285,13 @@ export default function LiveTrading() {
 	              close: +c[4],
 	              volume: +c[5]
 	            }));
-	            const signal = calculateTechnicalSignal(mapped);
+	            const timeframeTechSignal = calculateTechnicalSignal(mapped);
+	            const signal = calculateAiSignal({
+	              candles: mapped,
+	              flow: latestFlowRef.current,
+	              orderBook: latestOrderBookRef.current,
+	              techSignal: timeframeTechSignal,
+	            });
 
 	            return [timeframe, signal?.decision || ""] as const;
 	          })
@@ -407,7 +424,10 @@ export default function LiveTrading() {
 
     setSelected(type);
 
-    if(!price || candles.length < 10){
+    const lastClose = Number(candles[candles.length - 1]?.close || 0);
+    const entry = Number(price || lastClose);
+
+    if(!entry || candles.length < 10){
       setTrade(null);
       return;
     }
@@ -418,7 +438,6 @@ export default function LiveTrading() {
     const range = Math.max(...highs) - Math.min(...lows);
     const atr = calculateATR();
 
-    const entry = price;
     const fallbackDistance = range * 0.5;
     const stopDistance = Math.max(
       atr ? atr * 1.4 : fallbackDistance,

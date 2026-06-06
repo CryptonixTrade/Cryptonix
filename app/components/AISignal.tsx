@@ -33,6 +33,8 @@ type AISignalProps = {
   techSignal: any;
 };
 
+const LIVE_AI_REFRESH_MS = 3500;
+
 export default function AISignal(props: AISignalProps) {
   const {
     candles = [],
@@ -46,6 +48,7 @@ export default function AISignal(props: AISignalProps) {
   const [signal, setSignal] = useState<Signal | null>(null);
 
   const lastCandleRef = useRef<number | null>(null);
+  const lastRunRef = useRef(0);
   const scoreRef = useRef<number | null>(null);
 
   /* ======================================================
@@ -59,9 +62,15 @@ export default function AISignal(props: AISignalProps) {
 
     if (!last) return;
 
-    if (last.time === lastCandleRef.current) return;
+    const now = Date.now();
+    const candleTime = Number(last.time || 0);
+    const candleChanged = candleTime !== lastCandleRef.current;
+    const liveRefreshReady = now - lastRunRef.current >= LIVE_AI_REFRESH_MS;
 
-    lastCandleRef.current = last.time;
+    if (!candleChanged && !liveRefreshReady) return;
+
+    lastCandleRef.current = candleTime;
+    lastRunRef.current = now;
 
     const engineSignal = calculateAiSignal({
       candles,
@@ -91,8 +100,6 @@ export default function AISignal(props: AISignalProps) {
             100,
             engineSignal.confidence + Math.abs(smooth - engineSignal.score) * 0.35
           );
-
-    const now = Date.now();
 
     const newSignal: Signal = {
       score: smooth,
@@ -157,11 +164,14 @@ export default function AISignal(props: AISignalProps) {
   return (
     <div className="w-full min-w-0">
     <div
-      className="cryptonixSignalCard cx-card cx-card-sm relative p-4 transition-all duration-500"
+      className="cryptonixSignalCard cryptonixAiPrimeCard cx-card cx-card-sm relative p-4 transition-all duration-500"
       style={{
-        boxShadow: glow,
+        boxShadow: `${glow}, 0 28px 88px rgba(0,0,0,0.48), 0 0 74px rgba(242,213,138,0.11), inset 0 1px 0 rgba(255,255,255,0.14)`,
       }}
     >
+
+      <div className="cxAiCoreHalo" aria-hidden="true" />
+      <div className="cxAiCoreGrid" aria-hidden="true" />
 
       {/* BACKGROUND GLOW */}
       {/* ======================================================
@@ -171,7 +181,7 @@ export default function AISignal(props: AISignalProps) {
       <div className="relative z-10 flex items-start justify-between">
 
         {/* LEFT */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
 
           {/* SIGNAL DOT */}
           <div className="relative flex items-center justify-center">
@@ -197,11 +207,11 @@ export default function AISignal(props: AISignalProps) {
           <div>
 
             <div className="text-sm font-semibold text-white">
-              CRYPTONIX AI
+              CRYPTONIX AI CORE
             </div>
 
             <div className="mt-1 text-[10px] tracking-[0.10em] text-[var(--cx-text-muted)]">
-              {interval} • AI SIGNAL
+              {interval} • PRIMARY SIGNAL ENGINE
             </div>
 
           </div>
@@ -210,7 +220,7 @@ export default function AISignal(props: AISignalProps) {
 
         {/* DECISION */}
         <div
-          className="rounded-full border px-3 py-[6px] text-[10px] font-semibold tracking-[0.08em]"
+          className="rounded-full border px-3 py-[6px] text-[10px] font-semibold tracking-[0.08em] shadow-[0_0_22px_rgba(242,213,138,0.08)]"
           style={{
             color,
             borderColor: `${color}30`,
@@ -316,7 +326,7 @@ export default function AISignal(props: AISignalProps) {
       <div className="relative z-10 mt-2 flex items-center justify-between border-t border-white/6 pt-2">
 
         <div className="text-[9px] tracking-[0.14em] text-white/35">
-          ENTRY:{" "}
+          LIVE AI ENTRY:{" "}
           <span className="text-white/80">
             {signal.entryPrice.toFixed(2)}
           </span>

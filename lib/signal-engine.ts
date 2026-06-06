@@ -34,6 +34,21 @@ export type AiSignalResult = EngineSignal & {
   orderBookScore: number;
 };
 
+function toFiniteNumber(value: unknown, fallback = 0) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : fallback;
+}
+
+function normalizeCandles(candles: EngineCandle[]) {
+  return candles
+    .map((c) => ({
+      ...c,
+      close: toFiniteNumber(c.close),
+      volume: Math.max(0, toFiniteNumber(c.volume)),
+    }))
+    .filter((c) => c.close > 0);
+}
+
 export function clamp(value: number, min = -1, max = 1) {
   return Math.max(min, Math.min(max, value));
 }
@@ -112,8 +127,12 @@ export function getSignalTtl(interval: string, volatility: number) {
 export function calculateTechnicalSignal(candles: EngineCandle[]): EngineSignal | null {
   if (!candles || candles.length < 60) return null;
 
-  const closes = candles.map((c) => Number(c.close || 0));
-  const volumes = candles.map((c) => Number(c.volume || 0));
+  const normalized = normalizeCandles(candles);
+
+  if (normalized.length < 60) return null;
+
+  const closes = normalized.map((c) => c.close);
+  const volumes = normalized.map((c) => c.volume || 0);
   const lastPrice = closes[closes.length - 1];
 
   if (!lastPrice) return null;
@@ -167,7 +186,11 @@ export function calculateAiSignal(input: {
 
   if (!candles || candles.length < 60) return null;
 
-  const closes = candles.map((c) => Number(c.close || 0));
+  const normalized = normalizeCandles(candles);
+
+  if (normalized.length < 60) return null;
+
+  const closes = normalized.map((c) => c.close);
   const last = closes[closes.length - 1];
   const prev = closes[closes.length - 5];
 
@@ -181,10 +204,10 @@ export function calculateAiSignal(input: {
   const momentum = clamp(((last - prev) / prev) * 40);
   const rsi = calculateRSI(closes);
   const rsiScore = rsi > 70 ? -0.6 : rsi < 30 ? 0.6 : 0;
-  const buy = Number(flow?.buyVolume || 0);
-  const sell = Number(flow?.sellVolume || 0);
+  const buy = Math.max(0, toFiniteNumber(flow?.buyVolume));
+  const sell = Math.max(0, toFiniteNumber(flow?.sellVolume));
   const flowScore = buy + sell > 0 ? clamp((buy - sell) / (buy + sell)) : 0;
-  const orderBookScore = clamp(Number(orderBook?.imbalance || 0) / 0.35);
+  const orderBookScore = clamp(toFiniteNumber(orderBook?.imbalance) / 0.35);
   const techScore =
     techSignal?.decision === "LONG"
       ? 1

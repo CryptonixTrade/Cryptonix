@@ -202,11 +202,11 @@ export default function PressureSignal(props: any) {
           <div>
 
             <div className="text-base font-semibold text-white">
-              Technical Signal
+              Technical Pressure
             </div>
 
             <div className="mt-1 text-[11px] tracking-[0.10em] text-[var(--cx-text-muted)]">
-              Market pressure analysis
+              RSI / momentum / volume pressure
             </div>
 
           </div>

@@ -132,7 +132,7 @@ export default function TechnicalSignal(props: Props) {
             </div>
 
             <div className="mt-1 text-[10px] tracking-[0.10em] text-[var(--cx-text-muted)]">
-              {interval} • TECHNICAL MARKET STRUCTURE
+              {interval} • EMA STRUCTURE / MOMENTUM
             </div>
 
           </div>
@@ -240,7 +240,7 @@ export default function TechnicalSignal(props: Props) {
       <div className="relative z-10 mt-2 flex items-center justify-between border-t border-white/6 pt-2">
 
         <div className="text-[7px] tracking-[0.14em] text-white/35">
-          CRYPTONIX ANALYTICS CORE
+          TREND STRUCTURE MODEL
         </div>
 
         <div className="text-[9px] tracking-[0.14em] text-orange-300">

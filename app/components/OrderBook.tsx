@@ -34,13 +34,16 @@ export default function OrderBook(props: Props) {
       try {
         const data = JSON.parse(e.data);
 
-        if (!data?.b || !data?.a) return;
+        const rawBids = data?.b || data?.bids;
+        const rawAsks = data?.a || data?.asks;
 
-        const bids = data.b.map(
+        if (!rawBids || !rawAsks) return;
+
+        const bids = rawBids.map(
           (x: any) => +x[1]
         );
 
-        const asks = data.a.map(
+        const asks = rawAsks.map(
           (x: any) => +x[1]
         );
 
@@ -140,7 +143,7 @@ export default function OrderBook(props: Props) {
           </div>
 
           <div className="mt-1 text-[11px] tracking-[0.10em] text-[var(--cx-text-muted)]">
-            Real-time market depth
+            Live order book imbalance
           </div>
 
         </div>
