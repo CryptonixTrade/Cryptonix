@@ -84,6 +84,12 @@ const [selectedAmount, setSelectedAmount] = useState("");
     srcSet="/CRYPTONIX-mobile.png"
   />
 
+  {/* TABLET */}
+  <source
+    media="(min-width: 769px) and (max-width: 1180px)"
+    srcSet="/planshet.png"
+  />
+
   {/* DESKTOP */}
   <img
     src="/CRYPTONIX.PNG"
@@ -301,6 +307,13 @@ const [selectedAmount, setSelectedAmount] = useState("");
         @media (max-width: 768px) {
           .container {
             background: url('/CRYPTONIX-mobile.png') no-repeat center;
+            background-size: cover;
+          }
+        }
+
+        @media (min-width: 769px) and (max-width: 1180px) {
+          .container {
+            background: url('/planshet.png') no-repeat center;
             background-size: cover;
           }
         }

@@ -260,11 +260,14 @@ export default function TradePanel(props: any) {
 
         {/* LONG */}
         <button
+          disabled={isBlocked}
           onClick={() => handleClick("LONG")}
           className={`
             rounded-2xl border py-3 text-sm font-bold tracking-[0.16em] transition-all duration-300
             ${
-              selected === "LONG"
+              isBlocked
+                ? "cursor-not-allowed border-white/10 bg-white/[0.03] text-gray-600"
+                : selected === "LONG"
                 ? "border-green-400 bg-green-400 text-black shadow-[0_0_20px_rgba(45,255,135,0.25)]"
                 : "border-green-500/20 bg-green-500/10 text-green-400 hover:bg-green-500/20"
             }
@@ -275,11 +278,14 @@ export default function TradePanel(props: any) {
 
         {/* SHORT */}
         <button
+          disabled={isBlocked}
           onClick={() => handleClick("SHORT")}
           className={`
             rounded-2xl border py-3 text-sm font-bold tracking-[0.16em] transition-all duration-300
             ${
-              selected === "SHORT"
+              isBlocked
+                ? "cursor-not-allowed border-white/10 bg-white/[0.03] text-gray-600"
+                : selected === "SHORT"
                 ? "border-red-400 bg-red-400 text-black shadow-[0_0_20px_rgba(255,94,94,0.25)]"
                 : "border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20"
             }

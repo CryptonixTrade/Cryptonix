@@ -11,6 +11,13 @@ import Search from "@/app/components/Search";
 import Header from "@/app/components/Header";
 import TradePanel from "@/app/components/TradePanel";
 import AISignal from "@/app/components/AISignal";
+import OrderBook from "@/app/components/OrderBook";
+
+type OrderBookState = {
+  imbalance: number;
+  bidVolume: number;
+  askVolume: number;
+};
 
 export default function LiveTrading() {
 
@@ -33,6 +40,12 @@ export default function LiveTrading() {
   const [tradeFlow, setTradeFlow] = useState({
     buyVolume: 0,
     sellVolume: 0
+  });
+
+  const [orderBook, setOrderBook] = useState<OrderBookState>({
+    imbalance: 0,
+    bidVolume: 0,
+    askVolume: 0
   });
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
@@ -202,6 +215,22 @@ export default function LiveTrading() {
 
   }, [symbol, interval]);
 
+  function calculateATR(period = 14) {
+    if (candles.length < period + 1) return null;
+
+    const recent = candles.slice(-(period + 1));
+    const ranges = recent.slice(1).map((c: any, index: number) => {
+      const prevClose = recent[index].close;
+      return Math.max(
+        c.high - c.low,
+        Math.abs(c.high - prevClose),
+        Math.abs(c.low - prevClose)
+      );
+    });
+
+    return ranges.reduce((sum: number, value: number) => sum + value, 0) / ranges.length;
+  }
+
   function createTrade(type:"LONG"|"SHORT"){
     if (selected === type) {
       setSelected(null);
@@ -220,16 +249,25 @@ export default function LiveTrading() {
     const lows = candles.slice(-10).map((c:any)=>c.low);
 
     const range = Math.max(...highs) - Math.min(...lows);
+    const atr = calculateATR();
 
     const entry = price;
+    const fallbackDistance = range * 0.5;
+    const stopDistance = Math.max(
+      atr ? atr * 1.4 : fallbackDistance,
+      fallbackDistance,
+      entry * 0.001
+    );
+    const takeDistance = stopDistance * 1.8;
+
     let stop, take;
 
     if(type === "LONG"){
-      stop = entry - range * 0.5;
-      take = entry + range;
+      stop = entry - stopDistance;
+      take = entry + takeDistance;
     } else {
-      stop = entry + range * 0.5;
-      take = entry - range;
+      stop = entry + stopDistance;
+      take = entry - takeDistance;
     }
 
     setTrade({
@@ -274,6 +312,7 @@ export default function LiveTrading() {
   candles={candles}
   onSignal={setAiSignal}
   flow={tradeFlow}
+  orderBook={orderBook}
   interval={interval}
   techSignal={techSignal}
 />
@@ -302,6 +341,11 @@ export default function LiveTrading() {
           />
 
           <PressureSignal candles={candles}/>
+
+          <OrderBook
+            symbol={symbol}
+            onUpdate={setOrderBook}
+          />
         </div>
 
       </div>

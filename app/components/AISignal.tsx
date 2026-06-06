@@ -24,6 +24,11 @@ type AISignalProps = {
   candles: any[];
   onSignal: (signal: any) => void;
   flow: any;
+  orderBook?: {
+    imbalance: number;
+    bidVolume: number;
+    askVolume: number;
+  };
   interval: string;
   techSignal: any;
 };
@@ -33,7 +38,9 @@ export default function AISignal(props: AISignalProps) {
     candles = [],
     onSignal,
     flow,
+    orderBook,
     interval = "1m",
+    techSignal,
   } = props;
 
   const [signal, setSignal] = useState<Signal | null>(null);
@@ -153,6 +160,15 @@ export default function AISignal(props: AISignalProps) {
         ? clamp((buy - sell) / (buy + sell))
         : 0;
 
+    const orderBookScore = clamp((orderBook?.imbalance ?? 0) / 0.35);
+
+    const techScore =
+      techSignal?.decision === "LONG"
+        ? 1
+        : techSignal?.decision === "SHORT"
+        ? -1
+        : 0;
+
     const phase = detectPhase(closes);
 
     const volatility = Math.abs(last - prev) / last;
@@ -164,10 +180,12 @@ export default function AISignal(props: AISignalProps) {
     if (trend !== higherTrend) penalty *= 0.7;
     if (Math.abs(flowScore) < 0.1) penalty *= 0.8;
     if (volatility < 0.00025) penalty *= 0.75;
+    if (orderBookScore && Math.sign(orderBookScore) !== trend) penalty *= 0.82;
+    if (techScore && techScore !== trend) penalty *= 0.78;
 
     const agreement =
-      (trend > 0 && momentum > 0 && flowScore > 0) ||
-      (trend < 0 && momentum < 0 && flowScore < 0);
+      (trend > 0 && momentum > 0 && flowScore > 0 && orderBookScore >= -0.15) ||
+      (trend < 0 && momentum < 0 && flowScore < 0 && orderBookScore <= 0.15);
 
     if (!agreement) penalty *= 0.7;
 
@@ -183,9 +201,11 @@ export default function AISignal(props: AISignalProps) {
     const raw =
       (
         trend * 0.3 +
-        momentum * 0.25 +
-        flowScore * 0.25 +
-        rsiScore * 0.2
+        momentum * 0.22 +
+        flowScore * 0.18 +
+        orderBookScore * 0.16 +
+        techScore * 0.08 +
+        rsiScore * 0.06
       ) *
       phaseBoost *
       penalty;
@@ -234,11 +254,17 @@ export default function AISignal(props: AISignalProps) {
 
     const buy = flow?.buyVolume ?? 0;
     const sell = flow?.sellVolume ?? 0;
+    const orderBookStrength = Math.abs(orderBook?.imbalance ?? 0);
+    const techConfirm =
+      (decision === "LONG" && techSignal?.decision === "LONG") ||
+      (decision === "SHORT" && techSignal?.decision === "SHORT");
 
     const confidence = Math.min(
       100,
       Math.abs(smooth - 50) * 0.6 +
         Math.abs(buy - sell) * 0.3 +
+        orderBookStrength * 35 +
+        (techConfirm ? 8 : 0) +
         vol * 200
     );
 
