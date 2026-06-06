@@ -270,13 +270,15 @@ const legacyTabletFallbackScript = `
 
     var form = qs(".loginBox", root);
     if (form) {
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        fallbackLogin(form);
-      }, true);
       addTap(qs('button[type="submit"]', form), function (event) {
         event.preventDefault();
-        fallbackLogin(form);
+        var usernameInput = qs('input[name="username"]', form);
+        var passwordInput = qs('input[name="password"]', form);
+        if (!usernameInput || !usernameInput.value || !passwordInput || !passwordInput.value) {
+          alert("Enter username and password");
+          return;
+        }
+        form.submit();
       });
     }
   }
@@ -391,21 +393,32 @@ const [selectedAmount, setSelectedAmount] = useState("");
       
       <CryptonixPortal />
 
-      <form onSubmit={handleLogin} className="loginBox">
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+	      <form
+	        action="/api/legacy-login"
+	        method="post"
+	        onSubmit={handleLogin}
+	        className="loginBox"
+	      >
+	        <input
+	          ref={inputRef}
+	          name="username"
+	          type="text"
+	          placeholder="Username"
+	          autoComplete="username"
+	          required
+	          value={username}
+	          onChange={(e) => setUsername(e.target.value)}
+	        />
+	
+	        <input
+	          name="password"
+	          type="password"
+	          placeholder="Password"
+	          autoComplete="current-password"
+	          required
+	          value={password}
+	          onChange={(e) => setPassword(e.target.value)}
+	        />
 
         <button type="submit" disabled={loading}>
           {loading ? "Loading..." : "Login"}
