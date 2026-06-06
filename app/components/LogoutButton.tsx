@@ -1,7 +1,5 @@
 "use client";
 
-import { signOut } from "next-auth/react";
-
 import { usePathname } from "next/navigation";
 
 export default function LogoutButton() {
@@ -13,18 +11,21 @@ export default function LogoutButton() {
   }
 
   return (
-    <button
-      onClick={() =>
-        signOut({
-          callbackUrl: "/login",
-        })
-      }
+    <form
+      action="/api/legacy-logout"
+      method="post"
       style={{
         position: "fixed",
 
         bottom: "20px",
         right: "20px",
 
+        zIndex: 999999,
+      }}
+    >
+      <button
+        type="submit"
+      style={{
         padding: "10px 14px",
 
         fontSize: "12px",
@@ -56,5 +57,6 @@ export default function LogoutButton() {
     >
       EXIT TERMINAL
     </button>
+    </form>
   );
 }
