@@ -347,7 +347,7 @@ export default function Chart(props: any) {
   ====================================================== */
 
   return (
-    <div className="cx-panel relative w-full overflow-hidden">
+    <div className="cryptonixChartPanel cx-panel relative w-full overflow-hidden">
 
       {/* ======================================================
           BACKGROUND GLOW
@@ -361,7 +361,7 @@ export default function Chart(props: any) {
           TOP BAR
       ====================================================== */}
 
-      <div className="relative z-10 flex items-center justify-between border-b border-white/6 px-4 py-3 md:px-5">
+      <div className="cryptonixChartHeader relative z-10 flex items-center justify-between border-b border-white/6 px-4 py-3 md:px-5">
 
         {/* LEFT */}
         <div className="flex items-center gap-3">
@@ -409,7 +409,7 @@ export default function Chart(props: any) {
 
 <div
   ref={containerRef}
-  className="
+  className="cryptonixChartArea
     relative
     w-full
     flex

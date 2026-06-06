@@ -22,7 +22,7 @@ export default function Timeframes(props: any) {
   ];
 
   return (
-    <div className="w-full">
+    <div className="cryptonixTimeframes w-full">
 
       {/* ======================================================
           HEADER

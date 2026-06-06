@@ -144,7 +144,7 @@ export default function Search(props: any) {
   return (
     <div
       ref={ref}
-      className="relative w-[180px]"
+      className="cryptonixSearch relative w-[180px]"
     >
 
       {/* ======================================================

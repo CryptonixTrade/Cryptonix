@@ -197,7 +197,10 @@ may result in:
 
   text-decoration: none;
 
-  font-size: 33px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 
   transition: 0.2s ease;
 }
@@ -228,9 +231,9 @@ may result in:
   
             background: linear-gradient(180deg, rgba(18,16,13,0.88), rgba(7,7,8,0.88));
   
-            border: 1px solid rgba(28, 19, 19, 0.08);
+            border: 1px solid rgba(242,213,138,0.16);
   
-            border-radius: 8px;
+            border-radius: 28px;
   
             padding: 30px;
   

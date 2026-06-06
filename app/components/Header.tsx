@@ -13,7 +13,7 @@ export default function Header(props: any) {
   const isUp = change >= 0;
 
   return (
-    <div className="cx-panel relative mb-4 overflow-hidden">
+    <div className="cryptonixHeader cx-panel relative mb-4 overflow-hidden">
 
       {/* ===== TOP GLOW ===== */}
       <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-80" />
@@ -108,9 +108,9 @@ export default function Header(props: any) {
         <div className="grid grid-cols-2 gap-3 md:gap-4">
 
           {/* SPOT */}
-          <div className="cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
+          <div className="cryptonixHeaderMetric cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
 
-            <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
               Spot
             </div>
 
@@ -126,9 +126,9 @@ export default function Header(props: any) {
           </div>
 
           {/* FUTURES */}
-          <div className="cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
+          <div className="cryptonixHeaderMetric cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
 
-            <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
               Futures
             </div>
 

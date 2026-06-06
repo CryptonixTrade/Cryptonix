@@ -1177,6 +1177,76 @@ const [selectedAmount, setSelectedAmount] = useState("");
   }
 }
 
+/* =========================================
+   CRYPTONIX LUXURY ENTRY PASS
+========================================= */
+
+.loginBox {
+  border: 1px solid rgba(242,213,138,0.16);
+  background:
+    linear-gradient(180deg, rgba(18,16,13,0.42), rgba(3,3,3,0.18));
+  box-shadow:
+    0 18px 58px rgba(0,0,0,0.36),
+    0 0 34px rgba(215,168,79,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.045);
+}
+
+.loginBox input {
+  border: 1px solid rgba(242,213,138,0.14);
+  background: rgba(3,3,3,0.46);
+  color: #f4efe3;
+}
+
+.loginBox button {
+  color: #15100a;
+  background:
+    linear-gradient(
+      135deg,
+      #8b5e18,
+      #d7a84f,
+      #f2d58a
+    );
+}
+
+.planCard {
+  border: 1px solid rgba(242,213,138,0.18);
+  background:
+    linear-gradient(180deg, rgba(18,16,13,0.86), rgba(7,7,8,0.94));
+  box-shadow:
+    0 18px 58px rgba(0,0,0,0.42),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.planCard h3 {
+  color: #f2d58a;
+}
+
+.planCard p {
+  color: #f4efe3;
+}
+
+.cryptoBtn {
+  background:
+    linear-gradient(
+      135deg,
+      #8b5e18,
+      #d7a84f,
+      #f2d58a
+    ) !important;
+  box-shadow:
+    0 10px 26px rgba(0,0,0,0.28),
+    0 0 20px rgba(215,168,79,0.12);
+}
+
+.termsLabel {
+  color: rgba(244,239,227,0.88);
+  text-shadow: 0 1px 10px rgba(0,0,0,0.8);
+}
+
+.footerLinks a {
+  color: #f2d58a;
+}
+
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -1443,7 +1513,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
     bottom: 57px;
 
     width: 42px;
-    height: 2px;
+    height: 42px;
   }
 
   .tgButton {

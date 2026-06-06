@@ -370,6 +370,7 @@ export default function LiveTrading() {
   return (
     <main className="cryptonixTerminal cx-terminal min-h-screen w-full flex flex-col text-yellow-400 p-2 overflow-x-visible">
 
+      <div className="cryptonixWorkspace">
       <Header
         symbol={symbol}
         price={price}
@@ -378,9 +379,9 @@ export default function LiveTrading() {
         changePercent={changePercent}
       />
 
-<div className="flex flex-col lg:flex-row gap-2 w-full overflow-x-visible">
+<div className="cryptonixDashboardGrid flex flex-col lg:flex-row gap-2 w-full overflow-x-visible">
 
-        <div className="flex flex-col flex-1 gap-2">
+        <div className="cryptonixMainColumn flex flex-col flex-1 gap-2">
           <div className="cryptonixControls flex flex-col md:flex-row gap-2">
             <Search
               coins={coins}
@@ -421,7 +422,7 @@ export default function LiveTrading() {
           </div>
         </div>
 
-        <div className="hidden lg:flex flex-col gap-2 min-w-[260px] max-w-[260px]">
+        <div className="cryptonixSideColumn hidden lg:flex flex-col gap-2 min-w-[260px] max-w-[260px]">
           <TradePanel
             trade={selected ? trade : null}
             selected={selected}
@@ -438,6 +439,7 @@ export default function LiveTrading() {
           />
         </div>
 
+      </div>
       </div>
     </main>
   );
