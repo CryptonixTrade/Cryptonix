@@ -7,7 +7,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   // 💣 ЖЁСТКАЯ БЛОКИРОВКА
-  if (!session) {
+  if (!session?.user?.id) {
     redirect("/login");
   }
 

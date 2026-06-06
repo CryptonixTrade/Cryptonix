@@ -5,6 +5,9 @@ import Cryptonix from "./Cryptonix";
 
 const tabletTerminalScript = `
 (function () {
+  if (window.__cryptonixTabletTerminalFallback) return;
+  window.__cryptonixTabletTerminalFallback = true;
+
   function isTablet() {
     return window.innerWidth >= 600 && window.innerWidth <= 1180;
   }
@@ -39,6 +42,7 @@ const tabletTerminalScript = `
   function request(path, cb) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/market-data?" + path, true);
+    xhr.timeout = 15000;
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
       if (xhr.status >= 200 && xhr.status < 300) {
@@ -50,6 +54,9 @@ const tabletTerminalScript = `
       } else {
         cb(new Error("Request failed " + xhr.status));
       }
+    };
+    xhr.ontimeout = function () {
+      cb(new Error("Request timeout"));
     };
     xhr.send();
   }
@@ -284,9 +291,9 @@ const tabletTerminalScript = `
     refreshAll();
     window.setInterval(loadPrices, 5000);
     window.setInterval(loadCandles, 20000);
-    window.onresize = function () {
+    window.addEventListener("resize", function () {
       if (isTablet()) drawChart();
-    };
+    });
   }
 
   if (document.readyState === "loading") {

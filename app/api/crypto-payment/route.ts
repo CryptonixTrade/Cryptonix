@@ -17,8 +17,7 @@ export async function POST(req: Request) {
       email,
     } = body;
 
-    const response =
-    await resend.emails.send({
+    const response = await resend.emails.send({
       from:
         "Cryptonix <onboarding@resend.dev>",
   
@@ -38,8 +37,10 @@ export async function POST(req: Request) {
         <p><b>Email:</b> ${email}</p>
       `,
     });
-  
-  console.log(response);
+
+    if (response.error) {
+      throw response.error;
+    }
 
     return NextResponse.json({
       success: true,
