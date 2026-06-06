@@ -19,6 +19,18 @@ type OrderBookState = {
   askVolume: number;
 };
 
+async function fetchMarketData(path: string) {
+  const res = await fetch(`/api/market-data?${path}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error(`Market data failed: ${res.status}`);
+  }
+
+  return res.json();
+}
+
 export default function LiveTrading() {
 
   const [coins, setCoins] = useState<any[]>([]);
@@ -48,23 +60,27 @@ export default function LiveTrading() {
     askVolume: 0
   });
 
-  const [techSignal, setTechSignal] = useState<Signal | null>(null);
-
-  useEffect(() => {
-    const savedSymbol = localStorage.getItem("symbol");
-    const savedInterval = localStorage.getItem("interval");
-
-    if (savedSymbol) setSymbol(savedSymbol);
-    if (savedInterval) setIntervalState(savedInterval);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("symbol", symbol);
-  }, [symbol]);
-
-  useEffect(() => {
-    localStorage.setItem("interval", interval);
-  }, [interval]);
+	  const [techSignal, setTechSignal] = useState<Signal | null>(null);
+	
+	  useEffect(() => {
+	    const savedSymbol = window.localStorage?.getItem("symbol");
+	    const savedInterval = window.localStorage?.getItem("interval");
+	
+	    if (savedSymbol) setSymbol(savedSymbol);
+	    if (savedInterval) setIntervalState(savedInterval);
+	  }, []);
+	
+	  useEffect(() => {
+	    try {
+	      window.localStorage?.setItem("symbol", symbol);
+	    } catch {}
+	  }, [symbol]);
+	
+	  useEffect(() => {
+	    try {
+	      window.localStorage?.setItem("interval", interval);
+	    } catch {}
+	  }, [interval]);
 
   useEffect(() => {
     setSelected(null);
@@ -75,34 +91,49 @@ export default function LiveTrading() {
     if (!selected) setTrade(null);
   }, [selected]);
 
-  useEffect(() => {
-    const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data?.p) setBtcSpot(Number(data.p));
-    };
-
-    return () => ws.close();
-  }, []);
-
-  useEffect(() => {
-    const ws = new WebSocket("wss://fstream.binance.com/ws/btcusdt@trade");
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data?.p) setBtcFutures(Number(data.p));
-    };
-
-    return () => ws.close();
-  }, []);
-
-  useEffect(() => {
-    if (!symbol) return;
-
-    const ws = new WebSocket(
-      `wss://fstream.binance.com/ws/${symbol.toLowerCase()}@trade`
-    );
+	  useEffect(() => {
+	    let ws: WebSocket | null = null;
+	    try {
+	      ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+	    } catch {
+	      return;
+	    }
+	
+	    ws.onmessage = (e) => {
+	      const data = JSON.parse(e.data);
+	      if (data?.p) setBtcSpot(Number(data.p));
+	    };
+	
+	    return () => ws?.close();
+	  }, []);
+	
+	  useEffect(() => {
+	    let ws: WebSocket | null = null;
+	    try {
+	      ws = new WebSocket("wss://fstream.binance.com/ws/btcusdt@trade");
+	    } catch {
+	      return;
+	    }
+	
+	    ws.onmessage = (e) => {
+	      const data = JSON.parse(e.data);
+	      if (data?.p) setBtcFutures(Number(data.p));
+	    };
+	
+	    return () => ws?.close();
+	  }, []);
+	
+	  useEffect(() => {
+	    if (!symbol) return;
+	
+	    let ws: WebSocket | null = null;
+	    try {
+	      ws = new WebSocket(
+	        `wss://fstream.binance.com/ws/${symbol.toLowerCase()}@trade`
+	      );
+	    } catch {
+	      return;
+	    }
 
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
@@ -125,17 +156,16 @@ export default function LiveTrading() {
       }, 2000);
     };
 
-    return () => ws.close();
-  }, [symbol]);
-
-  useEffect(() => {
-    async function fetchCoins(){
-      try {
-        const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-        const data = await res.json();
-
-        const usdt = data.filter((c:any)=>c.symbol.endsWith("USDT"));
-        setCoins(usdt);
+	    return () => ws?.close();
+	  }, [symbol]);
+	
+	  useEffect(() => {
+	    async function fetchCoins(){
+	      try {
+	        const data = await fetchMarketData("type=tickers");
+	
+	        const usdt = data.filter((c:any)=>c.symbol.endsWith("USDT"));
+	        setCoins(usdt);
       } catch (e) {
         console.error("Coins fetch error", e);
       }
@@ -144,12 +174,11 @@ export default function LiveTrading() {
     fetchCoins();
   }, []);
 
-  async function fetchData() {
-    try {
-      const res = await fetch(
-        `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=100`
-      );
-      const data = await res.json();
+	  async function fetchData() {
+	    try {
+	      const data = await fetchMarketData(
+	        `type=klines&symbol=${symbol}&interval=${interval}&limit=100`
+	      );
 
       const mapped = data.map((c:any)=>({
         time: c[0] / 1000,
@@ -166,16 +195,56 @@ export default function LiveTrading() {
     }
   }
 
-  useEffect(()=>{
-    fetchData();
-  },[symbol, interval]);
+	  useEffect(()=>{
+	    fetchData();
+	  },[symbol, interval]);
 
-  useEffect(() => {
-    if (!symbol || !interval) return;
+	  useEffect(() => {
+	    if (!symbol) return;
 
-    const ws = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${interval}`
-    );
+	    let cancelled = false;
+
+	    async function fetchPrices() {
+	      try {
+	        const data = await fetchMarketData(`type=prices&symbol=${symbol}`);
+
+	        if (cancelled) return;
+	        if (data?.price) setPrice(Number(data.price));
+	        if (data?.btcSpot) setBtcSpot(Number(data.btcSpot));
+	        if (data?.btcFutures) setBtcFutures(Number(data.btcFutures));
+	      } catch (e) {
+	        console.error("Prices fetch error", e);
+	      }
+	    }
+
+	    fetchPrices();
+	    const timer = window.setInterval(fetchPrices, 5000);
+
+	    return () => {
+	      cancelled = true;
+	      window.clearInterval(timer);
+	    };
+	  }, [symbol]);
+
+	  useEffect(() => {
+	    if (!symbol || !interval) return;
+
+	    const timer = window.setInterval(fetchData, 15000);
+
+	    return () => window.clearInterval(timer);
+	  }, [symbol, interval]);
+	
+	  useEffect(() => {
+	    if (!symbol || !interval) return;
+	
+	    let ws: WebSocket | null = null;
+	    try {
+	      ws = new WebSocket(
+	        `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${interval}`
+	      );
+	    } catch {
+	      return;
+	    }
 
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
@@ -211,7 +280,7 @@ export default function LiveTrading() {
       });
     };
 
-    return () => ws.close();
+	    return () => ws?.close();
 
   }, [symbol, interval]);
 
