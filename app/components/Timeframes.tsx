@@ -4,6 +4,7 @@ export default function Timeframes(props: any) {
   const {
     interval = "1m",
     setIntervalState = () => {},
+    signals = {},
   } = props;
 
   const tf = [
@@ -55,6 +56,13 @@ export default function Timeframes(props: any) {
 
         {tf.map((t) => {
           const active = interval === t;
+          const signal = signals?.[t];
+          const signalClass =
+            signal === "LONG"
+              ? "cxTimeframeSignalLong"
+              : signal === "SHORT"
+              ? "cxTimeframeSignalShort"
+              : "";
 
           return (
             <button
@@ -66,7 +74,7 @@ export default function Timeframes(props: any) {
               }}
               disabled={active}
               className={`
-                group relative flex h-[40px] min-w-[44px] items-center justify-center
+                cxTimeframeButton group relative flex h-[40px] min-w-[44px] items-center justify-center
                 overflow-hidden rounded-full border px-3
                 text-[11px] font-semibold
                 transition-all duration-500
@@ -76,6 +84,11 @@ export default function Timeframes(props: any) {
                     : "border-white/10 bg-white/[0.035] text-white/[0.58] hover:border-white/[0.22] hover:bg-white/[0.075] hover:text-white"
                 }
               `}
+              title={
+                signal
+                  ? `${t}: ${signal} signal`
+                  : `${t}: no active signal`
+              }
             >
 
               {/* GLOW */}
@@ -96,6 +109,13 @@ export default function Timeframes(props: any) {
               <span className="relative z-10">
                 {t}
               </span>
+
+              {signal && (
+                <span
+                  className={`cxTimeframeSignal ${signalClass}`}
+                  aria-label={`${signal} signal on ${t}`}
+                />
+              )}
 
             </button>
           );

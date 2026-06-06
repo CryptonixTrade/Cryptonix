@@ -12,12 +12,28 @@ import Header from "@/app/components/Header";
 import TradePanel from "@/app/components/TradePanel";
 import AISignal from "@/app/components/AISignal";
 import OrderBook from "@/app/components/OrderBook";
+import { calculateTechnicalSignal } from "@/lib/signal-engine";
 
 type OrderBookState = {
   imbalance: number;
   bidVolume: number;
   askVolume: number;
 };
+
+const TIMEFRAMES = [
+  "1m",
+  "3m",
+  "5m",
+  "15m",
+  "30m",
+  "1h",
+  "2h",
+  "4h",
+  "12h",
+  "1d",
+  "1w",
+  "1M",
+];
 
 function isTabletViewport() {
   return window.innerWidth >= 600 && window.innerWidth <= 1180;
@@ -65,6 +81,7 @@ export default function LiveTrading() {
   });
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
+  const [timeframeSignals, setTimeframeSignals] = useState<Record<string, string>>({});
   const selectedTicker = useMemo(
     () => coins.find((coin: any) => coin.symbol === symbol),
     [coins, symbol]
@@ -136,7 +153,7 @@ export default function LiveTrading() {
 	    if (isTabletViewport()) return;
 	
 	    const ws = new WebSocket(
-      `wss://fstream.binance.com/ws/${symbol.toLowerCase()}@trade`
+      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@trade`
     );
 
     ws.onmessage = (e) => {
@@ -179,8 +196,10 @@ export default function LiveTrading() {
 	          data = await res.json();
 	        }
 	
-	        const usdt = data.filter((c:any)=>c.symbol.endsWith("USDT"));
-        setCoins(usdt);
+        const markets = data
+          .filter((c:any) => c?.symbol && Number(c.lastPrice || 0) > 0)
+          .sort((a:any, b:any) => Number(b.quoteVolume || 0) - Number(a.quoteVolume || 0));
+        setCoins(markets);
       } catch (e) {
         console.error("Coins fetch error", e);
       }
@@ -222,6 +241,65 @@ export default function LiveTrading() {
 	  useEffect(()=>{
 	    fetchData();
 	  },[symbol, interval]);
+
+	  useEffect(() => {
+	    if (!symbol) return;
+
+	    let cancelled = false;
+
+	    async function loadTimeframeSignals() {
+	      try {
+	        const entries = await Promise.all(
+	          TIMEFRAMES.map(async (timeframe) => {
+	            let data;
+
+	            if (isTabletViewport()) {
+	              data = await fetchTabletMarketData(
+	                `type=klines&symbol=${symbol}&interval=${timeframe}&limit=100`
+	              );
+	            } else {
+	              const res = await fetch(
+	                `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=100`
+	              );
+
+	              if (!res.ok) return [timeframe, ""] as const;
+	              data = await res.json();
+	            }
+
+	            const mapped = data.map((c:any)=>({
+	              time: c[0] / 1000,
+	              open: +c[1],
+	              high: +c[2],
+	              low: +c[3],
+	              close: +c[4],
+	              volume: +c[5]
+	            }));
+	            const signal = calculateTechnicalSignal(mapped);
+
+	            return [timeframe, signal?.decision || ""] as const;
+	          })
+	        );
+
+	        if (cancelled) return;
+
+	        setTimeframeSignals(
+	          Object.fromEntries(
+	            entries.filter(([, decision]) => decision && decision !== "NO TRADE")
+	          )
+	        );
+	      } catch (e) {
+	        console.error("Timeframe signals fetch error", e);
+	      }
+	    }
+
+	    loadTimeframeSignals();
+	    const timer = window.setInterval(loadTimeframeSignals, 60000);
+
+	    return () => {
+	      cancelled = true;
+	      window.clearInterval(timer);
+	    };
+	  }, [symbol]);
 
 	  useEffect(() => {
 	    if (!symbol || !isTabletViewport()) return;
@@ -388,7 +466,11 @@ export default function LiveTrading() {
               setSymbol={setSymbol}
               symbol={symbol}
             />
-            <Timeframes interval={interval} setIntervalState={setIntervalState}/>
+            <Timeframes
+              interval={interval}
+              setIntervalState={setIntervalState}
+              signals={timeframeSignals}
+            />
           </div>
 
           <div className="cryptonixSignalGrid cxReveal grid grid-cols-2 gap-3 items-start">

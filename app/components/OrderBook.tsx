@@ -27,7 +27,7 @@ export default function OrderBook(props: Props) {
     if (!symbol) return;
 
     const ws = new WebSocket(
-      `wss://fstream.binance.com/ws/${symbol.toLowerCase()}@depth10@100ms`
+      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth10@100ms`
     );
 
     ws.onmessage = (e) => {

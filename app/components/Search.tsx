@@ -88,9 +88,6 @@ export default function Search(props: any) {
 
     const filtered = coins
       .filter((c: any) =>
-        c.symbol.endsWith("USDT")
-      )
-      .filter((c: any) =>
         c.symbol
           .toLowerCase()
           .includes(search.toLowerCase())
@@ -114,7 +111,7 @@ export default function Search(props: any) {
       }
     );
 
-    return sorted.slice(0, 50);
+    return sorted.slice(0, search.trim() ? 120 : 80);
   }, [coins, search, favorites]);
 
   /* ======================================================
