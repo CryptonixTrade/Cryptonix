@@ -390,6 +390,51 @@ const [selectedAmount, setSelectedAmount] = useState("");
 </picture>
 
 	      <div className="loginOverlay" />
+
+      <div className="loginTopBar">
+        <div className="loginBrandLockup">
+          <div className="loginMiniMark">
+            <span />
+            <span />
+          </div>
+          <span>CRYPTONIX</span>
+        </div>
+
+        <div className="loginNavPill">
+          AI Wealth OS
+        </div>
+      </div>
+
+      <section className="loginHeroStage">
+        <div className="cxBrandMark loginBrandMark">
+          <span className="cxBrandNode cxBrandNodeTl" />
+          <span className="cxBrandNode cxBrandNodeTr" />
+          <span className="cxBrandNode cxBrandNodeBl" />
+          <span className="cxBrandNode cxBrandNodeBr" />
+          <span className="cxBrandBar cxBrandBarA" />
+          <span className="cxBrandBar cxBrandBarB" />
+          <span className="cxBrandCircuit cxBrandCircuitLeft" />
+          <span className="cxBrandCircuit cxBrandCircuitRight" />
+        </div>
+
+        <div className="loginEyebrow">Private AI market intelligence</div>
+
+        <h1>
+          Command the future
+          <span>of digital wealth.</span>
+        </h1>
+
+        <p>
+          A cinematic trading cockpit built for clarity, signal discipline,
+          and premium decision flow.
+        </p>
+
+        <div className="loginHeroMetrics">
+          <span>Neural signals</span>
+          <span>Live market pulse</span>
+          <span>USDT access</span>
+        </div>
+      </section>
       
       <CryptonixPortal />
 
@@ -1181,23 +1226,198 @@ const [selectedAmount, setSelectedAmount] = useState("");
    CRYPTONIX LUXURY ENTRY PASS
 ========================================= */
 
-.loginBox {
-  border: 1px solid rgba(242,213,138,0.16);
+.bgImage {
+  transform: scale(1.015);
+  filter: saturate(0.86) contrast(1.08) brightness(0.72);
+}
+
+.loginOverlay {
   background:
-    linear-gradient(180deg, rgba(18,16,13,0.42), rgba(3,3,3,0.18));
+    linear-gradient(90deg, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.48) 34%, rgba(0,0,0,0.34) 58%, rgba(0,0,0,0.72) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.38), rgba(0,0,0,0.08) 42%, rgba(0,0,0,0.74)),
+    radial-gradient(circle at 50% 38%, rgba(242,213,138,0.12), transparent 38%);
+}
+
+.loginTopBar {
+  position: fixed;
+  top: 22px;
+  left: 30px;
+  right: 30px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.loginBrandLockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255,255,255,0.88);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.loginMiniMark {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(242,213,138,0.24);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.055);
   box-shadow:
-    0 18px 58px rgba(0,0,0,0.36),
-    0 0 34px rgba(215,168,79,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.045);
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 0 26px rgba(242,213,138,0.12);
+}
+
+.loginMiniMark span {
+  position: absolute;
+  left: 7px;
+  top: 14px;
+  width: 16px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5e18, #f2d58a, #8b5e18);
+}
+
+.loginMiniMark span:first-child {
+  transform: rotate(45deg);
+}
+
+.loginMiniMark span:last-child {
+  transform: rotate(-45deg);
+}
+
+.loginNavPill {
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.055);
+  color: rgba(255,255,255,0.68);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.loginHeroStage {
+  position: fixed;
+  left: clamp(28px, 6vw, 96px);
+  top: 15vh;
+  z-index: 3;
+  width: min(560px, 45vw);
+  color: white;
+  pointer-events: none;
+  animation: loginReveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.loginBrandMark {
+  width: 132px;
+  height: 122px;
+  margin-bottom: 28px;
+}
+
+.loginEyebrow {
+  color: rgba(255,255,255,0.54);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.loginHeroStage h1 {
+  margin: 18px 0 0;
+  max-width: 660px;
+  color: #fff;
+  font-size: clamp(48px, 6.2vw, 92px);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.loginHeroStage h1 span {
+  display: block;
+  color: rgba(255,255,255,0.72);
+}
+
+.loginHeroStage p {
+  margin: 24px 0 0;
+  max-width: 470px;
+  color: rgba(255,255,255,0.62);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.loginHeroMetrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.loginHeroMetrics span {
+  border: 1px solid rgba(255,255,255,0.11);
+  border-radius: 999px;
+  padding: 9px 12px;
+  background: rgba(255,255,255,0.055);
+  color: rgba(255,255,255,0.62);
+  font-size: 12px;
+  font-weight: 650;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.loginBox {
+  position: fixed;
+  top: clamp(96px, 14vh, 148px);
+  right: clamp(24px, 5vw, 74px);
+  z-index: 18;
+  width: 330px;
+  max-width: calc(100vw - 48px);
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 30px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.13), rgba(255,255,255,0.035)),
+    rgba(0,0,0,0.34);
+  box-shadow:
+    0 34px 110px rgba(0,0,0,0.48),
+    0 0 80px rgba(242,213,138,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+  animation: loginReveal 0.9s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .loginBox input {
-  border: 1px solid rgba(242,213,138,0.14);
-  background: rgba(3,3,3,0.46);
-  color: #f4efe3;
+  height: 48px;
+  margin-bottom: 12px;
+  padding: 0 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  background: rgba(0,0,0,0.28);
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+.loginBox input::placeholder {
+  color: rgba(255,255,255,0.42);
+}
+
+.loginBox input:focus {
+  border-color: rgba(242,213,138,0.35);
+  box-shadow: 0 0 0 4px rgba(242,213,138,0.08);
 }
 
 .loginBox button {
+  height: 48px;
+  margin-top: 2px;
+  border-radius: 999px;
   color: #15100a;
   background:
     linear-gradient(
@@ -1206,26 +1426,53 @@ const [selectedAmount, setSelectedAmount] = useState("");
       #d7a84f,
       #f2d58a
     );
+  font-size: 14px;
+  font-weight: 750;
+  box-shadow:
+    0 18px 38px rgba(0,0,0,0.28),
+    0 0 30px rgba(242,213,138,0.14);
 }
 
 .planCard {
-  border: 1px solid rgba(242,213,138,0.18);
+  width: 154px;
+  padding: 16px;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 28px;
   background:
-    linear-gradient(180deg, rgba(18,16,13,0.86), rgba(7,7,8,0.94));
+    linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.025)),
+    rgba(0,0,0,0.38);
   box-shadow:
-    0 18px 58px rgba(0,0,0,0.42),
-    inset 0 1px 0 rgba(255,255,255,0.04);
+    0 24px 76px rgba(0,0,0,0.42),
+    inset 0 1px 0 rgba(255,255,255,0.11);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  animation: loginReveal 0.9s 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .planCard h3 {
-  color: #f2d58a;
+  color: rgba(255,255,255,0.76);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0;
 }
 
 .planCard p {
-  color: #f4efe3;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.plans {
+  left: clamp(24px, 5vw, 76px);
+  bottom: 58px;
+  gap: 12px;
 }
 
 .cryptoBtn {
+  width: 100% !important;
+  height: 34px !important;
   background:
     linear-gradient(
       135deg,
@@ -1236,15 +1483,226 @@ const [selectedAmount, setSelectedAmount] = useState("");
   box-shadow:
     0 10px 26px rgba(0,0,0,0.28),
     0 0 20px rgba(215,168,79,0.12);
+  font-size: 10px !important;
+  letter-spacing: 0.02em !important;
 }
 
 .termsLabel {
   color: rgba(244,239,227,0.88);
   text-shadow: 0 1px 10px rgba(0,0,0,0.8);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.footerLinks {
+  left: clamp(24px, 5vw, 76px);
+  bottom: 22px;
 }
 
 .footerLinks a {
   color: #f2d58a;
+}
+
+@keyframes loginReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+    filter: blur(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .loginOverlay {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.28) 42%, rgba(0,0,0,0.82)),
+      radial-gradient(circle at 50% 38%, rgba(242,213,138,0.11), transparent 42%);
+  }
+
+  .loginTopBar {
+    top: 14px;
+    left: 14px;
+    right: 14px;
+  }
+
+  .loginNavPill {
+    display: none;
+  }
+
+  .loginBrandLockup {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  .loginHeroStage {
+    left: 16px;
+    right: 16px;
+    top: 68px;
+    width: auto;
+  }
+
+  .loginBrandMark {
+    display: none;
+  }
+
+  .loginEyebrow {
+    font-size: 10px;
+  }
+
+  .loginHeroStage h1 {
+    max-width: 360px;
+    margin-top: 12px;
+    font-size: 38px;
+    letter-spacing: -0.035em;
+  }
+
+  .loginHeroStage p,
+  .loginHeroMetrics {
+    display: none;
+  }
+
+  .loginBox {
+    top: 172px;
+    left: 14px;
+    right: 14px;
+    width: auto;
+    max-width: none;
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .loginBox input {
+    height: 40px;
+    margin-bottom: 8px;
+    border-radius: 14px;
+    font-size: 13px;
+  }
+
+  .loginBox button {
+    height: 42px;
+  }
+
+  .plans {
+    left: 12px;
+    right: 12px;
+    bottom: 66px;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+
+  .planCard {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    padding: 10px 8px;
+    border-radius: 20px;
+    gap: 6px;
+  }
+
+  .planCard h3 {
+    font-size: 11px;
+  }
+
+  .planCard p {
+    font-size: 15px;
+  }
+
+  .cryptoBtn {
+    height: 28px !important;
+    font-size: 8.5px !important;
+    padding: 0 6px !important;
+  }
+
+  .binanceWrapper {
+    left: 12px;
+    right: 12px;
+    bottom: 170px;
+    width: auto;
+  }
+
+  .footerLinks {
+    left: 12px;
+    right: 58px;
+    bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .termsLabel {
+    font-size: 10.5px;
+    line-height: 1.25;
+    text-align: left;
+  }
+
+  .termsLabel input {
+    flex: 0 0 auto;
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1180px) {
+  .loginHeroStage {
+    left: 34px;
+    top: 90px;
+    width: 48vw;
+  }
+
+  .loginBrandMark {
+    display: block;
+    width: 94px;
+    height: 88px;
+    margin-bottom: 18px;
+  }
+
+  .loginHeroStage h1 {
+    font-size: clamp(42px, 6vw, 68px);
+  }
+
+  .loginHeroStage p {
+    display: block;
+    max-width: 360px;
+    font-size: 14px;
+  }
+
+  .loginBox {
+    top: 92px;
+    right: 30px;
+    left: auto;
+    width: 284px;
+    padding: 18px;
+  }
+
+  .plans {
+    left: 30px;
+    right: auto;
+    bottom: 78px;
+    gap: 10px;
+  }
+
+  .planCard {
+    width: 126px;
+    flex: 0 0 auto;
+  }
+
+  .binanceWrapper {
+    left: 30px;
+    right: auto;
+    bottom: 196px;
+    width: 340px;
+  }
+
+  .footerLinks {
+    left: 30px;
+    right: auto;
+    bottom: 32px;
+  }
 }
 
         @keyframes fadeIn {

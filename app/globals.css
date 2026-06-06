@@ -1342,6 +1342,35 @@ button:active {
     width: 100%;
   }
 
+  .cryptonixControls .cryptonixTimeframes {
+    padding: 12px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes > div:first-child {
+    margin-bottom: 8px;
+  }
+
+  .cxTimeframeRail {
+    flex-wrap: nowrap !important;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 6px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cxTimeframeRail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cxTimeframeRail button {
+    height: 32px !important;
+    min-width: 38px !important;
+    padding: 0 10px !important;
+    scroll-snap-align: start;
+    font-size: 10px !important;
+  }
+
   .cryptonixChartHeader {
     min-height: 54px;
     padding: 12px;

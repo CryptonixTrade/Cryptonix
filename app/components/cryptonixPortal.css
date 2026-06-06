@@ -519,3 +519,105 @@
       height: 166px;
     }
   }
+
+/* =========================================
+   CRYPTONIX LOGIN PREMIUM PLACEMENT
+========================================= */
+
+.portal-wrapper {
+  top: calc(15vh + 162px);
+  left: clamp(94px, calc(6vw + 66px), 162px);
+  width: 122px;
+  height: 122px;
+  z-index: 19;
+}
+
+.portal-button {
+  width: 82px;
+  height: 82px;
+  border-color: rgba(255,255,255,0.18);
+  background:
+    radial-gradient(circle at 32% 22%, rgba(255,255,255,0.72), rgba(242,213,138,0.92) 24%, rgba(132,84,17,0.98) 62%, rgba(20,12,4,0.98));
+  color: #fff9dc;
+  font-size: 9px;
+  line-height: 1.12;
+  letter-spacing: 0;
+  box-shadow:
+    0 18px 42px rgba(0,0,0,0.38),
+    0 0 28px rgba(242,213,138,0.28),
+    0 0 70px rgba(242,213,138,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    inset 0 -12px 18px rgba(65,38,8,0.28);
+}
+
+.orbit1 {
+  width: 98px;
+  height: 98px;
+}
+
+.orbit2 {
+  width: 118px;
+  height: 118px;
+}
+
+.orbit3 {
+  width: 138px;
+  height: 138px;
+}
+
+.portal-wrapper::before {
+  width: 104px;
+  height: 104px;
+}
+
+.portal-wrapper::after {
+  width: 158px;
+  height: 158px;
+  opacity: 0.28;
+}
+
+@media (max-width: 599px) {
+  .portal-wrapper {
+    top: 44%;
+    left: 50%;
+    width: 118px;
+    height: 118px;
+    z-index: 18;
+  }
+
+  .portal-button {
+    width: 76px;
+    height: 76px;
+    font-size: 8.5px;
+  }
+
+  .orbit1 {
+    width: 92px;
+    height: 92px;
+  }
+
+  .orbit2 {
+    width: 110px;
+    height: 110px;
+  }
+
+  .orbit3 {
+    width: 128px;
+    height: 128px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1180px) {
+  .portal-wrapper {
+    top: 222px;
+    left: 82px;
+    width: 112px;
+    height: 112px;
+  }
+
+  .portal-button {
+    width: 76px;
+    height: 76px;
+    font-size: 8.5px;
+  }
+}
