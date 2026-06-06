@@ -63,6 +63,7 @@ export default function Chart(props: any) {
         },
 
         textColor: "rgba(255,255,255,0.42)",
+        attributionLogo: false,
       },
 
       grid: {
@@ -144,6 +145,7 @@ export default function Chart(props: any) {
           },
 
           textColor: "rgba(255,255,255,0.20)",
+          attributionLogo: false,
         },
 
         grid: {
@@ -347,107 +349,67 @@ export default function Chart(props: any) {
   ====================================================== */
 
   return (
-    <div className="cryptonixChartPanel cx-panel relative w-full overflow-hidden">
-
-      {/* ======================================================
-          BACKGROUND GLOW
-      ====================================================== */}
-
-      <div className="pointer-events-none absolute left-[-120px] top-[-120px] h-[260px] w-[260px] rounded-full bg-orange-500/10 blur-3xl" />
-
-      <div className="pointer-events-none absolute bottom-[-120px] right-[-120px] h-[260px] w-[260px] rounded-full bg-yellow-500/10 blur-3xl" />
-
-      {/* ======================================================
-          TOP BAR
-      ====================================================== */}
-
-      <div className="cryptonixChartHeader relative z-10 flex items-center justify-between border-b border-white/6 px-4 py-3 md:px-5">
-
-        {/* LEFT */}
-        <div className="flex items-center gap-3">
-
-          <div className="relative flex items-center justify-center">
-
-            <div className="h-3 w-3 rounded-full bg-orange-400 shadow-[0_0_15px_rgba(255,170,0,0.85)]" />
-
-            <div className="absolute h-3 w-3 animate-ping rounded-full bg-orange-400/40" />
-
+    <div className="cryptonixChartPanel cx-panel cxReveal relative w-full overflow-hidden">
+      <div className="cryptonixChartHeader relative z-10 flex items-center justify-between border-b border-white/6 px-5 py-4 md:px-7">
+        <div className="flex min-w-0 items-center gap-4">
+          <div className="cxChartGlyph" aria-hidden="true">
+            <span />
+            <span />
+            <span />
           </div>
 
-          <div className="flex flex-col">
-
-          <div className="text-sm font-semibold tracking-[0.18em] text-[var(--cx-gold-soft)]">
-              CRYPTONIX CHART
+          <div className="flex min-w-0 flex-col">
+            <div className="text-base font-semibold text-white md:text-xl">
+              Market Intelligence
             </div>
 
-            <div className="text-[11px] tracking-[0.16em] text-[var(--cx-text-muted)]">
-              {symbol} • REAL-TIME MARKET ANALYSIS
+            <div className="mt-1 text-[11px] tracking-[0.14em] text-[var(--cx-text-muted)] md:text-xs">
+              {symbol} / neural price structure
             </div>
-
           </div>
-
         </div>
 
-        {/* RIGHT */}
         <div className="hidden items-center gap-2 md:flex">
+          <a
+            href="https://www.tradingview.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cx-chip px-3 py-[6px] text-white/35 transition-colors duration-500 hover:text-white/60"
+          >
+            Chart Engine
+          </a>
 
           <div className="cx-chip px-3 py-[6px] text-white/45">
-            AI POWERED
+            Neural
           </div>
 
           <div className="cx-chip px-3 py-[6px]">
-            LIVE
+            Live
           </div>
+        </div>
+      </div>
 
+      <div
+        ref={containerRef}
+        className="cryptonixChartArea relative flex min-h-[560px] w-full flex-col overflow-visible rounded-[28px] border border-[var(--cx-line-soft)] bg-[rgba(3,3,3,0.20)] backdrop-blur-xl"
+      >
+        <div ref={priceRef} className="relative min-h-[455px] w-full">
+          {(!candles || candles.length === 0) && (
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="cxLoadingPill">
+                Synchronizing Market Data
+              </div>
+            </div>
+          )}
         </div>
 
-      </div>
-
-      {/* ======================================================
-          CHART AREA
-      ====================================================== */}
-
-<div
-  ref={containerRef}
-  className="cryptonixChartArea
-    relative
-    w-full
-    flex
-    flex-col
-    rounded-[22px]
-    border
-    border-[var(--cx-line-soft)]
-    bg-[rgba(3,3,3,0.28)]
-    backdrop-blur-xl
-    overflow-visible
-    min-h-[520px]
-  "
->
-
-        {/* PRICE CHART */}
-        <div
-  ref={priceRef}
-  className="relative w-full min-h-[420px]"
->
-  {(!candles || candles.length === 0) && (
-    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-      <div className="rounded-full border border-orange-400/15 bg-black/30 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
-        Loading Market Data
-      </div>
-    </div>
-  )}
-</div>
-
-        {/* VOLUME */}
         {!isMobile && (
           <div
-          ref={volumeRef}
-          className="w-full min-h-[90px]"
-        />
+            ref={volumeRef}
+            className="min-h-[100px] w-full"
+          />
         )}
-
       </div>
-
     </div>
   );
 }

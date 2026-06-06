@@ -88,33 +88,13 @@ export default function TechnicalSignal(props: Props) {
   return (
     <div className="w-full min-w-0">
     <div
-      className="cx-card cx-card-sm relative p-[10px] transition-all duration-300"
+      className="cryptonixSignalCard cx-card cx-card-sm relative p-4 transition-all duration-500"
       style={{
         boxShadow: glow,
       }}
     >
 
       {/* BACKGROUND GLOW */}
-      <div
-        className="pointer-events-none absolute right-[-60px] top-[-60px] h-[80px] w-[80px] rounded-full blur-xl"
-        style={{
-          background:
-            signal.decision === "LONG"
-              ? "rgba(45,255,135,0.08)"
-              : signal.decision === "SHORT"
-              ? "rgba(255,94,94,0.08)"
-              : "rgba(255,170,0,0.08)",
-        }}
-      />
-
-      {/* TOP LINE */}
-      <div
-        className="absolute inset-x-0 top-0 h-[2px]"
-        style={{
-          background: `linear-gradient(to right, transparent, ${color}, transparent)`,
-        }}
-      />
-
       {/* ======================================================
           HEADER
       ====================================================== */}
@@ -147,11 +127,11 @@ export default function TechnicalSignal(props: Props) {
           {/* TITLES */}
           <div>
 
-            <div className="text-[9px] font-bold tracking-[0.10em] text-[var(--cx-gold-soft)]">
+            <div className="text-sm font-semibold text-white">
               TREND ENGINE
             </div>
 
-            <div className="mt-[2px] text-[9px] tracking-[0.16em] text-[var(--cx-text-muted)]">
+            <div className="mt-1 text-[10px] tracking-[0.10em] text-[var(--cx-text-muted)]">
               {interval} • TECHNICAL MARKET STRUCTURE
             </div>
 
@@ -161,7 +141,7 @@ export default function TechnicalSignal(props: Props) {
 
         {/* STATUS */}
         <div
-          className="rounded-full border px-2 py-[4px] text-[10px] font-semibold tracking-[0.16em]"
+          className="rounded-full border px-3 py-[6px] text-[10px] font-semibold tracking-[0.08em]"
           style={{
             color,
             borderColor: `${color}30`,
@@ -190,16 +170,16 @@ export default function TechnicalSignal(props: Props) {
         </div>
 
         {/* BAR */}
-        <div className="relative h-[10px] overflow-hidden rounded-full bg-white/5">
+        <div className="relative h-[8px] overflow-hidden rounded-full bg-white/[0.06]">
 
           {/* GRADIENT */}
           <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-zinc-700 to-green-400 opacity-80" />
 
           {/* POINTER */}
           <div
-            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-black"
+            className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-black"
             style={{
-              left: `calc(${signal.score}% - 6px)`,
+              left: `calc(${signal.score}% - 8px)`,
               background: color,
               boxShadow: `0 0 18px ${color}`,
             }}
@@ -216,7 +196,7 @@ export default function TechnicalSignal(props: Props) {
       <div className="relative z-10 mt-3 grid grid-cols-2 gap-1">
 
         {/* SCORE */}
-        <div className="rounded-2xl border border-[var(--cx-line-soft)] bg-white/[0.025] p-2">
+        <div className="cxMiniMetric">
 
           <div className="text-[7px] uppercase tracking-[0.10em] text-[var(--cx-text-muted)]">
             Technical Score
@@ -234,7 +214,7 @@ export default function TechnicalSignal(props: Props) {
         </div>
 
         {/* STATUS */}
-        <div className="rounded-2xl border border-[var(--cx-line-soft)] bg-white/[0.025] p-3">
+        <div className="cxMiniMetric">
 
           <div className="text-[7px] uppercase tracking-[0.10em] text-[var(--cx-text-muted)]">
             Direction

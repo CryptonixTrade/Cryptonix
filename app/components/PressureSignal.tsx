@@ -162,33 +162,13 @@ export default function PressureSignal(props: any) {
 
   return (
     <div
-      className="cx-panel relative overflow-hidden p-4 transition-all duration-300"
+      className="cryptonixSignalCard cx-panel relative overflow-hidden p-5 transition-all duration-500"
       style={{
         boxShadow: glow,
       }}
     >
 
       {/* BACKGROUND LIGHT */}
-      <div
-        className="pointer-events-none absolute left-[-50px] top-[-50px] h-[140px] w-[140px] rounded-full blur-3xl"
-        style={{
-          background:
-            signal.decision === "LONG"
-              ? "rgba(45,255,135,0.08)"
-              : signal.decision === "SHORT"
-              ? "rgba(255,94,94,0.08)"
-              : "rgba(255,170,0,0.08)",
-        }}
-      />
-
-      {/* TOP GLOW LINE */}
-      <div
-        className="absolute inset-x-0 top-0 h-[2px]"
-        style={{
-          background: `linear-gradient(to right, transparent, ${color}, transparent)`,
-        }}
-      />
-
       {/* ======================================================
           HEADER
       ====================================================== */}
@@ -221,12 +201,12 @@ export default function PressureSignal(props: any) {
           {/* TITLES */}
           <div>
 
-            <div className="text-sm font-bold tracking-[0.18em] text-[var(--cx-gold-soft)]">
-              TECHNICAL SIGNAL
+            <div className="text-base font-semibold text-white">
+              Technical Signal
             </div>
 
-            <div className="mt-[2px] text-[11px] tracking-[0.16em] text-[var(--cx-text-muted)]">
-              MARKET PRESSURE ANALYSIS
+            <div className="mt-1 text-[11px] tracking-[0.10em] text-[var(--cx-text-muted)]">
+              Market pressure analysis
             </div>
 
           </div>
@@ -235,7 +215,7 @@ export default function PressureSignal(props: any) {
 
         {/* STATUS */}
         <div
-          className="rounded-full border px-3 py-[6px] text-xs font-semibold tracking-[0.16em]"
+          className="rounded-full border px-3 py-[6px] text-[10px] font-semibold tracking-[0.08em]"
           style={{
             color,
             borderColor: `${color}30`,
@@ -290,7 +270,7 @@ export default function PressureSignal(props: any) {
       <div className="relative z-10 mt-5 grid grid-cols-3 gap-3">
 
         {/* SCORE */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="cxMiniMetric">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
             Score
@@ -306,7 +286,7 @@ export default function PressureSignal(props: any) {
         </div>
 
         {/* RSI */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="cxMiniMetric">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
             RSI
@@ -319,7 +299,7 @@ export default function PressureSignal(props: any) {
         </div>
 
         {/* MOMENTUM */}
-        <div className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
+        <div className="cxMiniMetric">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
             Momen

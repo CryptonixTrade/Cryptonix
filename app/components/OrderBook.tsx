@@ -124,26 +124,7 @@ export default function OrderBook(props: Props) {
   ====================================================== */
 
   return (
-    <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(12,12,14,0.72)] p-5 backdrop-blur-xl">
-
-      {/* BACKGROUND GLOW */}
-      <div
-        className="pointer-events-none absolute right-[-70px] top-[-70px] h-[160px] w-[160px] rounded-full blur-3xl"
-        style={{
-          background:
-            imbalance > 0
-              ? "rgba(45,255,135,0.08)"
-              : "rgba(255,94,94,0.08)",
-        }}
-      />
-
-      {/* TOP LINE */}
-      <div
-        className="absolute inset-x-0 top-0 h-[2px]"
-        style={{
-          background: `linear-gradient(to right, transparent, ${pressureColor}, transparent)`,
-        }}
-      />
+    <div className="cryptonixSignalCard cx-panel relative overflow-hidden p-5 transition-all duration-500">
 
       {/* ======================================================
           HEADER
@@ -154,19 +135,19 @@ export default function OrderBook(props: Props) {
         {/* LEFT */}
         <div>
 
-          <div className="text-sm font-bold tracking-[0.18em] text-orange-400">
-            ORDER FLOW
+          <div className="text-base font-semibold text-white">
+            Order Flow
           </div>
 
-          <div className="mt-1 text-[11px] tracking-[0.16em] text-white/35">
-            REAL-TIME MARKET DEPTH
+          <div className="mt-1 text-[11px] tracking-[0.10em] text-[var(--cx-text-muted)]">
+            Real-time market depth
           </div>
 
         </div>
 
         {/* STATUS */}
         <div
-          className="rounded-full border px-3 py-[6px] text-xs font-semibold tracking-[0.16em]"
+          className="rounded-full border px-3 py-[6px] text-[10px] font-semibold tracking-[0.08em]"
           style={{
             color: pressureColor,
             borderColor: `${pressureColor}30`,
@@ -227,7 +208,7 @@ export default function OrderBook(props: Props) {
       <div className="relative z-10 mt-5 grid grid-cols-2 gap-3">
 
         {/* BUY */}
-        <div className="rounded-2xl border border-green-500/10 bg-green-500/5 p-4">
+        <div className="cxMiniMetric">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
             Bid Volume
@@ -240,7 +221,7 @@ export default function OrderBook(props: Props) {
         </div>
 
         {/* SELL */}
-        <div className="rounded-2xl border border-red-500/10 bg-red-500/5 p-4">
+        <div className="cxMiniMetric">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-white/35">
             Ask Volume

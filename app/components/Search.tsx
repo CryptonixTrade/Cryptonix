@@ -144,48 +144,31 @@ export default function Search(props: any) {
   return (
     <div
       ref={ref}
-      className="cryptonixSearch relative w-[180px]"
+      className="cryptonixSearch cxControlSurface relative w-[180px]"
     >
 
       {/* ======================================================
           LABEL
       ====================================================== */}
 
-      <div className="mb-2 flex items-center justify-between">
-
-        <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
-          Market Search
-        </div>
-
-        <div className="cx-chip px-2 py-[4px]">
-          LIVE
-        </div>
-
-      </div>
-
-      {/* ======================================================
-          ACTIVE SYMBOL
-      ====================================================== */}
-
-      <div className="cx-card-sm mb-3 flex items-center justify-between border border-[var(--cx-line-soft)] bg-white/[0.025] px-2 py-1">
+      <div className="cxSelectedMarket mb-3 flex items-center justify-between">
 
         <div>
 
-          <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
-            Selected Pair
+          <div className="cxMicroLabel">
+            Market
           </div>
 
-          <div className="mt-1 text-lg font-bold text-[var(--cx-gold-soft)]">
+          <div className="mt-2 text-2xl font-semibold text-white">
             {symbol}
           </div>
 
         </div>
 
-        <div className="relative flex items-center justify-center">
+        <div className="cxLivePill px-3 py-2">
 
-          <div className="h-3 w-3 rounded-full bg-orange-400 shadow-[0_0_16px_rgba(255,170,0,0.9)]" />
-
-          <div className="absolute h-3 w-3 animate-ping rounded-full bg-orange-400/40" />
+          <span />
+          Live
 
         </div>
 
@@ -213,8 +196,8 @@ export default function Search(props: any) {
           className="
             cx-input
             w-full
-            py-2 pl-8 pr-2
-            text-[10px] text-white
+            py-3 pl-10 pr-3
+            text-sm text-white
             outline-none
             transition-all duration-300
             placeholder:text-white/25
@@ -273,14 +256,11 @@ export default function Search(props: any) {
                   group relative mb-1 cursor-pointer overflow-hidden rounded-xl border p-1 transition-all duration-300
                   ${
                     isActive
-                      ? "border-orange-400/20 bg-orange-400/10"
-                      : "border-white/5 bg-white/[0.03] hover:border-white/10 hover:bg-white/[0.05]"
+                      ? "border-white/20 bg-white/[0.08]"
+                      : "border-white/5 bg-white/[0.03] hover:border-white/[0.12] hover:bg-white/[0.06]"
                   }
                 `}
               >
-
-                {/* GLOW */}
-                <div className="pointer-events-none absolute right-[-30px] top-[-30px] h-[90px] w-[90px] rounded-full bg-orange-500/5 blur-2xl transition-opacity duration-300 group-hover:opacity-100 opacity-0" />
 
                 <div className="relative z-10 flex items-center justify-between">
 
@@ -395,7 +375,7 @@ export default function Search(props: any) {
                     ${
                       isActive
                         ? "border-orange-400 bg-orange-400 text-black shadow-[0_0_18px_rgba(255,170,0,0.25)]"
-                        : "border-white/8 bg-white/[0.03] text-white/70 hover:border-white/15 hover:bg-white/[0.05]"
+                        : "border-white/[0.08] bg-white/[0.03] text-white/70 hover:border-white/[0.15] hover:bg-white/[0.05]"
                     }
                   `}
                 >

@@ -98,13 +98,7 @@ export default function TradePanel(props: any) {
   ====================================================== */
 
   return (
-    <div className="cryptonixTradePanel cx-panel relative overflow-hidden p-5">
-
-      {/* BACKGROUND GLOW */}
-      <div className="pointer-events-none absolute bottom-[-80px] right-[-80px] h-[180px] w-[180px] rounded-full bg-orange-500/10 blur-3xl" />
-
-      {/* TOP LINE */}
-      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-80" />
+    <div className="cryptonixTradePanel cx-panel relative overflow-hidden p-6">
 
       {/* ======================================================
           HEADER
@@ -115,24 +109,21 @@ export default function TradePanel(props: any) {
         {/* LEFT */}
         <div>
 
-          <div className="text-sm font-bold tracking-[0.18em] text-[var(--cx-gold-soft)]">
-            AI TRADE PANEL
+          <div className="text-xl font-semibold text-white">
+            Execution AI
           </div>
 
-          <div className="mt-1 text-[11px] tracking-[0.16em] text-[var(--cx-text-muted)]">
-            EXECUTION TERMINAL
+          <div className="mt-1 text-[11px] tracking-[0.14em] text-[var(--cx-text-muted)]">
+            Signal-controlled entry layer
           </div>
 
         </div>
 
         {/* LIVE STATUS */}
-        <div className="cx-chip flex items-center gap-2 px-3 py-[6px]">
+        <div className="cxLivePill">
 
-          <div className="h-2 w-2 animate-pulse rounded-full bg-orange-400" />
-
-          <div className="text-[10px] font-semibold tracking-[0.18em] text-orange-300">
-            LIVE
-          </div>
+          <span />
+          Live
 
         </div>
 
@@ -144,11 +135,11 @@ export default function TradePanel(props: any) {
 
       <div className="relative z-10 mt-6 text-center">
 
-        <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
+        <div className="cxMicroLabel">
           Current Price
         </div>
 
-        <div className="mt-2 text-3xl font-bold tracking-tight text-white">
+        <div className="mt-3 text-5xl font-semibold tracking-normal text-white">
 
           $
           {formatPrice(price || 0)}
@@ -162,7 +153,7 @@ export default function TradePanel(props: any) {
       ====================================================== */}
 
       <div
-        className="relative z-10 mt-6 overflow-hidden rounded-2xl border p-4"
+        className="cxSignalModule relative z-10 mt-7 overflow-hidden rounded-[26px] border p-5"
         style={{
           borderColor: `${signalColor}25`,
           background: `${signalColor}08`,
@@ -170,24 +161,17 @@ export default function TradePanel(props: any) {
       >
 
         {/* INNER GLOW */}
-        <div
-          className="pointer-events-none absolute right-[-30px] top-[-30px] h-[90px] w-[90px] rounded-full blur-2xl"
-          style={{
-            background: `${signalColor}25`,
-          }}
-        />
-
         <div className="relative z-10 flex items-center justify-between">
 
           {/* LEFT */}
           <div>
 
-            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
+            <div className="cxMicroLabel">
               AI Signal
             </div>
 
             <div
-              className="mt-1 text-xl font-bold"
+              className="mt-2 text-3xl font-semibold"
               style={{
                 color: signalColor,
               }}
@@ -200,11 +184,11 @@ export default function TradePanel(props: any) {
           {/* CONFIDENCE */}
           <div className="text-right">
 
-            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
+            <div className="cxMicroLabel">
               Confidence
             </div>
 
-            <div className="mt-1 text-xl font-bold text-orange-400">
+            <div className="mt-2 text-3xl font-semibold text-white">
               {aiConfidence.toFixed(0)}%
             </div>
 
@@ -213,7 +197,7 @@ export default function TradePanel(props: any) {
         </div>
 
         {/* BAR */}
-        <div className="relative mt-4 h-[10px] overflow-hidden rounded-full bg-white/5">
+        <div className="relative mt-5 h-[8px] overflow-hidden rounded-full bg-white/[0.07]">
 
           <div
             className="absolute inset-y-0 left-0 rounded-full"
@@ -237,13 +221,13 @@ export default function TradePanel(props: any) {
           handleClick(aiDecision)
         }
         className={`
-          relative z-10 mt-6 w-full overflow-hidden rounded-2xl py-4 text-sm font-bold tracking-[0.18em] transition-all duration-300
+          relative z-10 mt-7 w-full overflow-hidden rounded-full py-4 text-sm font-semibold tracking-[0.08em] transition-all duration-500
           ${
             isBlocked
-              ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-gray-500"
+              ? "cursor-not-allowed border border-white/10 bg-white/[0.035] text-gray-500"
               : aiDecision === "LONG"
-              ? "border border-green-400/30 bg-green-400 text-black shadow-[0_0_25px_rgba(45,255,135,0.25)] hover:scale-[1.01]"
-              : "border border-red-400/30 bg-red-400 text-black shadow-[0_0_25px_rgba(255,94,94,0.25)] hover:scale-[1.01]"
+              ? "border border-green-300/40 bg-green-300 text-black shadow-[0_18px_38px_rgba(45,255,135,0.18)] hover:scale-[1.01]"
+              : "border border-red-300/40 bg-red-300 text-black shadow-[0_18px_38px_rgba(255,94,94,0.18)] hover:scale-[1.01]"
           }
         `}
       >
@@ -263,13 +247,13 @@ export default function TradePanel(props: any) {
           disabled={isBlocked}
           onClick={() => handleClick("LONG")}
           className={`
-            rounded-2xl border py-3 text-sm font-bold tracking-[0.16em] transition-all duration-300
+            rounded-full border py-3 text-sm font-semibold tracking-[0.08em] transition-all duration-500
             ${
               isBlocked
                 ? "cursor-not-allowed border-white/10 bg-white/[0.03] text-gray-600"
                 : selected === "LONG"
-                ? "border-green-400 bg-green-400 text-black shadow-[0_0_20px_rgba(45,255,135,0.25)]"
-                : "border-green-500/20 bg-green-500/10 text-green-400 hover:bg-green-500/20"
+                ? "border-green-300 bg-green-300 text-black shadow-[0_16px_30px_rgba(45,255,135,0.16)]"
+                : "border-white/10 bg-white/[0.035] text-green-300 hover:border-green-300/30 hover:bg-green-300/10"
             }
           `}
         >
@@ -281,13 +265,13 @@ export default function TradePanel(props: any) {
           disabled={isBlocked}
           onClick={() => handleClick("SHORT")}
           className={`
-            rounded-2xl border py-3 text-sm font-bold tracking-[0.16em] transition-all duration-300
+            rounded-full border py-3 text-sm font-semibold tracking-[0.08em] transition-all duration-500
             ${
               isBlocked
                 ? "cursor-not-allowed border-white/10 bg-white/[0.03] text-gray-600"
                 : selected === "SHORT"
-                ? "border-red-400 bg-red-400 text-black shadow-[0_0_20px_rgba(255,94,94,0.25)]"
-                : "border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                ? "border-red-300 bg-red-300 text-black shadow-[0_16px_30px_rgba(255,94,94,0.16)]"
+                : "border-white/10 bg-white/[0.035] text-red-300 hover:border-red-300/30 hover:bg-red-300/10"
             }
           `}
         >
@@ -302,7 +286,7 @@ export default function TradePanel(props: any) {
 
       {trade ? (
         <div
-          className="relative z-10 mt-5 overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-4"
+          className="relative z-10 mt-5 overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035] p-5"
         >
 
           {/* HEADER */}
@@ -383,7 +367,7 @@ export default function TradePanel(props: any) {
 
         </div>
       ) : (
-        <div className="relative z-10 mt-5 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-5 text-center">
+        <div className="relative z-10 mt-5 rounded-[24px] border border-dashed border-white/10 bg-white/[0.025] p-6 text-center">
 
           <div className="text-[11px] uppercase tracking-[0.18em] text-white/35">
             Waiting For Trade Entry

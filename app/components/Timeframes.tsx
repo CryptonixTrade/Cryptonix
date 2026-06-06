@@ -22,27 +22,24 @@ export default function Timeframes(props: any) {
   ];
 
   return (
-    <div className="cryptonixTimeframes w-full">
+    <div className="cryptonixTimeframes cxControlSurface w-full">
 
       {/* ======================================================
           HEADER
       ====================================================== */}
 
-      <div className="mb-1 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between">
 
         <div>
 
-          <div className="text-[8px] uppercase tracking-[0.18em] text-white/35">
-          </div>
-
-          <div className="mt-[2px] text-[11px] font-semibold text-[var(--cx-gold-soft)]">
-            Multi-Timeframe
+          <div className="cxMicroLabel">
+            Time horizon
           </div>
 
         </div>
 
         {/* ACTIVE */}
-        <div className="cx-chip px-2 py-[2px] text-[8px]">
+        <div className="cx-chip px-3 py-[6px] text-[10px]">
 
           {interval}
 
@@ -54,7 +51,7 @@ export default function Timeframes(props: any) {
           TIMEFRAMES GRID
       ====================================================== */}
 
-      <div className="flex flex-wrap gap-2">
+      <div className="cxTimeframeRail flex flex-wrap gap-2">
 
         {tf.map((t) => {
           const active = interval === t;
@@ -69,14 +66,14 @@ export default function Timeframes(props: any) {
               }}
               disabled={active}
               className={`
-                group relative flex h-[34px] w-[34px] items-center justify-center
-                overflow-hidden rounded-full border
-                text-[9px] font-bold
-                transition-all duration-300
+                group relative flex h-[40px] min-w-[44px] items-center justify-center
+                overflow-hidden rounded-full border px-3
+                text-[11px] font-semibold
+                transition-all duration-500
                 ${
                   active
-                    ? "border-[var(--cx-gold-soft)] bg-[var(--cx-gold-core)] text-black shadow-[0_0_18px_rgba(215,168,79,0.22)]"
-                    : "border-[var(--cx-line-soft)] bg-white/[0.025] text-white/65 hover:border-[var(--cx-line-strong)] hover:bg-white/[0.055] hover:text-white"
+                    ? "border-white/70 bg-white text-black shadow-[0_18px_38px_rgba(255,255,255,0.16)]"
+                    : "border-white/10 bg-white/[0.035] text-white/[0.58] hover:border-white/[0.22] hover:bg-white/[0.075] hover:text-white"
                 }
               `}
             >
@@ -85,7 +82,7 @@ export default function Timeframes(props: any) {
               {!active && (
                 <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
 
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0" />
 
                 </div>
               )}
@@ -110,9 +107,9 @@ export default function Timeframes(props: any) {
           FOOTER
       ====================================================== */}
 
-      <div className="mt-1 flex items-center justify-between border-t border-white/6 pt-1">
+      <div className="mt-4 flex items-center justify-between border-t border-white/6 pt-3">
 
-        <div className="text-[8px] uppercase tracking-[0.16em] text-[var(--cx-text-muted)]">
+        <div className="text-[10px] uppercase tracking-[0.16em] text-[var(--cx-text-muted)]">
           Active Interval
         </div>
 

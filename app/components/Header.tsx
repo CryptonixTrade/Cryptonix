@@ -13,138 +13,95 @@ export default function Header(props: any) {
   const isUp = change >= 0;
 
   return (
-    <div className="cryptonixHeader cx-panel relative mb-4 overflow-hidden">
+    <div className="cryptonixHeader cx-panel cxReveal relative mb-6 overflow-hidden">
+      <div className="cxAuroraField" aria-hidden="true" />
 
-      {/* ===== TOP GLOW ===== */}
-      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-80" />
-
-      {/* ===== BACKGROUND LIGHT ===== */}
-      <div className="absolute -left-20 top-0 h-40 w-40 rounded-full bg-orange-500/10 blur-3xl" />
-
-      <div className="relative flex flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
-
-        {/* ======================================================
-            LEFT SIDE
-        ====================================================== */}
-        <div className="flex items-center gap-4">
-
-          {/* LIVE DOT */}
-          <div className="relative flex items-center justify-center">
-            <div className="h-3 w-3 rounded-full bg-orange-400 shadow-[0_0_15px_rgba(255,170,0,0.9)]" />
-
-            <div className="absolute h-3 w-3 animate-ping rounded-full bg-green-400/50" />
+      <div className="relative z-10 grid gap-6 px-5 py-6 md:px-8 md:py-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+        <div className="flex min-w-0 items-start gap-5">
+          <div className="cxBrandMark" aria-hidden="true">
+            <span className="cxBrandNode cxBrandNodeTl" />
+            <span className="cxBrandNode cxBrandNodeTr" />
+            <span className="cxBrandNode cxBrandNodeBl" />
+            <span className="cxBrandNode cxBrandNodeBr" />
+            <span className="cxBrandBar cxBrandBarA" />
+            <span className="cxBrandBar cxBrandBarB" />
+            <span className="cxBrandCircuit cxBrandCircuitLeft" />
+            <span className="cxBrandCircuit cxBrandCircuitRight" />
           </div>
 
-          {/* BRAND + SYMBOL */}
-          <div className="flex flex-col">
-
-            <div className="flex items-center gap-2">
-
-              <span className="text-lg font-bold tracking-[0.19em] text-[var(--cx-gold-soft)] md:text-xl">
-                CRYPTONIX.
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="cxMicroLabel">CRYPTONIX LIFE</span>
+              <span className="cxLivePill">
+                <span />
+                Live Intelligence
               </span>
+            </div>
 
-              <div className="cx-chip px-2 py-[2px]">
-                LIFE
+            <h1 className="mt-4 text-4xl font-semibold leading-[0.98] text-white md:text-6xl lg:text-7xl">
+              AI Market
+              <span className="block text-[var(--cx-gold-soft)]">Operating System</span>
+            </h1>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-white/52">
+              <span className="text-white/[0.86]">{symbol}</span>
+              <span className="h-1 w-1 rounded-full bg-white/28" />
+              <span>Neural trading dashboard</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="cxHeroMarket">
+          <div>
+            <div className="cxMicroLabel">Real-time market pulse</div>
+            <div className="mt-3 flex flex-wrap items-end gap-3">
+              <div className="cxHeroPrice">
+                $
+                {price
+                  ? price.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  : "--"}
               </div>
 
+              <div
+                className={`cxChangePill ${
+                  isUp ? "cxChangePillUp" : "cxChangePillDown"
+                }`}
+              >
+                {isUp ? "+" : ""}
+                {change.toFixed(2)}%
+              </div>
             </div>
-
-            <div className="mt-1 flex items-center gap-2">
-
-              <span className="text-sm font-medium tracking-wide text-white/90 md:text-base">
-                {symbol}
-              </span>
-
-              <span className="text-xs text-[var(--cx-text-muted)]">
-                AI Trading Terminal
-              </span>
-
-            </div>
-
           </div>
 
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="cryptonixHeaderMetric cxMetricTile">
+              <div className="cxMetricLabel">Spot</div>
+              <div className="cxMetricValue text-green-300">
+                {btcSpot
+                  ? btcSpot.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  : "--"}
+              </div>
+            </div>
+
+            <div className="cryptonixHeaderMetric cxMetricTile">
+              <div className="cxMetricLabel">Futures</div>
+              <div className="cxMetricValue text-[var(--cx-gold-soft)]">
+                {btcFutures
+                  ? btcFutures.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  : "--"}
+              </div>
+            </div>
+          </div>
         </div>
-
-        {/* ======================================================
-            CENTER PRICE
-        ====================================================== */}
-        <div className="flex flex-col items-start md:items-center">
-
-          <div className="flex items-end gap-2">
-
-            <div className="text-2xl font-bold tracking-tight text-white md:text-3xl">
-              $
-              {price
-                ? price.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
-                : "--"}
-            </div>
-
-            <div
-              className={`mb-1 rounded-full px-2 py-[3px] text-xs font-semibold ${
-                isUp
-                  ? "bg-green-500/10 text-green-400"
-                  : "bg-red-500/10 text-red-400"
-              }`}
-            >
-              {isUp ? "+" : ""}
-              {change.toFixed(2)}%
-            </div>
-
-          </div>
-
-          <div className="mt-1 text-xs tracking-widest text-[var(--cx-text-muted)]">
-            REAL-TIME MARKET DATA
-          </div>
-
-        </div>
-
-        {/* ======================================================
-            RIGHT SIDE
-        ====================================================== */}
-        <div className="grid grid-cols-2 gap-3 md:gap-4">
-
-          {/* SPOT */}
-          <div className="cryptonixHeaderMetric cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
-
-            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
-              Spot
-            </div>
-
-            <div className="mt-1 text-sm font-semibold text-green-400">
-              {btcSpot
-                ? btcSpot.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
-                : "--"}
-            </div>
-
-          </div>
-
-          {/* FUTURES */}
-          <div className="cryptonixHeaderMetric cx-card-sm border border-[var(--cx-line-soft)] bg-white/[0.025] px-4 py-3">
-
-            <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
-              Futures
-            </div>
-
-            <div className="mt-1 text-sm font-semibold text-orange-400">
-              {btcFutures
-                ? btcFutures.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
-                : "--"}
-            </div>
-
-          </div>
-
-        </div>
-
       </div>
     </div>
   );
