@@ -445,15 +445,13 @@
      MOBILE
   ========================================= */
   
-  @media (max-width: 768px) {
-  
+  @media (max-width: 599px) {
     .portal-wrapper {
       width: 130px;
       height: 130px;
-  
       top: 43%;
     }
-  
+
     .portal-button {
       width: 84px;
       height: 84px;
@@ -486,5 +484,34 @@
   
     .portal-content p {
       font-size: 14px;
+    }
+  }
+
+  @media (min-width: 600px) and (max-width: 1180px) {
+    .portal-wrapper {
+      top: 38%;
+      width: 150px;
+      height: 150px;
+    }
+
+    .portal-button {
+      width: 104px;
+      height: 104px;
+      font-size: 12px;
+    }
+
+    .orbit1 {
+      width: 122px;
+      height: 122px;
+    }
+
+    .orbit2 {
+      width: 144px;
+      height: 144px;
+    }
+
+    .orbit3 {
+      width: 166px;
+      height: 166px;
     }
   }

@@ -80,13 +80,13 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   {/* MOBILE */}
   <source
-    media="(max-width: 768px)"
+    media="(max-width: 599px)"
     srcSet="/CRYPTONIX-mobile.png"
   />
 
   {/* TABLET */}
   <source
-    media="(min-width: 769px) and (max-width: 1180px)"
+    media="(min-width: 600px) and (max-width: 1180px)"
     srcSet="/planshet.png"
   />
 
@@ -269,6 +269,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
 
   overflow: hidden;
 
@@ -283,6 +284,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
 
   object-fit: cover;
 
@@ -304,17 +306,21 @@ const [selectedAmount, setSelectedAmount] = useState("");
     0 0 14px rgba(255, 187, 0, 0.22);
 }
 
-        @media (max-width: 768px) {
+        @media (max-width: 599px) {
           .container {
             background: url('/CRYPTONIX-mobile.png') no-repeat center;
             background-size: cover;
           }
         }
 
-        @media (min-width: 769px) and (max-width: 1180px) {
+        @media (min-width: 600px) and (max-width: 1180px) {
           .container {
             background: url('/planshet.png') no-repeat center;
             background-size: cover;
+          }
+
+          .bgImage {
+            object-position: center center;
           }
         }
 
@@ -583,7 +589,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   width: 305px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 599px) {
   .binanceWrapper {
     left: 10px;
     right: 10px;
@@ -631,7 +637,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
    MOBILE
 ========================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 599px) {
 
   .plans {
     left: 10px;
@@ -757,6 +763,106 @@ const [selectedAmount, setSelectedAmount] = useState("");
   .planCard button:active {
     transform: scale(0.97);
   }
+
+@media (min-width: 600px) and (max-width: 1180px) {
+  .loginBox {
+    top: 28px;
+    right: 28px;
+    width: 230px;
+    max-width: 230px;
+    padding: 10px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.16);
+  }
+
+  .loginBox input {
+    min-height: 24px;
+    padding: 4px 8px;
+    margin-bottom: 5px;
+    font-size: 12px;
+  }
+
+  .loginBox button {
+    min-height: 28px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .plans {
+    left: 24px;
+    right: auto;
+    bottom: 72px;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  .planCard {
+    width: 108px;
+    padding: 7px 6px;
+    gap: 6px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(20,20,20,0.9), rgba(8,8,8,0.96));
+  }
+
+  .planCard h3 {
+    font-size: 13px;
+  }
+
+  .planCard p {
+    font-size: 15px;
+  }
+
+  .planCard button {
+    width: 86%;
+    height: 24px;
+    min-height: 24px;
+    font-size: 10px;
+    padding: 0 8px;
+  }
+
+  .binanceWrapper {
+    left: 24px;
+    right: auto;
+    bottom: 178px;
+    width: 340px;
+  }
+
+  .footerLinks {
+    left: 26px;
+    right: auto;
+    bottom: 30px;
+    display: block;
+  }
+
+  .termsLabel {
+    font-size: 13px;
+    text-align: left;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.85);
+  }
+
+  .termsLabel input {
+    width: 16px;
+    height: 16px;
+  }
+
+  .tgFloat {
+    right: 18px;
+    bottom: 22px;
+    width: 56px;
+    height: 56px;
+  }
+
+  .tgButton {
+    width: 56px;
+    height: 56px;
+  }
+
+  .tgIcon {
+    width: 24px;
+    height: 24px;
+  }
+}
 
         @keyframes fadeIn {
           from {
@@ -1017,7 +1123,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 599px) {
 
   .tgFloat {
     right: 6px;
