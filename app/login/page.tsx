@@ -74,7 +74,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   };
 
   return (
-    <div className="container">
+	    <div className="container loginPageRoot">
 
 <picture>
 
