@@ -1227,15 +1227,16 @@ const [selectedAmount, setSelectedAmount] = useState("");
 ========================================= */
 
 .bgImage {
-  transform: scale(1.015);
-  filter: saturate(0.86) contrast(1.08) brightness(0.72);
+  transform: scale(1.01);
+  filter: saturate(0.98) contrast(1.06) brightness(0.82);
+  animation: loginBgDrift 18s ease-in-out infinite alternate;
 }
 
 .loginOverlay {
   background:
-    linear-gradient(90deg, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.48) 34%, rgba(0,0,0,0.34) 58%, rgba(0,0,0,0.72) 100%),
-    linear-gradient(180deg, rgba(0,0,0,0.38), rgba(0,0,0,0.08) 42%, rgba(0,0,0,0.74)),
-    radial-gradient(circle at 50% 38%, rgba(242,213,138,0.12), transparent 38%);
+    linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.26) 38%, rgba(0,0,0,0.18) 62%, rgba(0,0,0,0.58) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.26), rgba(0,0,0,0.02) 42%, rgba(0,0,0,0.62)),
+    radial-gradient(circle at 50% 38%, rgba(242,213,138,0.08), transparent 42%);
 }
 
 .loginTopBar {
@@ -1466,13 +1467,15 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
 .plans {
   left: clamp(24px, 5vw, 76px);
-  bottom: 58px;
+  bottom: 56px;
   gap: 12px;
 }
 
 .cryptoBtn {
   width: 100% !important;
   height: 34px !important;
+  position: relative;
+  overflow: hidden;
   background:
     linear-gradient(
       135deg,
@@ -1487,6 +1490,32 @@ const [selectedAmount, setSelectedAmount] = useState("");
   letter-spacing: 0.02em !important;
 }
 
+.cryptoBtn::after {
+  content: "";
+  position: absolute;
+  top: -130%;
+  left: -40%;
+  width: 55%;
+  height: 340%;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.32),
+      transparent
+    );
+  transform: rotate(24deg);
+  animation: loginButtonSheen 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.cryptoBtn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 30px rgba(0,0,0,0.32),
+    0 0 26px rgba(215,168,79,0.18);
+}
+
 .termsLabel {
   color: rgba(244,239,227,0.88);
   text-shadow: 0 1px 10px rgba(0,0,0,0.8);
@@ -1497,6 +1526,13 @@ const [selectedAmount, setSelectedAmount] = useState("");
 .footerLinks {
   left: clamp(24px, 5vw, 76px);
   bottom: 22px;
+}
+
+.binanceWrapper {
+  left: clamp(24px, 5vw, 76px);
+  right: auto;
+  bottom: 214px;
+  width: 305px;
 }
 
 .footerLinks a {
@@ -1517,11 +1553,39 @@ const [selectedAmount, setSelectedAmount] = useState("");
   }
 }
 
+@keyframes loginBgDrift {
+  from {
+    transform: scale(1.01) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.035) translate3d(-0.4%, -0.35%, 0);
+  }
+}
+
+@keyframes loginButtonSheen {
+  0%,
+  38% {
+    left: -55%;
+    opacity: 0;
+  }
+
+  54% {
+    opacity: 0.75;
+  }
+
+  74%,
+  100% {
+    left: 145%;
+    opacity: 0;
+  }
+}
+
 @media (max-width: 900px) {
   .loginOverlay {
     background:
-      linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.28) 42%, rgba(0,0,0,0.82)),
-      radial-gradient(circle at 50% 38%, rgba(242,213,138,0.11), transparent 42%);
+      linear-gradient(180deg, rgba(0,0,0,0.46), rgba(0,0,0,0.08) 42%, rgba(0,0,0,0.72)),
+      radial-gradient(circle at 50% 40%, rgba(242,213,138,0.055), transparent 48%);
   }
 
   .loginTopBar {
@@ -1540,10 +1604,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   }
 
   .loginHeroStage {
-    left: 16px;
-    right: 16px;
-    top: 68px;
-    width: auto;
+    display: none;
   }
 
   .loginBrandMark {
@@ -1567,31 +1628,40 @@ const [selectedAmount, setSelectedAmount] = useState("");
   }
 
   .loginBox {
-    top: 172px;
-    left: 14px;
-    right: 14px;
-    width: auto;
-    max-width: none;
-    padding: 14px;
-    border-radius: 22px;
+    top: 58px;
+    left: auto;
+    right: 12px;
+    width: 198px;
+    max-width: calc(100vw - 24px);
+    padding: 9px;
+    border-radius: 14px;
+    background:
+      linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02)),
+      rgba(0,0,0,0.18);
+    box-shadow:
+      0 16px 46px rgba(0,0,0,0.34),
+      inset 0 1px 0 rgba(255,255,255,0.08);
   }
 
   .loginBox input {
-    height: 40px;
-    margin-bottom: 8px;
-    border-radius: 14px;
-    font-size: 13px;
+    height: 25px;
+    margin-bottom: 5px;
+    padding: 0 8px;
+    border-radius: 7px;
+    font-size: 12px;
+    background: rgba(30, 6, 4, 0.46);
   }
 
   .loginBox button {
-    height: 42px;
+    height: 28px;
+    font-size: 12px;
   }
 
   .plans {
     left: 12px;
     right: 12px;
-    bottom: 66px;
-    gap: 8px;
+    bottom: 58px;
+    gap: 6px;
     flex-wrap: nowrap;
     justify-content: center;
   }
@@ -1600,30 +1670,30 @@ const [selectedAmount, setSelectedAmount] = useState("");
     flex: 1 1 0;
     width: auto;
     min-width: 0;
-    padding: 10px 8px;
-    border-radius: 20px;
-    gap: 6px;
+    padding: 7px 6px;
+    border-radius: 16px;
+    gap: 4px;
   }
 
   .planCard h3 {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .planCard p {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .cryptoBtn {
-    height: 28px !important;
-    font-size: 8.5px !important;
+    height: 24px !important;
+    font-size: 8px !important;
     padding: 0 6px !important;
   }
 
   .binanceWrapper {
     left: 12px;
-    right: 12px;
-    bottom: 170px;
-    width: auto;
+    right: auto;
+    bottom: 148px;
+    width: 118px;
   }
 
   .footerLinks {
