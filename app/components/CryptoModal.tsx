@@ -95,9 +95,9 @@ const [success, setSuccess] =
 
     return (
   
-      <div className="overlay">
-  
-        <div className="modal">
+	      <div className="cryptoPaymentOverlay">
+	  
+	        <div className="cryptoPaymentModal">
   
           <h2>
             Payment Request Sent
@@ -110,23 +110,68 @@ const [success, setSuccess] =
   
           <button
             className="paidBtn"
+            type="button"
             onClick={onClose}
           >
             Close
           </button>
   
         </div>
+
+        <style jsx>{`
+          .cryptoPaymentOverlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.82);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+          }
+
+          .cryptoPaymentModal {
+            width: 360px;
+            max-width: calc(100vw - 24px);
+            padding: 22px;
+            border: 1px solid rgba(255,170,0,0.16);
+            border-radius: 24px;
+            background: rgba(12,12,12,0.96);
+            color: white;
+            box-shadow: 0 0 40px rgba(255,140,0,0.08);
+          }
+
+          .network {
+            opacity: 0.7;
+            margin-bottom: 18px;
+          }
+
+          .paidBtn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 999px;
+            font-weight: bold;
+            cursor: pointer;
+            color: black;
+            background: linear-gradient(90deg, #a26b00, #f5d06a);
+            touch-action: manipulation;
+          }
+        `}</style>
   
       </div>
     );
   }
   return (
-    <div className="overlay">
+	    <div className="cryptoPaymentOverlay">
 
-      <div className="modal">
+	      <div className="cryptoPaymentModal">
 
         <button
           className="closeBtn"
+          type="button"
           onClick={onClose}
         >
           ×
@@ -167,6 +212,7 @@ const [success, setSuccess] =
 
 <button
   className="copyBtn"
+  type="button"
   onClick={copyWallet}
 >
   Copy Wallet
@@ -186,6 +232,7 @@ const [success, setSuccess] =
 
 <button
   className="paidBtn"
+  type="button"
 
   onClick={submitPayment}
 
@@ -205,7 +252,7 @@ const [success, setSuccess] =
       </div>
 
       <style jsx>{`
-        .overlay {
+	        .cryptoPaymentOverlay {
           position: fixed;
           inset: 0;
 
@@ -217,8 +264,9 @@ const [success, setSuccess] =
           align-items: center;
           justify-content: center;
 
-          z-index: 999999;
-        }
+	          z-index: 2147483000;
+	          pointer-events: auto;
+	        }
 
 .qrBox {
   display: flex;
@@ -254,17 +302,18 @@ const [success, setSuccess] =
   background:
     rgba(255,255,255,0.08);
 
-  color: white;
-
-  transition: 0.2s ease;
-}
+	  color: white;
+	
+	  transition: 0.2s ease;
+	  touch-action: manipulation;
+	}
 
 .copyBtn:hover {
   background:
     rgba(255,255,255,0.14);
 }
 
-        .modal {
+	        .cryptoPaymentModal {
           width: 360px;
           max-width: calc(100vw - 24px);
 
@@ -297,10 +346,12 @@ const [success, setSuccess] =
 
           color: rgba(255,255,255,0.6);
 
-          font-size: 26px;
-
-          cursor: pointer;
-        }
+	          font-size: 26px;
+	
+	          cursor: pointer;
+	          z-index: 2;
+	          touch-action: manipulation;
+	        }
 
         h2 {
           margin-bottom: 8px;
@@ -390,13 +441,14 @@ const [success, setSuccess] =
 
           color: black;
 
-          background:
-            linear-gradient(
-              90deg,
-              #a26b00,
-              #f5d06a
-            );
-        }
+	          background:
+	            linear-gradient(
+	              90deg,
+	              #a26b00,
+	              #f5d06a
+	            );
+	          touch-action: manipulation;
+	        }
       `}</style>
 
     </div>

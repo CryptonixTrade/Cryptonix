@@ -324,6 +324,7 @@ button:active {
    LOGIN PAGE LEGACY IPAD SAFETY LAYOUT
 ========================================================= */
 
+@media (min-width: 600px) and (max-width: 1180px) {
 .loginPageRoot {
   position: fixed !important;
   top: 0 !important;
@@ -346,9 +347,14 @@ button:active {
   object-fit: cover !important;
   object-position: center center !important;
   z-index: 0 !important;
+  pointer-events: none !important;
 }
 
-.loginPageRoot .overlay {
+.loginPageRoot picture {
+  pointer-events: none !important;
+}
+
+.loginPageRoot .loginOverlay {
   position: fixed !important;
   top: 0 !important;
   right: 0 !important;
@@ -372,6 +378,7 @@ button:active {
   background: rgba(0, 0, 0, 0.18) !important;
   box-shadow: 0 0 25px rgba(91, 59, 19, 0.7) !important;
   text-align: center !important;
+  pointer-events: auto !important;
 }
 
 .loginPageRoot .loginBox input {
@@ -416,6 +423,7 @@ button:active {
   align-items: flex-end !important;
   justify-content: flex-start !important;
   flex-wrap: nowrap !important;
+  pointer-events: auto !important;
 }
 
 .loginPageRoot .planCard {
@@ -471,8 +479,9 @@ button:active {
   appearance: none !important;
 }
 
-.loginPageRoot .planCard button:disabled {
+.loginPageRoot .planCard button[aria-disabled="true"] {
   opacity: 0.42 !important;
+  cursor: not-allowed !important;
 }
 
 .loginPageRoot .footerLinks {
@@ -482,6 +491,7 @@ button:active {
   right: auto !important;
   z-index: 10000 !important;
   display: block !important;
+  pointer-events: auto !important;
 }
 
 .loginPageRoot .termsLabel {
@@ -498,6 +508,9 @@ button:active {
   width: 16px !important;
   height: 16px !important;
   margin: 0 7px 0 0 !important;
+  pointer-events: auto !important;
+  -webkit-appearance: checkbox !important;
+  appearance: checkbox !important;
 }
 
 .loginPageRoot .footerLinks a {
@@ -511,6 +524,7 @@ button:active {
   right: auto !important;
   z-index: 10000 !important;
   width: 340px !important;
+  pointer-events: auto !important;
 }
 
 .loginPageRoot .tgFloat {
@@ -520,79 +534,15 @@ button:active {
   width: 56px !important;
   height: 56px !important;
   z-index: 10001 !important;
+  pointer-events: auto !important;
 }
 
-@media (max-width: 599px) {
-  .loginPageRoot .bgImage {
-    object-position: center center !important;
-  }
-
-  .loginPageRoot .loginBox {
-    top: 16px !important;
-    right: 10px !important;
-    width: 180px !important;
-    max-width: 180px !important;
-    padding: 8px !important;
-  }
-
-  .loginPageRoot .plans {
-    left: 10px !important;
-    right: 10px !important;
-    bottom: 38px !important;
-    justify-content: center !important;
-    flex-wrap: wrap !important;
-  }
-
-  .loginPageRoot .planCard {
-    width: 75px !important;
-    min-height: 66px !important;
-    margin: 0 2px 4px 2px !important;
-    padding: 3px !important;
-  }
-
-  .loginPageRoot .planCard h3,
-  .loginPageRoot .planCard p {
-    font-size: 8px !important;
-    line-height: 10px !important;
-  }
-
-  .loginPageRoot .planCard button {
-    width: 92% !important;
-    height: 22px !important;
-    min-height: 22px !important;
-    font-size: 9px !important;
-    line-height: 22px !important;
-  }
-
-  .loginPageRoot .footerLinks {
-    left: 10px !important;
-    right: 10px !important;
-    bottom: 17px !important;
-  }
-
-  .loginPageRoot .termsLabel {
-    justify-content: center !important;
-    font-size: 11px !important;
-    text-align: center !important;
-  }
-
-  .loginPageRoot .binanceWrapper {
-    left: 10px !important;
-    right: 10px !important;
-    bottom: 112px !important;
-    width: auto !important;
-  }
-
-  .loginPageRoot .tgFloat {
-    right: 6px !important;
-    bottom: 57px !important;
-    width: 42px !important;
-    height: 42px !important;
-  }
+.loginPageRoot .portal-wrapper {
+  z-index: 10002 !important;
+  pointer-events: auto !important;
 }
 
-@media (min-width: 600px) and (max-width: 1180px) {
-  .loginPageRoot .bgImage {
-    object-position: center center !important;
-  }
+.loginPageRoot .portal-button {
+  pointer-events: auto !important;
+}
 }

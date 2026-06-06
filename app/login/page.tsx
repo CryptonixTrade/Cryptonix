@@ -2,6 +2,7 @@
 
 import { signIn, getSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
+import type { ChangeEvent, FormEvent, MouseEvent } from "react";
 import CryptoModal from "../components/CryptoModal";
 import BinancePartnerCard from "../components/BinancePartnerCard";
 import CryptonixPortal from "../components/CryptonixPortal";
@@ -21,7 +22,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
     amount: string
   ) => {
   
-    if (!agreed) return;
+    if (!agreed && !termsRef.current?.checked) return;
   
     setSelectedPlan(plan);
     setSelectedAmount(amount);
@@ -29,7 +30,14 @@ const [selectedAmount, setSelectedAmount] = useState("");
     setCryptoOpen(true);
   };
 
+  const handleAgreement = (
+    e: ChangeEvent<HTMLInputElement> | MouseEvent<HTMLInputElement> | FormEvent<HTMLInputElement>
+  ) => {
+    setAgreed((e.currentTarget as HTMLInputElement).checked);
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const termsRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -99,7 +107,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
 </picture>
 
-      <div className="overlay" />
+	      <div className="loginOverlay" />
       
       <CryptonixPortal />
 
@@ -144,7 +152,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
       <button
       type="button"
         className="cryptoBtn"
-        disabled={!agreed}
+        aria-disabled={!agreed}
         onClick={() =>
           openCryptoModal(
             "Monthly Plan",
@@ -169,7 +177,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
       <button
       type="button"
         className="cryptoBtn"
-        disabled={!agreed}
+        aria-disabled={!agreed}
         onClick={() =>
           openCryptoModal(
             "3 Months Plan",
@@ -194,7 +202,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
       <button
       type="button"
         className="cryptoBtn"
-        disabled={!agreed}
+        aria-disabled={!agreed}
         onClick={() =>
           openCryptoModal(
             "Yearly Plan",
@@ -217,11 +225,14 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
 
 
-    <input
-      type="checkbox"
-      checked={agreed}
-      onChange={(e) => setAgreed(e.target.checked)}
-    />
+	    <input
+	      ref={termsRef}
+	      type="checkbox"
+	      checked={agreed}
+	      onChange={handleAgreement}
+	      onClick={handleAgreement}
+	      onInput={handleAgreement}
+	    />
 
 
 
@@ -324,7 +335,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
           }
         }
 
-        .overlay {
+        .loginOverlay {
           position: absolute;
           inset: 0;
 
@@ -530,6 +541,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   justify-content: center;
 
   line-height: 1;
+  touch-action: manipulation;
 }
 
 .buyBtn {
@@ -565,6 +577,14 @@ const [selectedAmount, setSelectedAmount] = useState("");
 }
 
 .planCard button:disabled {
+  opacity: 0.28;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+.planCard button[aria-disabled="true"] {
   opacity: 0.28;
 
   cursor: not-allowed;
