@@ -15,6 +15,7 @@ export default function CryptonixPortal() {
         <div className="orbit orbit3"></div>
 
         <button
+          type="button"
           className="portal-button"
           onClick={() => setOpen(true)}
         >
@@ -24,16 +25,18 @@ export default function CryptonixPortal() {
       </div>
 
       {/* MODAL */}
-      <div className={`portal-modal ${open ? "active" : ""}`}>
+      {open && (
+        <div className="portal-modal active">
 
-        <div className="portal-content">
+          <div className="portal-content">
 
-          <button
-            className="close-btn"
-            onClick={() => setOpen(false)}
-          >
-            ✕
-          </button>
+            <button
+              type="button"
+              className="close-btn"
+              onClick={() => setOpen(false)}
+            >
+              ✕
+            </button>
 
           <h2>About Cryptonix</h2>
 
@@ -59,9 +62,10 @@ It is a new generation digital intelligence environment for modern market partic
 Support email: support@cryptonix.life
           </p>
 
-        </div>
+          </div>
 
-      </div>
+        </div>
+      )}
     </>
   );
 }
