@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   symbol: string;
@@ -18,6 +18,12 @@ export default function OrderBook(props: Props) {
   const [imbalance, setImbalance] = useState(0);
   const [bidVolume, setBidVolume] = useState(0);
   const [askVolume, setAskVolume] = useState(0);
+  const lastUpdateRef = useRef(0);
+  const onUpdateRef = useRef(onUpdate);
+
+  useEffect(() => {
+    onUpdateRef.current = onUpdate;
+  }, [onUpdate]);
 
   /* ======================================================
      WEBSOCKET
@@ -27,11 +33,17 @@ export default function OrderBook(props: Props) {
     if (!symbol) return;
 
     const ws = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth10@100ms`
+      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth10@1000ms`
     );
 
     ws.onmessage = (e) => {
       try {
+        const now = Date.now();
+
+        if (now - lastUpdateRef.current < 900) return;
+
+        lastUpdateRef.current = now;
+
         const data = JSON.parse(e.data);
 
         const rawBids = data?.b || data?.bids;
@@ -68,7 +80,7 @@ export default function OrderBook(props: Props) {
         setBidVolume(bidVol);
         setAskVolume(askVol);
 
-        onUpdate?.({
+        onUpdateRef.current?.({
           imbalance: currentImbalance,
           bidVolume: bidVol,
           askVolume: askVol,

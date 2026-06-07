@@ -7,6 +7,7 @@ import {
   getSignalTtl,
   smoothSignalScore,
 } from "@/lib/signal-engine";
+import { formatPrice } from "@/lib/price-format";
 
 type Decision = "LONG" | "SHORT" | "NO TRADE" | "EXPIRED";
 
@@ -358,7 +359,7 @@ export default function AISignal(props: AISignalProps) {
         <div className="text-[9px] tracking-[0.14em] text-white/35">
           LIVE AI ENTRY:{" "}
           <span className="text-white/80">
-            {signal.entryPrice.toFixed(2)}
+            {formatPrice(signal.entryPrice)}
           </span>
         </div>
 

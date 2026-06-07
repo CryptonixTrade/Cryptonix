@@ -44,17 +44,42 @@ const TIMEFRAMES = [
   "1M",
 ];
 
+const MARKET_QUOTES = [
+  "USDT",
+  "FDUSD",
+  "USDC",
+  "BUSD",
+  "BTC",
+  "ETH",
+  "BNB",
+];
+
+const TIMEFRAME_SIGNAL_REFRESH_MS = 45_000;
+
+function getQuoteAsset(symbol: string) {
+  const upper = String(symbol || "").toUpperCase();
+
+  return MARKET_QUOTES.find(
+    (quote) => upper.endsWith(quote) && upper.length > quote.length
+  );
+}
+
+function isSupportedMarket(symbol: string) {
+  return Boolean(getQuoteAsset(symbol));
+}
+
 function isTabletViewport() {
   return window.innerWidth >= 600 && window.innerWidth <= 1180;
 }
 
-async function fetchTabletMarketData(path: string) {
+async function fetchMarketData(path: string, signal?: AbortSignal) {
   const res = await fetch(`/api/market-data?${path}`, {
     cache: "no-store",
+    signal,
   });
 
   if (!res.ok) {
-    throw new Error(`Tablet market data failed: ${res.status}`);
+    throw new Error(`Market data failed: ${res.status}`);
   }
 
   return res.json();
@@ -152,6 +177,16 @@ export default function LiveTrading() {
   }, [timeframeSignals, aiSignal?.decision, interval]);
 
   useEffect(() => {
+    if (
+      coins.length &&
+      symbol &&
+      !coins.some((market: any) => market.symbol === symbol)
+    ) {
+      setSymbol("BTCUSDT");
+    }
+  }, [coins, symbol]);
+
+  useEffect(() => {
     const checkLayout = () => {
       setCompactLayout(window.innerWidth < 1024);
     };
@@ -191,6 +226,18 @@ export default function LiveTrading() {
     setSelected(null);
     setTrade(null);
     setAiSignal(null);
+    setTechSignal(null);
+    setCandles([]);
+    setPrice(null);
+    setTradeFlow({
+      buyVolume: 0,
+      sellVolume: 0
+    });
+    setOrderBook({
+      imbalance: 0,
+      bidVolume: 0,
+      askVolume: 0
+    });
   }, [symbol, interval]);
 
   useEffect(() => {
@@ -262,19 +309,24 @@ export default function LiveTrading() {
 	  useEffect(() => {
 	    async function fetchCoins(){
 	      try {
-	        let data;
-
-	        if (isTabletViewport()) {
-	          data = await fetchTabletMarketData("type=tickers");
-	        } else {
-	          const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-	          data = await res.json();
-	        }
+	        const data = await fetchMarketData("type=tickers");
 	
         const markets = data
-          .filter((c:any) => c?.symbol && Number(c.lastPrice || 0) > 0)
+          .filter((c:any) =>
+            c?.symbol &&
+            isSupportedMarket(c.symbol) &&
+            Number(c.lastPrice || 0) > 0
+          )
           .sort((a:any, b:any) => Number(b.quoteVolume || 0) - Number(a.quoteVolume || 0));
+
         setCoins(markets);
+
+        if (
+          markets.length &&
+          !markets.some((market: any) => market.symbol === symbol)
+        ) {
+          setSymbol("BTCUSDT");
+        }
       } catch (e) {
         console.error("Coins fetch error", e);
       }
@@ -283,20 +335,12 @@ export default function LiveTrading() {
     fetchCoins();
   }, []);
 
-	  async function fetchData() {
+	  async function fetchData(signal?: AbortSignal) {
 	    try {
-	      let data;
-
-	      if (isTabletViewport()) {
-	        data = await fetchTabletMarketData(
-	          `type=klines&symbol=${symbol}&interval=${interval}&limit=100`
-	        );
-	      } else {
-	        const res = await fetch(
-	          `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=100`
-	        );
-	        data = await res.json();
-	      }
+	      const data = await fetchMarketData(
+	        `type=klines&symbol=${symbol}&interval=${interval}&limit=100`,
+	        signal
+	      );
 
       const mapped = data.map((c:any)=>({
         time: c[0] / 1000,
@@ -305,41 +349,55 @@ export default function LiveTrading() {
         low: +c[3],
         close: +c[4],
         volume: +c[5]
-      }));
+      })).filter((c: Candle) =>
+        Number.isFinite(c.time) &&
+        Number.isFinite(c.open) &&
+        Number.isFinite(c.high) &&
+        Number.isFinite(c.low) &&
+        Number.isFinite(c.close) &&
+        c.open > 0 &&
+        c.high > 0 &&
+        c.low > 0 &&
+        c.close > 0
+      );
 
       setCandles(mapped);
+
+      const lastClose = mapped.at(-1)?.close;
+
+      if (lastClose) setPrice(lastClose);
     } catch (e) {
-      console.error("Candles fetch error", e);
+      if (!(e instanceof DOMException && e.name === "AbortError")) {
+        console.error("Candles fetch error", e);
+      }
     }
   }
 
 	  useEffect(()=>{
-	    fetchData();
+	    const controller = new AbortController();
+
+	    fetchData(controller.signal);
+
+	    return () => controller.abort();
 	  },[symbol, interval]);
 
 	  useEffect(() => {
 	    if (!symbol) return;
 
 	    let cancelled = false;
+	    let controller: AbortController | null = null;
 
 	    async function loadTimeframeSignals() {
+	      controller?.abort();
+	      controller = new AbortController();
+
 	      try {
 	        const entries = await Promise.all(
 	          TIMEFRAMES.map(async (timeframe) => {
-	            let data;
-
-	            if (isTabletViewport()) {
-	              data = await fetchTabletMarketData(
-	                `type=klines&symbol=${symbol}&interval=${timeframe}&limit=120`
-	              );
-	            } else {
-	              const res = await fetch(
-	                `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=120`
-	              );
-
-	              if (!res.ok) return [timeframe, ""] as const;
-	              data = await res.json();
-	            }
+	            const data = await fetchMarketData(
+	              `type=klines&symbol=${symbol}&interval=${timeframe}&limit=120`,
+	              controller?.signal
+	            );
 
 	            const mapped = data.map((c:any)=>({
 	              time: c[0] / 1000,
@@ -370,39 +428,48 @@ export default function LiveTrading() {
 	          )
 	        );
 	      } catch (e) {
-	        console.error("Timeframe signals fetch error", e);
+	        if (!(e instanceof DOMException && e.name === "AbortError")) {
+	          console.error("Timeframe signals fetch error", e);
+	        }
 	      }
 	    }
 
 	    loadTimeframeSignals();
-	    const timer = window.setInterval(loadTimeframeSignals, 60000);
+	    const timer = window.setInterval(
+	      loadTimeframeSignals,
+	      TIMEFRAME_SIGNAL_REFRESH_MS
+	    );
 
 	    return () => {
 	      cancelled = true;
+	      controller?.abort();
 	      window.clearInterval(timer);
 	    };
 	  }, [symbol]);
 
 	  useEffect(() => {
-	    if (!symbol || !isTabletViewport()) return;
+	    if (!symbol) return;
 
 	    let cancelled = false;
 
-	    async function fetchTabletPrices() {
+	    async function fetchLatestPrices() {
 	      try {
-	        const data = await fetchTabletMarketData(`type=prices&symbol=${symbol}`);
+	        const data = await fetchMarketData(`type=prices&symbol=${symbol}`);
 
 	        if (cancelled) return;
 	        if (data?.price) setPrice(Number(data.price));
 	        if (data?.btcSpot) setBtcSpot(Number(data.btcSpot));
 	        if (data?.btcFutures) setBtcFutures(Number(data.btcFutures));
 	      } catch (e) {
-	        console.error("Tablet prices fetch error", e);
+	        console.error("Prices fetch error", e);
 	      }
 	    }
 
-	    fetchTabletPrices();
-	    const timer = window.setInterval(fetchTabletPrices, 5000);
+	    fetchLatestPrices();
+	    const timer = window.setInterval(
+	      fetchLatestPrices,
+	      isTabletViewport() ? 5000 : 12000
+	    );
 
 	    return () => {
 	      cancelled = true;
@@ -449,10 +516,12 @@ export default function LiveTrading() {
         if (last.time === newCandle.time) {
           const updated = [...prev];
           updated[updated.length - 1] = newCandle;
+          setPrice(newCandle.close);
           return updated;
         }
 
         if (newCandle.time > last.time) {
+          setPrice(newCandle.close);
           return [...prev.slice(-500), newCandle];
         }
 
@@ -558,6 +627,8 @@ export default function LiveTrading() {
             />
           </div>
 
+          <Chart candles={candles} trade={selected ? trade : null} symbol={symbol}/>
+
           <div className="cryptonixSignalGrid cxReveal grid grid-cols-2 gap-3 items-start">
 
 <AISignal
@@ -575,9 +646,7 @@ export default function LiveTrading() {
   interval={interval}
   onSignal={setTechSignal}
 />
-
 </div>
-          <Chart candles={candles} trade={selected ? trade : null} symbol={symbol}/>
 
           <div className="cryptonixMobileTradePanel cxReveal lg:hidden">
             <TradePanel

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { formatPrice } from "@/lib/price-format";
 
 export default function TradePanel(props: any) {
   const {
@@ -12,21 +13,6 @@ export default function TradePanel(props: any) {
   } = props;
 
   const [pnl, setPnl] = useState<number | null>(null);
-
-  /* ======================================================
-     HELPERS
-  ====================================================== */
-
-  function formatPrice(p: number) {
-    if (!p) return "--";
-
-    if (p < 0.001) return p.toFixed(8);
-    if (p < 1) return p.toFixed(6);
-    if (p < 100) return p.toFixed(4);
-    if (p < 1000) return p.toFixed(3);
-
-    return p.toFixed(2);
-  }
 
   /* ======================================================
      PNL

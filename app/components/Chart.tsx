@@ -6,6 +6,10 @@ import {
   CandlestickSeries,
   HistogramSeries,
 } from "lightweight-charts";
+import {
+  getPriceMinMove,
+  getPricePrecision,
+} from "@/lib/price-format";
 
 export default function Chart(props: any) {
   const { candles = [], trade, symbol = "BTCUSDT" } = props;
@@ -23,6 +27,7 @@ export default function Chart(props: any) {
   const entryLineRef = useRef<any>(null);
   const tpLineRef = useRef<any>(null);
   const slLineRef = useRef<any>(null);
+  const shouldFitContentRef = useRef(true);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -41,6 +46,13 @@ export default function Chart(props: any) {
 
     return () => window.removeEventListener("resize", check);
   }, []);
+
+  useEffect(() => {
+    shouldFitContentRef.current = true;
+
+    candleSeriesRef.current?.setData([]);
+    volumeSeriesRef.current?.setData([]);
+  }, [symbol]);
 
   /* ======================================================
      INIT CHARTS
@@ -124,6 +136,11 @@ export default function Chart(props: any) {
       lastValueVisible: true,
       priceLineVisible: true,
       priceLineColor: "rgba(255,179,71,0.62)",
+      priceFormat: {
+        type: "price",
+        precision: 2,
+        minMove: 0.01,
+      },
     });
 
     priceChartRef.current = priceChart;
@@ -254,15 +271,48 @@ export default function Chart(props: any) {
   ====================================================== */
 
   useEffect(() => {
-    if (!candles || candles.length === 0) return;
+    if (!candles || candles.length === 0) {
+      candleSeriesRef.current?.setData([]);
+      volumeSeriesRef.current?.setData([]);
+      return;
+    }
 
     const candleData = candles.map((c: any) => ({
       time: Number(c.time),
-      open: c.open,
-      high: c.high,
-      low: c.low,
-      close: c.close,
-    }));
+      open: Number(c.open),
+      high: Number(c.high),
+      low: Number(c.low),
+      close: Number(c.close),
+    })).filter((c: any) =>
+      Number.isFinite(c.time) &&
+      Number.isFinite(c.open) &&
+      Number.isFinite(c.high) &&
+      Number.isFinite(c.low) &&
+      Number.isFinite(c.close) &&
+      c.open > 0 &&
+      c.high > 0 &&
+      c.low > 0 &&
+      c.close > 0
+    );
+
+    if (!candleData.length) {
+      candleSeriesRef.current?.setData([]);
+      volumeSeriesRef.current?.setData([]);
+      return;
+    }
+
+    const lastClose = candleData.at(-1)?.close;
+    const precision = getPricePrecision(lastClose);
+
+    candleSeriesRef.current?.applyOptions({
+      priceFormat: {
+        type: "price",
+        precision,
+        minMove: getPriceMinMove(lastClose),
+      },
+    });
+
+    const shouldFit = shouldFitContentRef.current;
 
     candleSeriesRef.current?.setData(candleData);
 
@@ -270,15 +320,28 @@ export default function Chart(props: any) {
       const volumeData = candles.map((c: any) => ({
         time: Number(c.time),
 
-        value: c.volume || 0,
+        value: Number(c.volume || 0),
 
         color:
           c.close >= c.open
             ? "rgba(45,255,135,0.45)"
             : "rgba(255,94,94,0.45)",
-      }));
+      })).filter((c: any) =>
+        Number.isFinite(c.time) &&
+        Number.isFinite(c.value) &&
+        c.value >= 0
+      );
 
       volumeSeriesRef.current.setData(volumeData);
+    }
+
+    if (shouldFit) {
+      try {
+        priceChartRef.current?.timeScale().fitContent();
+        volumeChartRef.current?.timeScale().fitContent();
+      } catch {}
+
+      shouldFitContentRef.current = false;
     }
   }, [candles, isMobile]);
 

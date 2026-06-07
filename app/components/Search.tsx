@@ -7,19 +7,37 @@ import {
   useRef,
   useState,
 } from "react";
+import { formatPrice } from "@/lib/price-format";
 
 const QUOTE_ASSETS = [
-  "USDT",
   "FDUSD",
   "USDC",
   "BUSD",
   "TUSD",
+  "USDT",
+  "BIDR",
+  "IDRT",
+  "AEUR",
+  "DAI",
   "BTC",
   "ETH",
   "BNB",
+  "USD",
+  "IDR",
+  "JPY",
+  "NGN",
+  "ARS",
+  "COP",
   "TRY",
   "EUR",
   "BRL",
+  "GBP",
+  "AUD",
+  "RUB",
+  "UAH",
+  "PLN",
+  "RON",
+  "ZAR",
 ];
 
 function getBaseAsset(symbol: string) {
@@ -56,6 +74,11 @@ export default function Search(props: any) {
   const [open, setOpen] =
     useState(false);
 
+  const availableSymbols = useMemo(
+    () => new Set(coins.map((coin: any) => coin.symbol)),
+    [coins]
+  );
+
   const baseAsset = useMemo(
     () => getBaseAsset(symbol),
     [symbol]
@@ -73,9 +96,27 @@ export default function Search(props: any) {
   const favoritePointerHandledRef =
     useRef(false);
 
+  function normalizeFavorites(value: unknown) {
+    if (!Array.isArray(value)) return [];
+
+    return value
+      .filter((item): item is string => typeof item === "string")
+      .map((item) => item.toUpperCase())
+      .filter((item, index, list) => item && list.indexOf(item) === index)
+      .slice(0, 24);
+  }
+
   useEffect(() => {
     setCoinLogoIndex(0);
   }, [baseAsset]);
+
+  useEffect(() => {
+    if (!availableSymbols.size) return;
+
+    setFavorites((prev) =>
+      prev.filter((symbol) => availableSymbols.has(symbol))
+    );
+  }, [availableSymbols]);
 
   /* ======================================================
      LOAD FAVORITES
@@ -87,7 +128,7 @@ export default function Search(props: any) {
         localStorage.getItem("favorites");
 
       if (saved) {
-        setFavorites(JSON.parse(saved));
+        setFavorites(normalizeFavorites(JSON.parse(saved)));
       }
     } catch {}
   }, []);
@@ -160,6 +201,12 @@ export default function Search(props: any) {
     return sorted.slice(0, search.trim() ? 120 : 80);
   }, [coins, search, favorites]);
 
+  const visibleFavorites = useMemo(() => {
+    if (!availableSymbols.size) return favorites;
+
+    return favorites.filter((favorite) => availableSymbols.has(favorite));
+  }, [availableSymbols, favorites]);
+
   /* ======================================================
      FAVORITES
   ====================================================== */
@@ -172,7 +219,7 @@ export default function Search(props: any) {
         );
       }
 
-      return [...prev, sym];
+      return [...prev, sym].slice(-24);
     });
   }
 
@@ -320,9 +367,7 @@ export default function Search(props: any) {
               c.priceChangePercent || 0
             );
 
-            const price = Number(
-              c.lastPrice || 0
-            ).toFixed(2);
+            const price = formatPrice(c.lastPrice);
 
             const isFav =
               favorites.includes(c.symbol);
@@ -425,7 +470,7 @@ export default function Search(props: any) {
           FAVORITES
       ====================================================== */}
 
-      {favorites.length > 0 && (
+      {visibleFavorites.length > 0 && (
         <div className="cryptonixFavorites mt-4">
 
           {/* TITLE */}
@@ -444,16 +489,14 @@ export default function Search(props: any) {
           {/* LIST */}
           <div className="flex flex-wrap gap-2">
 
-            {favorites.map((f: string) => {
+            {visibleFavorites.map((f: string) => {
               const isActive =
                 symbol === f;
 
               return (
                 <button
                   key={f}
-                  onClick={() =>
-                    setSymbol(f)
-                  }
+                  onClick={() => selectSymbol(f)}
                   className={`
                     rounded-full border px-2 py-1 text-[9px] font-semibold tracking-[0.14em] transition-all duration-300
                     ${

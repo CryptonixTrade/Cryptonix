@@ -1,5 +1,7 @@
 "use client";
 
+import { formatPrice } from "@/lib/price-format";
+
 export default function Header(props: any) {
   const {
     symbol = "BTCUSDT",
@@ -57,12 +59,7 @@ export default function Header(props: any) {
             <div className="mt-3 flex flex-wrap items-end gap-3">
               <div className="cxHeroPrice">
                 $
-                {price
-                  ? price.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  : "--"}
+                {formatPrice(price, { grouped: true })}
               </div>
 
               <div
@@ -80,24 +77,14 @@ export default function Header(props: any) {
             <div className="cryptonixHeaderMetric cxMetricTile">
               <div className="cxMetricLabel">Spot</div>
               <div className="cxMetricValue text-green-300">
-                {btcSpot
-                  ? btcSpot.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  : "--"}
+                {formatPrice(btcSpot, { grouped: true })}
               </div>
             </div>
 
             <div className="cryptonixHeaderMetric cxMetricTile">
               <div className="cxMetricLabel">Futures</div>
               <div className="cxMetricValue text-[var(--cx-gold-soft)]">
-                {btcFutures
-                  ? btcFutures.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  : "--"}
+                {formatPrice(btcFutures, { grouped: true })}
               </div>
             </div>
           </div>
