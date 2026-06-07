@@ -560,12 +560,6 @@ export default function LiveTrading() {
 
           <div className="cryptonixSignalGrid cxReveal grid grid-cols-2 gap-3 items-start">
 
-<TechnicalSignal
-  candles={candles}
-  interval={interval}
-  onSignal={setTechSignal}
-/>
-
 <AISignal
   key={`${symbol}:${interval}`}
   candles={candles}
@@ -574,6 +568,12 @@ export default function LiveTrading() {
   orderBook={orderBook}
   interval={interval}
   techSignal={techSignal}
+/>
+
+<TechnicalSignal
+  candles={candles}
+  interval={interval}
+  onSignal={setTechSignal}
 />
 
 </div>

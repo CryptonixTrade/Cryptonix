@@ -950,6 +950,146 @@ button:active {
 }
 
 @media (min-width: 1024px) {
+  .cryptonixHeader {
+    border-radius: 24px;
+    margin-bottom: 16px;
+  }
+
+  .cryptonixHeader > div:last-child {
+    gap: 18px;
+    padding: 18px 22px;
+  }
+
+  .cryptonixHeader .cxBrandMark {
+    width: 78px;
+    height: 72px;
+    border-radius: 24px;
+  }
+
+  .cryptonixHeader .cxBrandMark::before,
+  .cryptonixHeader .cxBrandMark::after {
+    left: 18px;
+    top: 33px;
+    width: 42px;
+    height: 9px;
+  }
+
+  .cryptonixHeader .cxBrandNode {
+    width: 17px;
+    height: 17px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTl {
+    left: 20px;
+    top: 14px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTr {
+    right: 20px;
+    top: 14px;
+  }
+
+  .cryptonixHeader .cxBrandNodeBl {
+    left: 20px;
+    bottom: 14px;
+  }
+
+  .cryptonixHeader .cxBrandNodeBr {
+    right: 20px;
+    bottom: 14px;
+  }
+
+  .cryptonixHeader .cxBrandBar {
+    width: 18px;
+    height: 6px;
+  }
+
+  .cryptonixHeader .cxBrandBarA {
+    left: 13px;
+    bottom: 13px;
+  }
+
+  .cryptonixHeader .cxBrandBarB {
+    right: 13px;
+    top: 13px;
+  }
+
+  .cryptonixHeader .cxBrandCircuit {
+    top: 35px;
+    width: 28px;
+  }
+
+  .cryptonixHeader .cxBrandCircuitLeft {
+    left: -12px;
+  }
+
+  .cryptonixHeader .cxBrandCircuitRight {
+    right: -12px;
+  }
+
+  .cryptonixHeader h1 {
+    margin-top: 12px;
+    font-size: clamp(38px, 4.4vw, 56px);
+    line-height: 0.98;
+  }
+
+  .cryptonixHeader .flex.min-w-0.items-start.gap-5 .mt-5 {
+    margin-top: 12px;
+  }
+
+  .cxHeroMarket {
+    padding: 16px;
+  }
+
+  .cxHeroMarket .mt-5 {
+    margin-top: 12px;
+  }
+
+  .cxHeroPrice {
+    font-size: clamp(32px, 3.2vw, 44px);
+  }
+
+  .cryptonixHeaderMetric {
+    min-width: 0;
+    padding: 10px 12px;
+  }
+
+  .cryptonixControls {
+    align-items: flex-start;
+  }
+
+  .cryptonixControls .cryptonixSearch {
+    width: 190px;
+    flex: 0 0 190px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes {
+    flex: 0 1 auto;
+    max-width: 620px;
+    padding: 14px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes > div:first-child {
+    margin-bottom: 10px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes > div:last-child {
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
+  .cryptonixControls .cxTimeframeRail {
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .cryptonixControls .cxTimeframeRail button {
+    height: 32px;
+    min-width: 38px;
+    padding: 0 10px;
+    font-size: 10px;
+  }
+
   .cryptonixDashboardGrid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
@@ -1314,6 +1454,20 @@ button:active {
   display: none;
 }
 
+.cryptonixSearchDropdown {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 999999;
+  width: 100%;
+  min-width: 280px;
+  max-width: calc(100vw - 24px);
+  max-height: 260px;
+  margin-top: 8px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
 @media (max-width: 1023px) {
   .cryptonixWorkspace {
     width: 100%;
@@ -1382,6 +1536,10 @@ button:active {
   color: #ffffff;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* =========================================================
    MICRO ANIMATIONS
 ========================================================= */
@@ -1428,6 +1586,8 @@ button:active {
   .cryptonixTerminal {
     min-height: 100svh;
     overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
     background:
       radial-gradient(circle at 12% 16%, rgba(242,213,138,0.13), transparent 26%),
       radial-gradient(circle at 92% 78%, rgba(181,95,18,0.18), transparent 30%),
@@ -1555,12 +1715,20 @@ button:active {
     grid-template-columns: minmax(118px, 0.9fr) minmax(0, 1.4fr);
     gap: 8px;
     align-items: stretch;
+    animation: none !important;
+    transform: none !important;
   }
 
   .cryptonixControls .cryptonixSearch,
   .cryptonixControls .cryptonixTimeframes {
     width: auto;
     min-width: 0;
+  }
+
+  .cryptonixControls .cryptonixSearch {
+    z-index: 80;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
 
   .cryptonixControls .cryptonixSearch,
@@ -1574,14 +1742,48 @@ button:active {
   }
 
   .cxSelectedMarket {
+    position: relative;
     margin-bottom: 8px !important;
     border-radius: 16px;
-    padding: 10px;
+    padding: 10px 32px 10px 10px;
+    gap: 6px;
+  }
+
+  .cxSelectedMarket > div:first-child {
+    min-width: 0;
+  }
+
+  .cxSelectedMarket .mt-2 {
+    min-width: 0;
   }
 
   .cxSelectedMarket .text-2xl {
-    font-size: 17px;
+    max-width: 62px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
     line-height: 1;
+    white-space: nowrap;
+  }
+
+  .cxMarketLivePill {
+    position: absolute;
+    top: 9px;
+    right: 8px;
+    width: 20px;
+    min-height: 14px !important;
+    justify-content: center;
+    gap: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    color: transparent !important;
+    font-size: 0 !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .cxMarketLivePill span {
+    width: 6px;
+    height: 6px;
   }
 
   .cxCoinLogoShell {
@@ -1596,13 +1798,64 @@ button:active {
   }
 
   .cryptonixSearch input {
-    padding-top: 9px !important;
-    padding-bottom: 9px !important;
-    font-size: 12px !important;
+    min-height: 36px;
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+    font-size: 16px !important;
+    line-height: 1.15;
   }
 
   .cryptonixSearch .mt-5 {
     display: none;
+  }
+
+  .cryptonixSearch .cryptonixFavorites {
+    display: block;
+    margin-top: 8px;
+    max-width: 100%;
+  }
+
+  .cryptonixSearch .cryptonixFavorites .mb-3 {
+    display: none;
+  }
+
+  .cryptonixSearch .cryptonixFavorites .flex.flex-wrap {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow-x: auto;
+    padding-bottom: 1px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cryptonixSearch .cryptonixFavorites .flex.flex-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cryptonixSearch .cryptonixFavorites button {
+    flex: 0 0 auto;
+    padding: 5px 7px;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .cryptonixMobileSearchOverlay {
+    position: fixed !important;
+    top: 92px !important;
+    right: 10px !important;
+    left: 10px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: min(520px, calc(100svh - 118px)) !important;
+    border-radius: 18px !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cryptonixMarketResultButton {
+    min-height: 42px;
+    touch-action: manipulation;
   }
 
   .cryptonixControls .cryptonixTimeframes > div:first-child {
@@ -1666,6 +1919,7 @@ button:active {
     order: 2;
     min-height: auto;
     border-radius: 24px;
+    transform: translateZ(0);
     box-shadow:
       0 22px 72px rgba(0,0,0,0.52),
       0 0 58px rgba(215,168,79,0.08),
@@ -1688,6 +1942,7 @@ button:active {
   .cryptonixChartArea {
     min-height: clamp(246px, 32svh, 360px) !important;
     border-radius: 0 0 22px 22px;
+    contain: layout paint;
   }
 
   .cryptonixChartArea > div:first-child {
@@ -1695,7 +1950,7 @@ button:active {
   }
 
   .cryptonixSignalGrid {
-    order: 3;
+    order: 4;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 8px;
@@ -1742,10 +1997,10 @@ button:active {
   }
 
   .cryptonixMobileTradePanel {
-    order: 4;
-    position: sticky;
-    bottom: 6px;
-    z-index: 50;
+    order: 3;
+    position: relative;
+    bottom: auto;
+    z-index: 20;
     margin-top: 0;
   }
 
@@ -1930,6 +2185,158 @@ button:active {
 /* =========================================================
    LOGIN PAGE LEGACY IPAD SAFETY LAYOUT
 ========================================================= */
+
+@media (min-width: 1024px) {
+  .cryptonixHeader {
+    margin-bottom: 12px;
+    border-radius: 22px;
+  }
+
+  .cryptonixHeader > div:last-child {
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.55fr);
+    gap: 16px;
+    align-items: center;
+    padding: 14px 18px;
+  }
+
+  .cryptonixHeader .cxBrandMark {
+    width: 62px;
+    height: 58px;
+    border-radius: 20px;
+  }
+
+  .cryptonixHeader .cxBrandMark::before,
+  .cryptonixHeader .cxBrandMark::after {
+    left: 14px;
+    top: 27px;
+    width: 34px;
+    height: 7px;
+  }
+
+  .cryptonixHeader .cxBrandNode {
+    width: 13px;
+    height: 13px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTl,
+  .cryptonixHeader .cxBrandNodeBl {
+    left: 15px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTr,
+  .cryptonixHeader .cxBrandNodeBr {
+    right: 15px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTl,
+  .cryptonixHeader .cxBrandNodeTr {
+    top: 12px;
+  }
+
+  .cryptonixHeader .cxBrandNodeBl,
+  .cryptonixHeader .cxBrandNodeBr {
+    bottom: 12px;
+  }
+
+  .cryptonixHeader .cxBrandBar,
+  .cryptonixHeader .cxBrandCircuit {
+    display: none;
+  }
+
+  .cryptonixHeader h1 {
+    margin-top: 8px;
+    font-size: clamp(32px, 3.2vw, 46px);
+    line-height: 0.96;
+  }
+
+  .cryptonixHeader .flex.min-w-0.items-start.gap-5 {
+    gap: 14px;
+  }
+
+  .cryptonixHeader .flex.min-w-0.items-start.gap-5 .mt-5 {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  .cryptonixHeader .cxMicroLabel {
+    font-size: 10px;
+  }
+
+  .cryptonixHeader .cxLivePill {
+    min-height: 26px;
+    padding: 5px 9px;
+    font-size: 9px;
+  }
+
+  .cxHeroMarket {
+    border-radius: 20px;
+    padding: 12px;
+  }
+
+  .cxHeroMarket .mt-3,
+  .cxHeroMarket .mt-5 {
+    margin-top: 8px;
+  }
+
+  .cxHeroPrice {
+    font-size: clamp(28px, 2.6vw, 38px);
+    line-height: 0.95;
+  }
+
+  .cxChangePill {
+    padding: 6px 9px;
+    font-size: 10px;
+  }
+
+  .cryptonixHeaderMetric {
+    padding: 8px 10px;
+  }
+
+  .cryptonixHeaderMetric .cxMetricLabel {
+    font-size: 9px;
+  }
+
+  .cryptonixHeaderMetric .cxMetricValue {
+    font-size: 13px;
+  }
+
+  .cryptonixControls {
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .cryptonixControls .cryptonixSearch {
+    width: 178px;
+    flex: 0 0 178px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes {
+    flex: 0 1 auto;
+    max-width: 560px;
+    padding: 10px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes > div:first-child {
+    margin-bottom: 7px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes > div:last-child {
+    margin-top: 7px;
+    padding-top: 7px;
+  }
+
+  .cryptonixControls .cxTimeframeRail {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .cryptonixControls .cxTimeframeRail button {
+    height: 28px;
+    min-width: 34px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+}
 
 @media (min-width: 600px) and (max-width: 1180px) {
 .loginPageRoot {
@@ -2152,4 +2559,158 @@ button:active {
 .loginPageRoot .portal-button {
   pointer-events: auto !important;
 }
+}
+
+@media (min-width: 1024px) {
+  .cryptonixHeader {
+    margin-bottom: 12px;
+    border-radius: 22px;
+  }
+
+  .cryptonixHeader > div:last-child {
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.55fr);
+    gap: 16px;
+    align-items: center;
+    padding: 14px 18px;
+  }
+
+  .cryptonixHeader .cxBrandMark {
+    width: 62px;
+    height: 58px;
+    border-radius: 20px;
+  }
+
+  .cryptonixHeader .cxBrandMark::before,
+  .cryptonixHeader .cxBrandMark::after {
+    left: 14px;
+    top: 27px;
+    width: 34px;
+    height: 7px;
+  }
+
+  .cryptonixHeader .cxBrandNode {
+    width: 13px;
+    height: 13px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTl,
+  .cryptonixHeader .cxBrandNodeBl {
+    left: 15px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTr,
+  .cryptonixHeader .cxBrandNodeBr {
+    right: 15px;
+  }
+
+  .cryptonixHeader .cxBrandNodeTl,
+  .cryptonixHeader .cxBrandNodeTr {
+    top: 12px;
+  }
+
+  .cryptonixHeader .cxBrandNodeBl,
+  .cryptonixHeader .cxBrandNodeBr {
+    bottom: 12px;
+  }
+
+  .cryptonixHeader .cxBrandBar,
+  .cryptonixHeader .cxBrandCircuit {
+    display: none;
+  }
+
+  .cryptonixHeader h1 {
+    margin-top: 8px;
+    font-size: clamp(32px, 3.2vw, 46px);
+    line-height: 0.96;
+  }
+
+  .cryptonixHeader .flex.min-w-0.items-start.gap-5 {
+    gap: 14px;
+  }
+
+  .cryptonixHeader .flex.min-w-0.items-start.gap-5 .mt-5 {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  .cryptonixHeader .cxMicroLabel {
+    font-size: 10px;
+  }
+
+  .cryptonixHeader .cxLivePill {
+    min-height: 26px;
+    padding: 5px 9px;
+    font-size: 9px;
+  }
+
+  .cxHeroMarket {
+    border-radius: 20px;
+    padding: 12px;
+  }
+
+  .cxHeroMarket .mt-3 {
+    margin-top: 8px;
+  }
+
+  .cxHeroMarket .mt-5 {
+    margin-top: 8px;
+  }
+
+  .cxHeroPrice {
+    font-size: clamp(28px, 2.6vw, 38px);
+    line-height: 0.95;
+  }
+
+  .cxChangePill {
+    padding: 6px 9px;
+    font-size: 10px;
+  }
+
+  .cryptonixHeaderMetric {
+    padding: 8px 10px;
+  }
+
+  .cryptonixHeaderMetric .cxMetricLabel {
+    font-size: 9px;
+  }
+
+  .cryptonixHeaderMetric .cxMetricValue {
+    font-size: 13px;
+  }
+
+  .cryptonixControls {
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .cryptonixControls .cryptonixSearch {
+    width: 178px;
+    flex: 0 0 178px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes {
+    max-width: 560px;
+    padding: 10px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes > div:first-child {
+    margin-bottom: 7px;
+  }
+
+  .cryptonixControls .cryptonixTimeframes > div:last-child {
+    margin-top: 7px;
+    padding-top: 7px;
+  }
+
+  .cryptonixControls .cxTimeframeRail {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .cryptonixControls .cxTimeframeRail button {
+    height: 28px;
+    min-width: 34px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
 }

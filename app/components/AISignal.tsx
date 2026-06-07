@@ -179,6 +179,14 @@ export default function AISignal(props: AISignalProps) {
     return `${m}m ${s}s`;
   }
 
+  const timeLeft = getTimeLeft(signal.expiryTime);
+  const holdLabel =
+    decision === "NO TRADE"
+      ? "Idle"
+      : expired
+      ? "Expired"
+      : timeLeft;
+
   /* ======================================================
      UI
   ====================================================== */
@@ -330,11 +338,11 @@ export default function AISignal(props: AISignalProps) {
         <div className="cxMiniMetric">
 
           <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--cx-text-muted)]">
-            Hold
+            Valid
           </div>
 
           <div className="mt-1 text-[15px] font-bold text-white">
-            {signal.hold}
+            {holdLabel}
           </div>
 
         </div>
@@ -363,7 +371,9 @@ export default function AISignal(props: AISignalProps) {
         >
           {decision === "NO TRADE"
             ? "NO ACTIVE SIGNAL"
-            : getTimeLeft(signal.expiryTime)}
+            : expired
+            ? "SIGNAL EXPIRED"
+            : `VALID FOR ${timeLeft}`}
           </div>
 
 </div>

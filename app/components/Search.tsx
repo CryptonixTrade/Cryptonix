@@ -70,6 +70,8 @@ export default function Search(props: any) {
     useState(0);
 
   const ref = useRef<any>(null);
+  const favoritePointerHandledRef =
+    useRef(false);
 
   useEffect(() => {
     setCoinLogoIndex(0);
@@ -108,7 +110,7 @@ export default function Search(props: any) {
   ====================================================== */
 
   useEffect(() => {
-    const handleClick = (e: any) => {
+    const handlePointer = (e: any) => {
       if (
         ref.current &&
         !ref.current.contains(e.target)
@@ -117,16 +119,10 @@ export default function Search(props: any) {
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handleClick
-    );
+    document.addEventListener("pointerdown", handlePointer);
 
     return () =>
-      document.removeEventListener(
-        "mousedown",
-        handleClick
-      );
+      document.removeEventListener("pointerdown", handlePointer);
   }, []);
 
   /* ======================================================
@@ -182,7 +178,32 @@ export default function Search(props: any) {
 
   function selectSymbol(sym: string) {
     setSymbol(sym);
+    setSearch("");
     setOpen(false);
+  }
+
+  function handleMarketSelect(e: any, sym: string) {
+    e.stopPropagation();
+    selectSymbol(sym);
+  }
+
+  function handleFavoritePointer(e: any, sym: string) {
+    e.preventDefault();
+    e.stopPropagation();
+    favoritePointerHandledRef.current = true;
+    toggleFavorite(sym);
+  }
+
+  function handleFavoriteClick(e: any, sym: string) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (favoritePointerHandledRef.current) {
+      favoritePointerHandledRef.current = false;
+      return;
+    }
+
+    toggleFavorite(sym);
   }
 
   /* ======================================================
@@ -235,7 +256,7 @@ export default function Search(props: any) {
 
         </div>
 
-        <div className="cxLivePill px-3 py-2">
+        <div className="cxLivePill cxMarketLivePill px-3 py-2">
 
           <span />
           Live
@@ -259,6 +280,7 @@ export default function Search(props: any) {
           placeholder="Search market..."
           value={search}
           onFocus={() => setOpen(true)}
+          onClick={() => setOpen(true)}
           onChange={(e) => {
             setSearch(e.target.value);
             setOpen(true);
@@ -282,12 +304,7 @@ export default function Search(props: any) {
 
       {open && (
         <div
-        className="
-        absolute left-0 top-full z-[999999] mt-2
-        max-h-[260px] w-full min-w-[280px] max-w-[calc(100vw-24px)] overflow-y-auto
-        cx-panel
-        p-2
-        "
+          className="cryptonixSearchDropdown cryptonixMobileSearchOverlay cx-panel"
         >
 
           {/* EMPTY */}
@@ -316,12 +333,6 @@ export default function Search(props: any) {
             return (
 	              <div
 	                key={c.symbol}
-	                onMouseDown={() => selectSymbol(c.symbol)}
-	                onClick={() => selectSymbol(c.symbol)}
-	                onTouchEnd={(e) => {
-	                  e.preventDefault();
-	                  selectSymbol(c.symbol);
-	                }}
 	                className={`
                   group relative mb-1 cursor-pointer overflow-hidden rounded-xl border p-1 transition-all duration-300
                   ${
@@ -332,7 +343,14 @@ export default function Search(props: any) {
                 `}
               >
 
-                <div className="relative z-10 flex items-center justify-between">
+                <button
+                  type="button"
+                  onPointerDown={(e) => handleMarketSelect(e, c.symbol)}
+                  onMouseDown={(e) => handleMarketSelect(e, c.symbol)}
+                  onTouchEnd={(e) => handleMarketSelect(e, c.symbol)}
+                  onClick={(e) => handleMarketSelect(e, c.symbol)}
+                  className="cryptonixMarketResultButton relative z-10 flex w-full items-center justify-between text-left"
+                >
 
                   {/* LEFT */}
                   <div className="flex flex-col">
@@ -361,7 +379,7 @@ export default function Search(props: any) {
                   </div>
 
                   {/* RIGHT */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 pr-8">
 
                     {/* CHANGE */}
                     <div
@@ -375,30 +393,26 @@ export default function Search(props: any) {
                       {change.toFixed(1)}%
                     </div>
 
-                    {/* STAR */}
-                    <button
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-
-                        toggleFavorite(
-                          c.symbol
-                        );
-                      }}
-                      className={`
-                        text-lg transition-all duration-300
-                        ${
-                          isFav
-                            ? "scale-110 text-yellow-400"
-                            : "text-white/20 hover:text-yellow-400"
-                        }
-                      `}
-                    >
-                      ★
-                    </button>
-
                   </div>
 
-                </div>
+                </button>
+
+                {/* STAR */}
+                <button
+                  type="button"
+                  onPointerDown={(e) => handleFavoritePointer(e, c.symbol)}
+                  onClick={(e) => handleFavoriteClick(e, c.symbol)}
+                  className={`
+                    absolute right-3 top-1/2 z-20 -translate-y-1/2 text-lg transition-all duration-300
+                    ${
+                      isFav
+                        ? "scale-110 text-yellow-400"
+                        : "text-white/20 hover:text-yellow-400"
+                    }
+                  `}
+                >
+                  ★
+                </button>
 
               </div>
             );
@@ -412,7 +426,7 @@ export default function Search(props: any) {
       ====================================================== */}
 
       {favorites.length > 0 && (
-        <div className="mt-5">
+        <div className="cryptonixFavorites mt-4">
 
           {/* TITLE */}
           <div className="mb-3 flex items-center gap-2">
