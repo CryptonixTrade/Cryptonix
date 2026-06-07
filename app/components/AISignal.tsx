@@ -51,6 +51,7 @@ export default function AISignal(props: AISignalProps) {
   const lastCandleRef = useRef<number | null>(null);
   const lastRunRef = useRef(0);
   const scoreRef = useRef<number | null>(null);
+  const signalRef = useRef<Signal | null>(null);
 
   /* ======================================================
      SIGNAL GENERATION
@@ -102,16 +103,24 @@ export default function AISignal(props: AISignalProps) {
             engineSignal.confidence + Math.abs(smooth - engineSignal.score) * 0.35
           );
 
+    const previousSignal = signalRef.current;
+    const keepSignalWindow =
+      previousSignal &&
+      previousSignal.decision === decision &&
+      previousSignal.expiryTime > now &&
+      !candleChanged;
+
     const newSignal: Signal = {
       score: smooth,
       decision,
       confidence,
-      entryTime: now,
-      expiryTime: now + ttl * 60000,
+      entryTime: keepSignalWindow ? previousSignal.entryTime : now,
+      expiryTime: keepSignalWindow ? previousSignal.expiryTime : now + ttl * 60000,
       hold: `${ttl} min`,
       entryPrice: last.close,
     };
 
+    signalRef.current = newSignal;
     setSignal(newSignal);
 
     onSignal?.(newSignal);
@@ -127,7 +136,7 @@ export default function AISignal(props: AISignalProps) {
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, [signal?.expiryTime, signal]);
+  }, [signal?.expiryTime]);
 
   /* ======================================================
      EMPTY
@@ -352,7 +361,9 @@ export default function AISignal(props: AISignalProps) {
               : "text-white/45"
           }`}
         >
-          {getTimeLeft(signal.expiryTime)}
+          {decision === "NO TRADE"
+            ? "NO ACTIVE SIGNAL"
+            : getTimeLeft(signal.expiryTime)}
           </div>
 
 </div>

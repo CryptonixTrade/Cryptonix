@@ -1,11 +1,44 @@
 "use client";
 
+import Image from "next/image";
 import {
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+
+const QUOTE_ASSETS = [
+  "USDT",
+  "FDUSD",
+  "USDC",
+  "BUSD",
+  "TUSD",
+  "BTC",
+  "ETH",
+  "BNB",
+  "TRY",
+  "EUR",
+  "BRL",
+];
+
+function getBaseAsset(symbol: string) {
+  const upper = String(symbol || "").toUpperCase();
+  const quote = QUOTE_ASSETS.find(
+    (asset) => upper.endsWith(asset) && upper.length > asset.length
+  );
+
+  return quote ? upper.slice(0, -quote.length) : upper;
+}
+
+function getCoinLogoUrls(baseAsset: string) {
+  const lower = baseAsset.toLowerCase();
+
+  return [
+    `https://assets.coincap.io/assets/icons/${lower}@2x.png`,
+    `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/${lower}.png`,
+  ];
+}
 
 export default function Search(props: any) {
   const {
@@ -23,7 +56,24 @@ export default function Search(props: any) {
   const [open, setOpen] =
     useState(false);
 
+  const baseAsset = useMemo(
+    () => getBaseAsset(symbol),
+    [symbol]
+  );
+
+  const coinLogoUrls = useMemo(
+    () => getCoinLogoUrls(baseAsset),
+    [baseAsset]
+  );
+
+  const [coinLogoIndex, setCoinLogoIndex] =
+    useState(0);
+
   const ref = useRef<any>(null);
+
+  useEffect(() => {
+    setCoinLogoIndex(0);
+  }, [baseAsset]);
 
   /* ======================================================
      LOAD FAVORITES
@@ -156,8 +206,31 @@ export default function Search(props: any) {
             Market
           </div>
 
-          <div className="mt-2 text-2xl font-semibold text-white">
-            {symbol}
+          <div className="mt-2 flex items-center gap-2">
+
+            <span className="cxCoinLogoShell">
+              {coinLogoIndex < coinLogoUrls.length ? (
+                <Image
+                  src={coinLogoUrls[coinLogoIndex]}
+                  alt={`${baseAsset} logo`}
+                  width={22}
+                  height={22}
+                  className="cxCoinLogo"
+                  onError={() =>
+                    setCoinLogoIndex((index) => index + 1)
+                  }
+                />
+              ) : (
+                <span className="cxCoinLogoFallback">
+                  {baseAsset.slice(0, 2)}
+                </span>
+              )}
+            </span>
+
+            <span className="text-2xl font-semibold text-white">
+              {symbol}
+            </span>
+
           </div>
 
         </div>

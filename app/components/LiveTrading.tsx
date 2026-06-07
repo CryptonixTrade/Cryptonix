@@ -134,6 +134,21 @@ export default function LiveTrading() {
     [coins, symbol]
   );
   const changePercent = Number(selectedTicker?.priceChangePercent || 0);
+  const displayedTimeframeSignals = useMemo(() => {
+    const nextSignals = { ...timeframeSignals };
+    const activeDecision = aiSignal?.decision;
+
+    if (
+      activeDecision === "LONG" ||
+      activeDecision === "SHORT"
+    ) {
+      nextSignals[interval] = activeDecision;
+    } else {
+      delete nextSignals[interval];
+    }
+
+    return nextSignals;
+  }, [timeframeSignals, aiSignal?.decision, interval]);
 
 	  useEffect(() => {
 	    let savedSymbol = null;
@@ -163,6 +178,7 @@ export default function LiveTrading() {
   useEffect(() => {
     setSelected(null);
     setTrade(null);
+    setAiSignal(null);
   }, [symbol, interval]);
 
   useEffect(() => {
@@ -525,7 +541,8 @@ export default function LiveTrading() {
             <Timeframes
               interval={interval}
               setIntervalState={setIntervalState}
-              signals={timeframeSignals}
+              signals={displayedTimeframeSignals}
+              activeSignal={aiSignal?.decision}
             />
           </div>
 
@@ -538,6 +555,7 @@ export default function LiveTrading() {
 />
 
 <AISignal
+  key={`${symbol}:${interval}`}
   candles={candles}
   onSignal={setAiSignal}
   flow={tradeFlow}

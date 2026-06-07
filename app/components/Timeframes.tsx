@@ -5,6 +5,7 @@ export default function Timeframes(props: any) {
     interval = "1m",
     setIntervalState = () => {},
     signals = {},
+    activeSignal = "",
   } = props;
 
   const tf = [
@@ -56,7 +57,11 @@ export default function Timeframes(props: any) {
 
         {tf.map((t) => {
           const active = interval === t;
-          const signal = signals?.[t];
+          const coreSignal =
+            activeSignal === "LONG" || activeSignal === "SHORT"
+              ? activeSignal
+              : "";
+          const signal = active ? coreSignal : signals?.[t];
           const signalClass =
             signal === "LONG"
               ? "cxTimeframeSignalLong"

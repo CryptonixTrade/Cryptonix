@@ -255,7 +255,7 @@ const legacyTabletFallbackScript = `
 
     if (buttons[0]) addTap(buttons[0], function () {
       if (!terms || !terms.checked) return;
-      openPayment("Monthly Plan", "3");
+      openPayment("Monthly Plan", "5");
     });
     if (buttons[1]) addTap(buttons[1], function () {
       if (!terms || !terms.checked) return;
@@ -483,7 +483,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
   <div className="planCard">
     <h3>Monthly</h3>
 
-    <p>$3 / month</p>
+    <p>$5 / month</p>
 
     <div className="planButtons">
 
@@ -494,7 +494,7 @@ const [selectedAmount, setSelectedAmount] = useState("");
         onClick={() =>
           openCryptoModal(
             "Monthly Plan",
-            "3"
+            "5"
           )
         }
       >
