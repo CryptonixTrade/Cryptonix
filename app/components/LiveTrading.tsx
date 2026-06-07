@@ -128,6 +128,7 @@ export default function LiveTrading() {
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
   const [timeframeSignals, setTimeframeSignals] = useState<Record<string, string>>({});
+  const [compactLayout, setCompactLayout] = useState(false);
 
   const selectedTicker = useMemo(
     () => coins.find((coin: any) => coin.symbol === symbol),
@@ -149,6 +150,17 @@ export default function LiveTrading() {
 
     return nextSignals;
   }, [timeframeSignals, aiSignal?.decision, interval]);
+
+  useEffect(() => {
+    const checkLayout = () => {
+      setCompactLayout(window.innerWidth < 1024);
+    };
+
+    checkLayout();
+    window.addEventListener("resize", checkLayout);
+
+    return () => window.removeEventListener("resize", checkLayout);
+  }, []);
 
 	  useEffect(() => {
 	    let savedSymbol = null;
@@ -576,8 +588,20 @@ export default function LiveTrading() {
               aiSignal={aiSignal}
             />
           </div>
+
+          {compactLayout && (
+            <div className="cryptonixMobileTerminalDeck cxReveal lg:hidden">
+              <PressureSignal candles={candles}/>
+
+              <OrderBook
+                symbol={symbol}
+                onUpdate={setOrderBook}
+              />
+            </div>
+          )}
         </div>
 
+        {!compactLayout && (
         <div className="cryptonixSideColumn hidden lg:flex flex-col gap-4 min-w-[320px] max-w-[320px]">
           <TradePanel
             trade={selected ? trade : null}
@@ -594,6 +618,7 @@ export default function LiveTrading() {
             onUpdate={setOrderBook}
           />
         </div>
+        )}
 
       </div>
       </div>

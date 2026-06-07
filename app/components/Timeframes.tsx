@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 export default function Timeframes(props: any) {
   const {
     interval = "1m",
@@ -22,6 +24,17 @@ export default function Timeframes(props: any) {
     "1w",
     "1M",
   ];
+  const primaryTf = new Set([
+    "1m",
+    "3m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "4h",
+  ]);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <div className="cryptonixTimeframes cxControlSurface w-full">
@@ -53,10 +66,15 @@ export default function Timeframes(props: any) {
           TIMEFRAMES GRID
       ====================================================== */}
 
-      <div className="cxTimeframeRail flex flex-wrap gap-2">
+      <div
+        className={`cxTimeframeRail flex flex-wrap gap-2 ${
+          expanded ? "cxTimeframeRailExpanded" : "cxTimeframeRailCollapsed"
+        }`}
+      >
 
         {tf.map((t) => {
           const active = interval === t;
+          const primary = primaryTf.has(t);
           const coreSignal =
             activeSignal === "LONG" || activeSignal === "SHORT"
               ? activeSignal
@@ -79,6 +97,7 @@ export default function Timeframes(props: any) {
               }}
               disabled={active}
               className={`
+                ${primary || active ? "" : "cxTimeframeOptionWide"}
                 cxTimeframeButton group relative flex h-[40px] min-w-[44px] items-center justify-center
                 overflow-hidden rounded-full border px-3
                 text-[11px] font-semibold
@@ -127,6 +146,17 @@ export default function Timeframes(props: any) {
         })}
 
       </div>
+
+      <button
+        type="button"
+        className="cxTimeframeToggle"
+        onClick={() => setExpanded((value) => !value)}
+        aria-expanded={expanded}
+        aria-label={expanded ? "Show fewer timeframes" : "Show all timeframes"}
+      >
+        <span>{expanded ? "Less" : "More"}</span>
+        <span aria-hidden="true">{expanded ? "^" : "v"}</span>
+      </button>
 
       {/* ======================================================
           FOOTER

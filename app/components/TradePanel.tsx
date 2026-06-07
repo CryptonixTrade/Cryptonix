@@ -104,7 +104,7 @@ export default function TradePanel(props: any) {
           HEADER
       ====================================================== */}
 
-      <div className="relative z-10 flex items-center justify-between">
+      <div className="cryptonixTradePanelHeader relative z-10 flex items-center justify-between">
 
         {/* LEFT */}
         <div>
@@ -133,7 +133,7 @@ export default function TradePanel(props: any) {
           PRICE
       ====================================================== */}
 
-      <div className="relative z-10 mt-6 text-center">
+      <div className="cryptonixTradePanelPrice relative z-10 mt-6 text-center">
 
         <div className="cxMicroLabel">
           Current Price
@@ -153,7 +153,7 @@ export default function TradePanel(props: any) {
       ====================================================== */}
 
       <div
-        className="cxSignalModule relative z-10 mt-7 overflow-hidden rounded-[26px] border p-5"
+        className="cryptonixTradePanelStatus cxSignalModule relative z-10 mt-7 overflow-hidden rounded-[26px] border p-5"
         style={{
           borderColor: `${signalColor}25`,
           background: `${signalColor}08`,
@@ -221,7 +221,7 @@ export default function TradePanel(props: any) {
           handleClick(aiDecision)
         }
         className={`
-          relative z-10 mt-7 w-full overflow-hidden rounded-full py-4 text-sm font-semibold tracking-[0.08em] transition-all duration-500
+          cryptonixTradeMainAction relative z-10 mt-7 w-full overflow-hidden rounded-full py-4 text-sm font-semibold tracking-[0.08em] transition-all duration-500
           ${
             isBlocked
               ? "cursor-not-allowed border border-white/10 bg-white/[0.035] text-gray-500"
@@ -240,7 +240,7 @@ export default function TradePanel(props: any) {
           MANUAL CONTROLS
       ====================================================== */}
 
-      <div className="relative z-10 mt-4 grid grid-cols-2 gap-3">
+      <div className="cryptonixTradeManualControls relative z-10 mt-4 grid grid-cols-2 gap-3">
 
         {/* LONG */}
         <button
@@ -286,7 +286,7 @@ export default function TradePanel(props: any) {
 
       {trade ? (
         <div
-          className="relative z-10 mt-5 overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035] p-5"
+          className="cryptonixTradeInfo relative z-10 mt-5 overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035] p-5"
         >
 
           {/* HEADER */}
@@ -367,7 +367,7 @@ export default function TradePanel(props: any) {
 
         </div>
       ) : (
-        <div className="relative z-10 mt-5 rounded-[24px] border border-dashed border-white/10 bg-white/[0.025] p-6 text-center">
+        <div className="cryptonixTradeWaiting relative z-10 mt-5 rounded-[24px] border border-dashed border-white/10 bg-white/[0.025] p-6 text-center">
 
           <div className="text-[11px] uppercase tracking-[0.18em] text-white/35">
             Waiting For Trade Entry
