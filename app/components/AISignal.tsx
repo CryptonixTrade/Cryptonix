@@ -46,6 +46,7 @@ export default function AISignal(props: AISignalProps) {
   } = props;
 
   const [signal, setSignal] = useState<Signal | null>(null);
+  const [nowMs, setNowMs] = useState(Date.now());
 
   const lastCandleRef = useRef<number | null>(null);
   const lastRunRef = useRef(0);
@@ -116,6 +117,18 @@ export default function AISignal(props: AISignalProps) {
     onSignal?.(newSignal);
   }, [candles, flow, orderBook, interval, techSignal, onSignal]);
 
+  useEffect(() => {
+    if (!signal) return;
+
+    setNowMs(Date.now());
+
+    const timer = window.setInterval(() => {
+      setNowMs(Date.now());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [signal?.expiryTime, signal]);
+
   /* ======================================================
      EMPTY
   ====================================================== */
@@ -126,7 +139,7 @@ export default function AISignal(props: AISignalProps) {
      STATES
   ====================================================== */
 
-  const expired = Date.now() > signal.expiryTime;
+  const expired = nowMs > signal.expiryTime;
 
   const decision = expired
     ? "EXPIRED"
@@ -147,7 +160,7 @@ export default function AISignal(props: AISignalProps) {
       : "0 0 30px rgba(255,255,255,0.05)";
 
   function getTimeLeft(expiry: number) {
-    const diff = expiry - Date.now();
+    const diff = expiry - nowMs;
 
     if (diff <= 0) return "expired";
 

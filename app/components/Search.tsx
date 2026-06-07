@@ -210,8 +210,8 @@ export default function Search(props: any) {
       {open && (
         <div
         className="
-        fixed left-[20px] top-[140px] z-[999999]
-        max-h-[220px] w-[320px] overflow-y-auto
+        absolute left-0 top-full z-[999999] mt-2
+        max-h-[260px] w-full min-w-[280px] max-w-[calc(100vw-24px)] overflow-y-auto
         cx-panel
         p-2
         "

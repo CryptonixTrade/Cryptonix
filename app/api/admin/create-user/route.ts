@@ -6,6 +6,8 @@ import { authOptions } from "@/lib/auth-options";
 
 export const runtime = "nodejs";
 
+const ALLOWED_ROLES = new Set(["admin", "user"]);
+
 export async function POST(req: Request) {
   try {
     // 🔐 проверка админа
@@ -18,11 +20,33 @@ export async function POST(req: Request) {
       );
     }
 
-    const { username, password, role } = await req.json();
+    const body = await req.json();
+    const username =
+      typeof body?.username === "string" ? body.username.trim() : "";
+    const password =
+      typeof body?.password === "string" ? body.password : "";
+    const role =
+      typeof body?.role === "string" && ALLOWED_ROLES.has(body.role)
+        ? body.role
+        : "user";
 
     if (!username || !password) {
       return NextResponse.json(
         { error: "Missing data" },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 4) {
+      return NextResponse.json(
+        { error: "Weak password" },
+        { status: 400 }
+      );
+    }
+
+    if (body?.role && !ALLOWED_ROLES.has(body.role)) {
+      return NextResponse.json(
+        { error: "Invalid role" },
         { status: 400 }
       );
     }
@@ -44,7 +68,7 @@ export async function POST(req: Request) {
       data: {
         username,
         password: hashed,
-        role: role || "user",
+        role,
       },
     });
 

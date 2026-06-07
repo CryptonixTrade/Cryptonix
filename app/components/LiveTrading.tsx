@@ -3,7 +3,7 @@
 import PressureSignal from "@/app/components/PressureSignal";
 import TechnicalSignal, { Signal } from "@/app/components/TechnicalSignal";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Chart from "@/app/components/Chart";
 import Timeframes from "@/app/components/Timeframes";
@@ -18,6 +18,15 @@ type OrderBookState = {
   imbalance: number;
   bidVolume: number;
   askVolume: number;
+};
+
+type Candle = {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
 };
 
 const TIMEFRAMES = [
@@ -51,6 +60,43 @@ async function fetchTabletMarketData(path: string) {
   return res.json();
 }
 
+function getTimeframeMicrostructure(candles: Candle[]) {
+  const recent = candles.slice(-24);
+
+  let buyVolume = 0;
+  let sellVolume = 0;
+
+  for (const candle of recent) {
+    const volume = Number(candle.volume || 0);
+    const open = Number(candle.open || 0);
+    const close = Number(candle.close || 0);
+
+    if (!Number.isFinite(volume) || volume <= 0) continue;
+
+    if (close >= open) {
+      buyVolume += volume;
+    } else {
+      sellVolume += volume;
+    }
+  }
+
+  const totalVolume = buyVolume + sellVolume;
+  const imbalance =
+    totalVolume > 0 ? (buyVolume - sellVolume) / totalVolume : 0;
+
+  return {
+    flow: {
+      buyVolume,
+      sellVolume,
+    },
+    orderBook: {
+      imbalance,
+      bidVolume: buyVolume,
+      askVolume: sellVolume,
+    },
+  };
+}
+
 export default function LiveTrading() {
 
   const [coins, setCoins] = useState<any[]>([]);
@@ -82,22 +128,12 @@ export default function LiveTrading() {
 
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
   const [timeframeSignals, setTimeframeSignals] = useState<Record<string, string>>({});
-  const latestFlowRef = useRef(tradeFlow);
-  const latestOrderBookRef = useRef(orderBook);
 
   const selectedTicker = useMemo(
     () => coins.find((coin: any) => coin.symbol === symbol),
     [coins, symbol]
   );
   const changePercent = Number(selectedTicker?.priceChangePercent || 0);
-
-  useEffect(() => {
-    latestFlowRef.current = tradeFlow;
-  }, [tradeFlow]);
-
-  useEffect(() => {
-    latestOrderBookRef.current = orderBook;
-  }, [orderBook]);
 
 	  useEffect(() => {
 	    let savedSymbol = null;
@@ -286,10 +322,11 @@ export default function LiveTrading() {
 	              volume: +c[5]
 	            }));
 	            const timeframeTechSignal = calculateTechnicalSignal(mapped);
+	            const microstructure = getTimeframeMicrostructure(mapped);
 	            const signal = calculateAiSignal({
 	              candles: mapped,
-	              flow: latestFlowRef.current,
-	              orderBook: latestOrderBookRef.current,
+	              flow: microstructure.flow,
+	              orderBook: microstructure.orderBook,
 	              techSignal: timeframeTechSignal,
 	            });
 
