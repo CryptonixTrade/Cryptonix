@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import QRCode from "react-qr-code";
+import { USDT_NETWORK, USDT_WALLET } from "@/lib/payment-config";
 
 type Props = {
   open: boolean;
@@ -15,9 +16,6 @@ export default function CryptoModal({
   plan,
   amount,
 }: Props) {
-  const wallet =
-"TWo1iyUNwYFh63qRuN7grd4eJmu4LDes3p";
-
 const [email, setEmail] =
   useState("");
 
@@ -80,7 +78,7 @@ const [success, setSuccess] =
     try {
   
       await navigator.clipboard.writeText(
-        wallet
+        USDT_WALLET
       );
   
       alert("Wallet copied");
@@ -180,7 +178,7 @@ const [success, setSuccess] =
         <h2>Pay with USDT</h2>
 
         <p className="network">
-          Network: TRC20
+          Network: {USDT_NETWORK}
         </p>
 
         <div className="plan">
@@ -198,7 +196,7 @@ const [success, setSuccess] =
         <div className="qrBox">
 
   <QRCode
-    value={wallet}
+    value={USDT_WALLET}
     size={170}
     bgColor="transparent"
     fgColor="#f5d06a"
@@ -207,7 +205,7 @@ const [success, setSuccess] =
 </div>
 
 <div className="walletBox">
-  {wallet}
+  {USDT_WALLET}
 </div>
 
 <button

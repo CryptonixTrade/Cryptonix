@@ -7,6 +7,7 @@ import CryptoModal from "../components/CryptoModal";
 import BinancePartnerCard from "../components/BinancePartnerCard";
 import CryptonixPortal from "../components/CryptonixPortal";
 import "../components/cryptonixPortal.css";
+import { PAYMENT_PLANS, USDT_WALLET } from "@/lib/payment-config";
 
 const legacyTabletFallbackScript = `
 (function () {
@@ -102,7 +103,7 @@ const legacyTabletFallbackScript = `
   }
 
   function openPayment(plan, amount) {
-    var wallet = "TWo1iyUNwYFh63qRuN7grd4eJmu4LDes3p";
+    var wallet = "${USDT_WALLET}";
     ensureStyle();
     closeLegacyModal();
 
@@ -255,15 +256,15 @@ const legacyTabletFallbackScript = `
 
     if (buttons[0]) addTap(buttons[0], function () {
       if (!terms || !terms.checked) return;
-      openPayment("Monthly Plan", "5");
+      openPayment("${PAYMENT_PLANS[0].paymentTitle}", "${PAYMENT_PLANS[0].amount}");
     });
     if (buttons[1]) addTap(buttons[1], function () {
       if (!terms || !terms.checked) return;
-      openPayment("3 Months Plan", "10");
+      openPayment("${PAYMENT_PLANS[1].paymentTitle}", "${PAYMENT_PLANS[1].amount}");
     });
     if (buttons[2]) addTap(buttons[2], function () {
       if (!terms || !terms.checked) return;
-      openPayment("Yearly Plan", "20");
+      openPayment("${PAYMENT_PLANS[2].paymentTitle}", "${PAYMENT_PLANS[2].amount}");
     });
 
     addTap(qs(".portal-button", root), openAbout);
@@ -371,16 +372,31 @@ const [selectedAmount, setSelectedAmount] = useState("");
   {/* MOBILE */}
   <source
     media="(max-width: 599px)"
+    srcSet="/CRYPTONIX-mobile.webp"
+    type="image/webp"
+  />
+  <source
+    media="(max-width: 599px)"
     srcSet="/CRYPTONIX-mobile.png"
   />
 
   {/* TABLET */}
   <source
     media="(min-width: 600px) and (max-width: 1180px)"
+    srcSet="/planshet.webp"
+    type="image/webp"
+  />
+  <source
+    media="(min-width: 600px) and (max-width: 1180px)"
     srcSet="/planshet.png"
   />
 
   {/* DESKTOP */}
+  <source
+    media="(min-width: 1181px)"
+    srcSet="/CRYPTONIX.webp"
+    type="image/webp"
+  />
   <img
     src="/CRYPTONIX.PNG"
     alt="bg"
@@ -473,86 +489,29 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
 
 <div className="plans">
+  {PAYMENT_PLANS.map((plan) => (
+    <div className="planCard" key={plan.id}>
+      <h3>{plan.title}</h3>
 
+      <p>{plan.displayPrice}</p>
 
-
-
-  
-
-  {/* MONTHLY */}
-  <div className="planCard">
-    <h3>Monthly</h3>
-
-    <p>$5 / month</p>
-
-    <div className="planButtons">
-
-      <button
-      type="button"
-        className="cryptoBtn"
-        aria-disabled={!agreed}
-        onClick={() =>
-          openCryptoModal(
-            "Monthly Plan",
-            "5"
-          )
-        }
-      >
-        Pay with USDT
-      </button>
-
+      <div className="planButtons">
+        <button
+          type="button"
+          className="cryptoBtn"
+          aria-disabled={!agreed}
+          onClick={() =>
+            openCryptoModal(
+              plan.paymentTitle,
+              plan.amount
+            )
+          }
+        >
+          Pay with USDT
+        </button>
+      </div>
     </div>
-  </div>
-
-  {/* 3 MONTHS */}
-  <div className="planCard">
-    <h3>3 Months</h3>
-
-    <p>$10</p>
-
-    <div className="planButtons">
-
-      <button
-      type="button"
-        className="cryptoBtn"
-        aria-disabled={!agreed}
-        onClick={() =>
-          openCryptoModal(
-            "3 Months Plan",
-            "10"
-          )
-        }
-      >
-        Pay with USDT
-      </button>
-
-    </div>
-  </div>
-
-  {/* YEARLY */}
-  <div className="planCard">
-    <h3>Yearly</h3>
-
-    <p>$20</p>
-
-    <div className="planButtons">
-
-      <button
-      type="button"
-        className="cryptoBtn"
-        aria-disabled={!agreed}
-        onClick={() =>
-          openCryptoModal(
-            "Yearly Plan",
-            "20"
-          )
-        }
-      >
-        Pay with USDT
-      </button>
-
-    </div>
-  </div>
+  ))}
 
 </div>
 
@@ -657,15 +616,13 @@ const [selectedAmount, setSelectedAmount] = useState("");
 
         @media (max-width: 599px) {
           .container {
-            background: url('/CRYPTONIX-mobile.png') no-repeat center;
-            background-size: cover;
+            background: #000;
           }
         }
 
         @media (min-width: 600px) and (max-width: 1180px) {
           .container {
-            background: url('/planshet.png') no-repeat center;
-            background-size: cover;
+            background: #000;
           }
 
           .bgImage {

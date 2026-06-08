@@ -53,6 +53,7 @@ export default function AISignal(props: AISignalProps) {
   const lastRunRef = useRef(0);
   const scoreRef = useRef<number | null>(null);
   const signalRef = useRef<Signal | null>(null);
+  const expiredNotifiedRef = useRef(false);
 
   /* ======================================================
      SIGNAL GENERATION
@@ -122,6 +123,7 @@ export default function AISignal(props: AISignalProps) {
     };
 
     signalRef.current = newSignal;
+    expiredNotifiedRef.current = false;
     setSignal(newSignal);
 
     onSignal?.(newSignal);
@@ -138,6 +140,25 @@ export default function AISignal(props: AISignalProps) {
 
     return () => window.clearInterval(timer);
   }, [signal?.expiryTime]);
+
+  useEffect(() => {
+    if (!signal) return;
+
+    if (nowMs <= signal.expiryTime) {
+      expiredNotifiedRef.current = false;
+      return;
+    }
+
+    if (expiredNotifiedRef.current) return;
+
+    expiredNotifiedRef.current = true;
+    onSignal?.({
+      ...signal,
+      decision: "NO TRADE",
+      confidence: 0,
+      expired: true,
+    });
+  }, [nowMs, signal, onSignal]);
 
   /* ======================================================
      EMPTY

@@ -8,46 +8,7 @@ import {
   useState,
 } from "react";
 import { formatPrice } from "@/lib/price-format";
-
-const QUOTE_ASSETS = [
-  "FDUSD",
-  "USDC",
-  "BUSD",
-  "TUSD",
-  "USDT",
-  "BIDR",
-  "IDRT",
-  "AEUR",
-  "DAI",
-  "BTC",
-  "ETH",
-  "BNB",
-  "USD",
-  "IDR",
-  "JPY",
-  "NGN",
-  "ARS",
-  "COP",
-  "TRY",
-  "EUR",
-  "BRL",
-  "GBP",
-  "AUD",
-  "RUB",
-  "UAH",
-  "PLN",
-  "RON",
-  "ZAR",
-];
-
-function getBaseAsset(symbol: string) {
-  const upper = String(symbol || "").toUpperCase();
-  const quote = QUOTE_ASSETS.find(
-    (asset) => upper.endsWith(asset) && upper.length > asset.length
-  );
-
-  return quote ? upper.slice(0, -quote.length) : upper;
-}
+import { getBaseAsset } from "@/lib/market-config";
 
 function getCoinLogoUrls(baseAsset: string) {
   const lower = baseAsset.toLowerCase();

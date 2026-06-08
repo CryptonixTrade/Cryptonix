@@ -176,6 +176,43 @@ export function calculateTechnicalSignal(candles: EngineCandle[]): EngineSignal 
   };
 }
 
+export function getTimeframeMicrostructure(candles: EngineCandle[]) {
+  const recent = candles.slice(-24);
+
+  let buyVolume = 0;
+  let sellVolume = 0;
+
+  for (const candle of recent) {
+    const volume = Math.max(0, toFiniteNumber(candle.volume));
+    const open = toFiniteNumber(candle.open);
+    const close = toFiniteNumber(candle.close);
+
+    if (volume <= 0) continue;
+
+    if (close >= open) {
+      buyVolume += volume;
+    } else {
+      sellVolume += volume;
+    }
+  }
+
+  const totalVolume = buyVolume + sellVolume;
+  const imbalance =
+    totalVolume > 0 ? (buyVolume - sellVolume) / totalVolume : 0;
+
+  return {
+    flow: {
+      buyVolume,
+      sellVolume,
+    },
+    orderBook: {
+      imbalance,
+      bidVolume: buyVolume,
+      askVolume: sellVolume,
+    },
+  };
+}
+
 export function calculateAiSignal(input: {
   candles: EngineCandle[];
   flow?: EngineFlow;

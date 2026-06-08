@@ -3,7 +3,7 @@
 import PressureSignal from "@/app/components/PressureSignal";
 import TechnicalSignal, { Signal } from "@/app/components/TechnicalSignal";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Chart from "@/app/components/Chart";
 import Timeframes from "@/app/components/Timeframes";
@@ -12,190 +12,37 @@ import Header from "@/app/components/Header";
 import TradePanel from "@/app/components/TradePanel";
 import AISignal from "@/app/components/AISignal";
 import OrderBook from "@/app/components/OrderBook";
-import { calculateAiSignal, calculateTechnicalSignal } from "@/lib/signal-engine";
-
-type OrderBookState = {
-  imbalance: number;
-  bidVolume: number;
-  askVolume: number;
-};
-
-type Candle = {
-  time: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-};
-
-const TIMEFRAMES = [
-  "1m",
-  "3m",
-  "5m",
-  "15m",
-  "30m",
-  "1h",
-  "2h",
-  "4h",
-  "12h",
-  "1d",
-  "1w",
-  "1M",
-];
-
-const MARKET_QUOTES = [
-  "USDT",
-  "FDUSD",
-  "USDC",
-  "BUSD",
-  "BTC",
-  "ETH",
-  "BNB",
-];
-
-const TIMEFRAME_SIGNAL_REFRESH_MS = 45_000;
-
-function getQuoteAsset(symbol: string) {
-  const upper = String(symbol || "").toUpperCase();
-
-  return MARKET_QUOTES.find(
-    (quote) => upper.endsWith(quote) && upper.length > quote.length
-  );
-}
-
-function isSupportedMarket(symbol: string) {
-  return Boolean(getQuoteAsset(symbol));
-}
-
-function isTabletViewport() {
-  return window.innerWidth >= 600 && window.innerWidth <= 1180;
-}
-
-async function fetchMarketData(path: string, signal?: AbortSignal) {
-  const res = await fetch(`/api/market-data?${path}`, {
-    cache: "no-store",
-    signal,
-  });
-
-  if (!res.ok) {
-    throw new Error(`Market data failed: ${res.status}`);
-  }
-
-  return res.json();
-}
-
-function getTimeframeMicrostructure(candles: Candle[]) {
-  const recent = candles.slice(-24);
-
-  let buyVolume = 0;
-  let sellVolume = 0;
-
-  for (const candle of recent) {
-    const volume = Number(candle.volume || 0);
-    const open = Number(candle.open || 0);
-    const close = Number(candle.close || 0);
-
-    if (!Number.isFinite(volume) || volume <= 0) continue;
-
-    if (close >= open) {
-      buyVolume += volume;
-    } else {
-      sellVolume += volume;
-    }
-  }
-
-  const totalVolume = buyVolume + sellVolume;
-  const imbalance =
-    totalVolume > 0 ? (buyVolume - sellVolume) / totalVolume : 0;
-
-  return {
-    flow: {
-      buyVolume,
-      sellVolume,
-    },
-    orderBook: {
-      imbalance,
-      bidVolume: buyVolume,
-      askVolume: sellVolume,
-    },
-  };
-}
+import { useCompactLayout } from "@/app/hooks/useCompactLayout";
+import { useMarketData } from "@/app/hooks/useMarketData";
+import { useTimeframeSignals } from "@/app/hooks/useTimeframeSignals";
 
 export default function LiveTrading() {
-
-  const [coins, setCoins] = useState<any[]>([]);
-
   const [symbol, setSymbol] = useState("BTCUSDT");
   const [interval, setIntervalState] = useState("1m");
-
-  const [candles, setCandles] = useState<any[]>([]);
-  const [price, setPrice] = useState<number | null>(null);
-
-  const [btcSpot, setBtcSpot] = useState<number | null>(null);
-  const [btcFutures, setBtcFutures] = useState<number | null>(null);
 
   const [selected, setSelected] = useState<string | null>(null);
   const [trade, setTrade] = useState<any>(null);
 
   const [aiSignal, setAiSignal] = useState<any>(null);
-
-  const [tradeFlow, setTradeFlow] = useState({
-    buyVolume: 0,
-    sellVolume: 0
-  });
-
-  const [orderBook, setOrderBook] = useState<OrderBookState>({
-    imbalance: 0,
-    bidVolume: 0,
-    askVolume: 0
-  });
-
   const [techSignal, setTechSignal] = useState<Signal | null>(null);
-  const [timeframeSignals, setTimeframeSignals] = useState<Record<string, string>>({});
-  const [compactLayout, setCompactLayout] = useState(false);
 
-  const selectedTicker = useMemo(
-    () => coins.find((coin: any) => coin.symbol === symbol),
-    [coins, symbol]
+  const {
+    btcFutures,
+    btcSpot,
+    candles,
+    changePercent,
+    coins,
+    orderBook,
+    price,
+    setOrderBook,
+    tradeFlow,
+  } = useMarketData(symbol, interval, setSymbol);
+  const displayedTimeframeSignals = useTimeframeSignals(
+    symbol,
+    interval,
+    aiSignal?.decision
   );
-  const changePercent = Number(selectedTicker?.priceChangePercent || 0);
-  const displayedTimeframeSignals = useMemo(() => {
-    const nextSignals = { ...timeframeSignals };
-    const activeDecision = aiSignal?.decision;
-
-    if (
-      activeDecision === "LONG" ||
-      activeDecision === "SHORT"
-    ) {
-      nextSignals[interval] = activeDecision;
-    } else {
-      delete nextSignals[interval];
-    }
-
-    return nextSignals;
-  }, [timeframeSignals, aiSignal?.decision, interval]);
-
-  useEffect(() => {
-    if (
-      coins.length &&
-      symbol &&
-      !coins.some((market: any) => market.symbol === symbol)
-    ) {
-      setSymbol("BTCUSDT");
-    }
-  }, [coins, symbol]);
-
-  useEffect(() => {
-    const checkLayout = () => {
-      setCompactLayout(window.innerWidth < 1024);
-    };
-
-    checkLayout();
-    window.addEventListener("resize", checkLayout);
-
-    return () => window.removeEventListener("resize", checkLayout);
-  }, []);
+  const compactLayout = useCompactLayout();
 
 	  useEffect(() => {
 	    let savedSymbol = null;
@@ -227,311 +74,11 @@ export default function LiveTrading() {
     setTrade(null);
     setAiSignal(null);
     setTechSignal(null);
-    setCandles([]);
-    setPrice(null);
-    setTradeFlow({
-      buyVolume: 0,
-      sellVolume: 0
-    });
-    setOrderBook({
-      imbalance: 0,
-      bidVolume: 0,
-      askVolume: 0
-    });
   }, [symbol, interval]);
 
   useEffect(() => {
     if (!selected) setTrade(null);
   }, [selected]);
-
-	  useEffect(() => {
-	    if (isTabletViewport()) return;
-
-	    const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data?.p) setBtcSpot(Number(data.p));
-    };
-
-    return () => ws.close();
-  }, []);
-
-	  useEffect(() => {
-	    if (isTabletViewport()) return;
-
-	    const ws = new WebSocket("wss://fstream.binance.com/ws/btcusdt@trade");
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data?.p) setBtcFutures(Number(data.p));
-    };
-
-    return () => ws.close();
-  }, []);
-
-	  useEffect(() => {
-	    if (!symbol) return;
-	    if (isTabletViewport()) return;
-	
-	    const ws = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@trade`
-    );
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-
-      if (data?.p) setPrice(Number(data.p));
-
-      const qty = Number(data.q || 0);
-      const isSell = data.m;
-
-      setTradeFlow(prev => ({
-        buyVolume: isSell ? prev.buyVolume : prev.buyVolume + qty,
-        sellVolume: isSell ? prev.sellVolume + qty : prev.sellVolume
-      }));
-    };
-
-    return () => ws.close();
-  }, [symbol]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setTradeFlow(prev => ({
-        buyVolume: prev.buyVolume * 0.9,
-        sellVolume: prev.sellVolume * 0.9
-      }));
-    }, 2000);
-
-    return () => window.clearInterval(timer);
-  }, []);
-
-	  useEffect(() => {
-	    async function fetchCoins(){
-	      try {
-	        const data = await fetchMarketData("type=tickers");
-	
-        const markets = data
-          .filter((c:any) =>
-            c?.symbol &&
-            isSupportedMarket(c.symbol) &&
-            Number(c.lastPrice || 0) > 0
-          )
-          .sort((a:any, b:any) => Number(b.quoteVolume || 0) - Number(a.quoteVolume || 0));
-
-        setCoins(markets);
-
-        if (
-          markets.length &&
-          !markets.some((market: any) => market.symbol === symbol)
-        ) {
-          setSymbol("BTCUSDT");
-        }
-      } catch (e) {
-        console.error("Coins fetch error", e);
-      }
-    }
-
-    fetchCoins();
-  }, []);
-
-	  async function fetchData(signal?: AbortSignal) {
-	    try {
-	      const data = await fetchMarketData(
-	        `type=klines&symbol=${symbol}&interval=${interval}&limit=100`,
-	        signal
-	      );
-
-      const mapped = data.map((c:any)=>({
-        time: c[0] / 1000,
-        open: +c[1],
-        high: +c[2],
-        low: +c[3],
-        close: +c[4],
-        volume: +c[5]
-      })).filter((c: Candle) =>
-        Number.isFinite(c.time) &&
-        Number.isFinite(c.open) &&
-        Number.isFinite(c.high) &&
-        Number.isFinite(c.low) &&
-        Number.isFinite(c.close) &&
-        c.open > 0 &&
-        c.high > 0 &&
-        c.low > 0 &&
-        c.close > 0
-      );
-
-      setCandles(mapped);
-
-      const lastClose = mapped.at(-1)?.close;
-
-      if (lastClose) setPrice(lastClose);
-    } catch (e) {
-      if (!(e instanceof DOMException && e.name === "AbortError")) {
-        console.error("Candles fetch error", e);
-      }
-    }
-  }
-
-	  useEffect(()=>{
-	    const controller = new AbortController();
-
-	    fetchData(controller.signal);
-
-	    return () => controller.abort();
-	  },[symbol, interval]);
-
-	  useEffect(() => {
-	    if (!symbol) return;
-
-	    let cancelled = false;
-	    let controller: AbortController | null = null;
-
-	    async function loadTimeframeSignals() {
-	      controller?.abort();
-	      controller = new AbortController();
-
-	      try {
-	        const entries = await Promise.all(
-	          TIMEFRAMES.map(async (timeframe) => {
-	            const data = await fetchMarketData(
-	              `type=klines&symbol=${symbol}&interval=${timeframe}&limit=120`,
-	              controller?.signal
-	            );
-
-	            const mapped = data.map((c:any)=>({
-	              time: c[0] / 1000,
-	              open: +c[1],
-	              high: +c[2],
-	              low: +c[3],
-	              close: +c[4],
-	              volume: +c[5]
-	            }));
-	            const timeframeTechSignal = calculateTechnicalSignal(mapped);
-	            const microstructure = getTimeframeMicrostructure(mapped);
-	            const signal = calculateAiSignal({
-	              candles: mapped,
-	              flow: microstructure.flow,
-	              orderBook: microstructure.orderBook,
-	              techSignal: timeframeTechSignal,
-	            });
-
-	            return [timeframe, signal?.decision || ""] as const;
-	          })
-	        );
-
-	        if (cancelled) return;
-
-	        setTimeframeSignals(
-	          Object.fromEntries(
-	            entries.filter(([, decision]) => decision && decision !== "NO TRADE")
-	          )
-	        );
-	      } catch (e) {
-	        if (!(e instanceof DOMException && e.name === "AbortError")) {
-	          console.error("Timeframe signals fetch error", e);
-	        }
-	      }
-	    }
-
-	    loadTimeframeSignals();
-	    const timer = window.setInterval(
-	      loadTimeframeSignals,
-	      TIMEFRAME_SIGNAL_REFRESH_MS
-	    );
-
-	    return () => {
-	      cancelled = true;
-	      controller?.abort();
-	      window.clearInterval(timer);
-	    };
-	  }, [symbol]);
-
-	  useEffect(() => {
-	    if (!symbol) return;
-
-	    let cancelled = false;
-
-	    async function fetchLatestPrices() {
-	      try {
-	        const data = await fetchMarketData(`type=prices&symbol=${symbol}`);
-
-	        if (cancelled) return;
-	        if (data?.price) setPrice(Number(data.price));
-	        if (data?.btcSpot) setBtcSpot(Number(data.btcSpot));
-	        if (data?.btcFutures) setBtcFutures(Number(data.btcFutures));
-	      } catch (e) {
-	        console.error("Prices fetch error", e);
-	      }
-	    }
-
-	    fetchLatestPrices();
-	    const timer = window.setInterval(
-	      fetchLatestPrices,
-	      isTabletViewport() ? 5000 : 12000
-	    );
-
-	    return () => {
-	      cancelled = true;
-	      window.clearInterval(timer);
-	    };
-	  }, [symbol]);
-
-	  useEffect(() => {
-	    if (!symbol || !interval || !isTabletViewport()) return;
-
-	    const timer = window.setInterval(fetchData, 15000);
-
-	    return () => window.clearInterval(timer);
-	  }, [symbol, interval]);
-	
-	  useEffect(() => {
-	    if (!symbol || !interval) return;
-	    if (isTabletViewport()) return;
-	
-	    const ws = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_${interval}`
-    );
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      const k = data.k;
-
-      if (!k) return;
-
-      const newCandle = {
-        time: Math.floor(k.t / 1000),
-        open: +k.o,
-        high: +k.h,
-        low: +k.l,
-        close: +k.c,
-        volume: +k.v
-      };
-
-      setCandles(prev => {
-        if (!prev.length) return [newCandle];
-
-        const last = prev[prev.length - 1];
-
-        if (last.time === newCandle.time) {
-          const updated = [...prev];
-          updated[updated.length - 1] = newCandle;
-          setPrice(newCandle.close);
-          return updated;
-        }
-
-        if (newCandle.time > last.time) {
-          setPrice(newCandle.close);
-          return [...prev.slice(-500), newCandle];
-        }
-
-        return prev;
-      });
-    };
-
-    return () => ws.close();
-
-  }, [symbol, interval]);
 
   function calculateATR(period = 14) {
     if (candles.length < period + 1) return null;

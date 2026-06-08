@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PRIMARY_TIMEFRAMES, TIMEFRAMES } from "@/lib/market-config";
 
 export default function Timeframes(props: any) {
   const {
@@ -10,30 +11,6 @@ export default function Timeframes(props: any) {
     activeSignal = "",
   } = props;
 
-  const tf = [
-    "1m",
-    "3m",
-    "5m",
-    "15m",
-    "30m",
-    "1h",
-    "2h",
-    "4h",
-    "12h",
-    "1d",
-    "1w",
-    "1M",
-  ];
-  const primaryTf = new Set([
-    "1m",
-    "3m",
-    "5m",
-    "15m",
-    "30m",
-    "1h",
-    "2h",
-    "4h",
-  ]);
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -72,9 +49,9 @@ export default function Timeframes(props: any) {
         }`}
       >
 
-        {tf.map((t) => {
+        {TIMEFRAMES.map((t) => {
           const active = interval === t;
-          const primary = primaryTf.has(t);
+          const primary = PRIMARY_TIMEFRAMES.has(t);
           const coreSignal =
             activeSignal === "LONG" || activeSignal === "SHORT"
               ? activeSignal

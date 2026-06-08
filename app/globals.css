@@ -157,7 +157,6 @@ img {
 
 canvas {
   image-rendering: optimizeSpeed;
-  will-change: transform;
 }
 
 /* =========================================================
